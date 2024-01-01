@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    include:
+      core
+    active: dev
+  config:
+    import: optional:file:.env[.properties]
+
+
+
+
+
