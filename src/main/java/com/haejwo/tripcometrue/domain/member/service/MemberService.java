@@ -19,7 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public ResponseDTO<SignUpResponse> signup(SignUpRequest signUpRequest) {
+    public SignUpResponse signup(SignUpRequest signUpRequest) {
 
         memberRepository.findByMemberBaseEmail(signUpRequest.email()).ifPresent(user -> {
             throw new EmailDuplicateException();
@@ -29,6 +29,6 @@ public class MemberService {
 
         Member newMember = signUpRequest.toEntity(encodedPassword);
         memberRepository.save(newMember);
-        return ResponseDTO.okWithData(SignUpResponse.fromEntity(newMember));
+        return SignUpResponse.fromEntity(newMember);
     }
 }
