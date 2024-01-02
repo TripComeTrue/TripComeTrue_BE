@@ -27,7 +27,9 @@ jobs:
 
       - name: Make docker-compose file
         run: |
-          echo "\n${{ secrets.DOCKER_COMPOSE }}\n" | base64 --decode >> ./docker-compose.yml
+          echo "\n" >> ./docker-compose.yml
+          echo "${{ secrets.DOCKER_COMPOSE }}" | base64 --decode >> ./docker-compose.yml
+          echo "\n" >> ./docker-compose.yml
 
       - name: Grant execute permission for gradlew
         run: |
