@@ -5,7 +5,6 @@ import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.member.request.SignUpRequest;
 import com.haejwo.tripcometrue.domain.member.response.SignUpResponse;
-import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
