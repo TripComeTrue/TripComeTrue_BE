@@ -28,8 +28,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 
-	//mysql connector
+	// mysql connector
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// testcontainers
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:mysql'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,6 +44,10 @@ dependencies {
 
 	// yml
 	implementation 'org.yaml:snakeyaml:+'
+}
+
+jar {
+	enabled = false
 }
 
 tasks.named('test') {
