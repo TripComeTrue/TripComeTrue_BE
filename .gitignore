@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### ENV FILE ###
+.env
+
+### DATABASE/DATA Directory ###
+database/data/
+
+### REDIS/DATA Directory ###
+redis/data/
