@@ -18,11 +18,11 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // RestController에서 json 응답 시 null 값의 필드는 아예 보여주지 않도록 설정하는 부분
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return objectMapper;
-    }
+//    @Bean
+//    public ObjectMapper objectMapper() {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        // RestController에서 json 응답 시 null 값의 필드는 아예 보여주지 않도록 설정하는 부분
+//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//        return objectMapper;
+//    }
 }
