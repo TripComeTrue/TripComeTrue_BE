@@ -1,13 +1,13 @@
 spring:
   config:
     activate:
-      on-profile: docker
+      on-profile: prod
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DBURL}
-    username: ${DBUSER}
-    password: ${DBUSER}
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     show-sql: true
@@ -17,6 +17,11 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 logging:
   level:
