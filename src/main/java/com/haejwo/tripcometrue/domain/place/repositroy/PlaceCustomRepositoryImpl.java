@@ -5,6 +5,8 @@ import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQuery;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,21 +19,25 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<Place> findPlaceWithFilter(Pageable pageable, PlaceFilterRequestDto requestDto) {
+    public Page<Place> findPlaceWithFilter(Pageable pageable, Integer storedCount) {
 
         QPlace place = QPlace.place;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        if(requestDto.storedCount() != null && requestDto.storedCount() >= 0) {
-            booleanBuilder.and(place.storedCount.goe(requestDto.storedCount()));
+        if(storedCount != null && storedCount >= 0) {
+            booleanBuilder.and(place.storedCount.goe(storedCount));
         }
 
-        QueryResults<Place> result = from(place)
-            .where(booleanBuilder)
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetchResults();
+        List<Place> result = from(place)
+                                .where(booleanBuilder)
+                                .offset(pageable.getOffset())
+                                .limit(pageable.getPageSize())
+                                .fetch();
+        
+        // 프론트의 Page 정보 필요 유무에 따라 응답 객체 List, Page 나뉨 
+        long total = from(place).where(booleanBuilder).fetchCount();
 
-        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+        return new PageImpl<>(result, pageable, total);
+
     }
 }

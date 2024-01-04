@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface PlaceCustomRepository {
 
     Page<Place> findPlaceWithFilter(Pageable pageable,
-                                    PlaceFilterRequestDto requestDto);
+                                    Integer storedCount);
 
 }

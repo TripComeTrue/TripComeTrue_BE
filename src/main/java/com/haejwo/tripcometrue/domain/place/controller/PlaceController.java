@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,12 +58,10 @@ public class PlaceController {
     @GetMapping
     public ResponseEntity<ResponseDTO<Page<PlaceResponseDto>>> placeList(
         Pageable pageable,
-        @ModelAttribute PlaceFilterRequestDto requestDto
+        @RequestParam Integer storedCount
     ) {
 
-        System.out.println("requestDto : " + requestDto.toString());
-
-        Page<PlaceResponseDto> placePage = placeService.findPlaces(pageable, requestDto);
+        Page<PlaceResponseDto> placePage = placeService.findPlaces(pageable, storedCount);
 
         ResponseDTO responseBody = ResponseDTO.okWithData(placePage);
 
@@ -71,7 +70,7 @@ public class PlaceController {
             .body(responseBody);
     }
 
-    @PatchMapping("/{placeId}")
+    @PutMapping("/{placeId}")
     public ResponseEntity<ResponseDTO<PlaceResponseDto>> placeModify(
         @PathVariable Long placeId,
         @RequestBody PlaceRequestDto requestDto
