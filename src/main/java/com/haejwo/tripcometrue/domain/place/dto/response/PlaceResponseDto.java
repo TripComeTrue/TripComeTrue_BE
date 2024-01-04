@@ -1,15 +1,9 @@
 package com.haejwo.tripcometrue.domain.place.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import java.time.LocalTime;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record PlaceResponseDto(
     Long id,
     String name,
@@ -19,10 +13,6 @@ public record PlaceResponseDto(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime weekdayCloseTime,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime weekendOpenTime,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime weekendCloseTime,
-//    LocalTime weekdayOpenTime,
-//    LocalTime weekdayCloseTime,
-//    LocalTime weekendOpenTime,
-//    LocalTime weekendCloseTime,
     Integer storedCount,
     Long cityId
 ) {
@@ -52,7 +42,7 @@ public record PlaceResponseDto(
         this.cityId = cityId;
     }
 
-    public static PlaceResponseDto DtoToEntity(Place entity) {
+    public static PlaceResponseDto fromEntity(Place entity) {
         return PlaceResponseDto.builder()
             .id(entity.getId())
             .name(entity.getName())
