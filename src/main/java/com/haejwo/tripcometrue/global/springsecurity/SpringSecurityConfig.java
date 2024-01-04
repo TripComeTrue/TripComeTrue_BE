@@ -1,16 +1,19 @@
 package com.haejwo.tripcometrue.global.springsecurity;
 
+import com.haejwo.tripcometrue.global.jwt.JwtAuthenticationFilter;
+import com.haejwo.tripcometrue.global.jwt.JwtAuthorizationFilter;
 import com.haejwo.tripcometrue.global.util.CustomResponseUtil;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
@@ -18,6 +21,9 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @Configuration
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -48,14 +54,20 @@ public class SpringSecurityConfig {
         http.sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // jwt filter
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthorizationFilter, BasicAuthenticationFilter.class);
+
         http.authorizeHttpRequests(authz -> authz
             /*
             .requestMatchers(new AntPathRequestMatcher("ant matcher")).authenticated()
             .requestMatchers(new AntPathRequestMatcher("role sample")).hasRole("ADMIN")
-            .requestMatchers(new AntPathRequestMatcher("role sample", HttpMethod.POST.name())).hasRole("ADMIN")
-            .requestMatchers(HttpMethod.OPTIONS, "/basket/**").permitAll() // OPTIONS 메서드에 대한 권한 허용 */
+            .requestMatchers(HttpMethod.OPTIONS, "/basket/**").permitAll() // OPTIONS 메서드에 대한 권한 허용
+            .requestMatchers(new AntPathRequestMatcher("role sample", HttpMethod.POST.name())).hasRole("ADMIN") */
             .requestMatchers(new AntPathRequestMatcher("/login/**")).permitAll()
-            .requestMatchers(new AntPathRequestMatcher("/v1/member/signup/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/signup")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/test/jwt")).permitAll()
+
             .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
             .anyRequest().authenticated());
 
