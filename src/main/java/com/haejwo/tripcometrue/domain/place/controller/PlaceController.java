@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.place.controller;
 
-import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
-import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
+import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDTO;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDTO;
 import com.haejwo.tripcometrue.domain.place.service.PlaceService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<PlaceResponseDto>> placeAdd(
-        @RequestBody PlaceRequestDto requestDto
+    public ResponseEntity<ResponseDTO<PlaceResponseDTO>> placeAdd(
+        @RequestBody PlaceRequestDTO requestDto
     ) {
 
-        PlaceResponseDto responseDto = placeService.addPlace(requestDto);
-        ResponseDTO<PlaceResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+        PlaceResponseDTO responseDto = placeService.addPlace(requestDto);
+        ResponseDTO<PlaceResponseDTO> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
             .status(responseBody.getCode())
@@ -39,12 +39,12 @@ public class PlaceController {
     }
 
     @GetMapping("/{placeId}")
-    public ResponseEntity<ResponseDTO<PlaceResponseDto>> placeDetails(
+    public ResponseEntity<ResponseDTO<PlaceResponseDTO>> placeDetails(
         @PathVariable Long placeId
     ) {
 
-        PlaceResponseDto responseDto = placeService.findPlace(placeId);
-        ResponseDTO<PlaceResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+        PlaceResponseDTO responseDto = placeService.findPlace(placeId);
+        ResponseDTO<PlaceResponseDTO> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
             .status(responseBody.getCode())
@@ -52,12 +52,12 @@ public class PlaceController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Page<PlaceResponseDto>>> placeList(
+    public ResponseEntity<ResponseDTO<Page<PlaceResponseDTO>>> placeList(
         Pageable pageable,
         @RequestParam Integer storedCount
     ) {
 
-        Page<PlaceResponseDto> placePage = placeService.findPlaces(pageable, storedCount);
+        Page<PlaceResponseDTO> placePage = placeService.findPlaces(pageable, storedCount);
 
         ResponseDTO responseBody = ResponseDTO.okWithData(placePage);
 
@@ -67,13 +67,13 @@ public class PlaceController {
     }
 
     @PutMapping("/{placeId}")
-    public ResponseEntity<ResponseDTO<PlaceResponseDto>> placeModify(
+    public ResponseEntity<ResponseDTO<PlaceResponseDTO>> placeModify(
         @PathVariable Long placeId,
-        @RequestBody PlaceRequestDto requestDto
+        @RequestBody PlaceRequestDTO requestDto
     ) {
 
-        PlaceResponseDto responseDto = placeService.modifyPlace(placeId, requestDto);
-        ResponseDTO<PlaceResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+        PlaceResponseDTO responseDto = placeService.modifyPlace(placeId, requestDto);
+        ResponseDTO<PlaceResponseDTO> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
             .status(responseBody.getCode())

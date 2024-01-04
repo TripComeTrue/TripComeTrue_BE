@@ -5,7 +5,7 @@ import com.haejwo.tripcometrue.domain.place.entity.Place;
 import java.time.LocalTime;
 import lombok.Builder;
 
-public record PlaceRequestDto(
+public record PlaceRequestDTO(
     String name,
     String address,
     String description,
@@ -18,7 +18,7 @@ public record PlaceRequestDto(
 ) {
 
     @Builder
-    public PlaceRequestDto(
+    public PlaceRequestDTO(
         String name,
         String address,
         String description,
