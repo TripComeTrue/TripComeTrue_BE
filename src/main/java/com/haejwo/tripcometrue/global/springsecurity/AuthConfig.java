@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.global.springsecurity;
 
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -11,7 +12,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -44,9 +44,13 @@ public class AuthConfig {
         return config.getAuthenticationManager();
     }
 
+    // AppConfig에서 정의한 PasswordEncoder 빈을 참조
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return passwordEncoder;
     }
 
     private PrincipalDetails loadUserByUsername(String email) {
