@@ -30,13 +30,16 @@ public class TripRecordReview extends BaseTimeEntity {
     private String content;
 
     private Short rating;
+    private Integer likeCount;
     private String imageUrl;
 
     @Builder
-    public TripRecordReview(Member member, String content, Short rating, String imageUrl) {
+    public TripRecordReview(Member member, TripRecord tripRecord, String content, Short rating, Integer likeCount, String imageUrl) {
         this.member = member;
+        this.tripRecord = tripRecord;
         this.content = content;
         this.rating = rating;
+        this.likeCount = likeCount;
         this.imageUrl = imageUrl;
     }
 }
