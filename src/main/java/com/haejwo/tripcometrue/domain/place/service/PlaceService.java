@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.domain.place.service;
 
-import com.haejwo.tripcometrue.domain.place.dto.request.PlaceFilterRequestDto;
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;

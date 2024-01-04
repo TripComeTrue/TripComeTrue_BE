@@ -1,11 +1,8 @@
 package com.haejwo.tripcometrue.domain.place.repositroy;
 
-import com.haejwo.tripcometrue.domain.place.dto.request.PlaceFilterRequestDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryResults;
-import com.querydsl.jpa.impl.JPAQuery;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
