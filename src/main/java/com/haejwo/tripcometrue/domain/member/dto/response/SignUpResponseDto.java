@@ -1,18 +1,19 @@
-package com.haejwo.tripcometrue.domain.member.response;
+package com.haejwo.tripcometrue.domain.member.dto.response;
 
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 
-public record SignUpResponse(
+public record SignUpResponseDto(
 
     Long memberId,
     String email,
     String name
 
 ) {
-    public static SignUpResponse fromEntity(Member member) {
-        return new SignUpResponse (
-            member.getMemberId(),
+
+    public static SignUpResponseDto fromEntity(Member member) {
+        return new SignUpResponseDto(
+            member.getId(),
             member.getMemberBase().getEmail(),
             member.getMemberBase().getNickname()
         );
