@@ -1,11 +1,13 @@
 package com.haejwo.tripcometrue.domain.place.entity;
 
-import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
+import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDTO;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,9 +20,12 @@ import lombok.NoArgsConstructor;
 public class Place extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "place_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String address;
     private String description;
     private LocalTime weekdayOpenTime;
@@ -32,12 +37,17 @@ public class Place extends BaseTimeEntity {
     // 임시 City 테이블 데이터
     private Long cityId;
 
+    @PrePersist
+    public void prePersist() {
+        this.storedCount = this.storedCount == null ? 0 : storedCount;
+    }
+
     @Builder
     public Place(
         Long id, String name, String address, String description,
         LocalTime weekdayOpenTime, LocalTime weekdayCloseTime,
         LocalTime weekendOpenTime, LocalTime weekendCloseTime,
-        Integer storedCount, Long cityId, String city) {
+        Integer storedCount, Long cityId) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -50,7 +60,7 @@ public class Place extends BaseTimeEntity {
         this.cityId = cityId;
     }
 
-    public void update(PlaceRequestDto requestDto) {
+    public void update(PlaceRequestDTO requestDto) {
         this.name = requestDto.name();
         this.address = requestDto.address();
         this.description = requestDto.description();
