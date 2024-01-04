@@ -23,9 +23,9 @@ public class PlaceService {
     @Transactional
     public PlaceResponseDto addPlace(PlaceRequestDto requestDto) {
 
-        Place requestPlace = requestDto.DtoToEntity();
+        Place requestPlace = requestDto.toEntity();
         Place savedPlace = placeRepository.save(requestPlace);
-        PlaceResponseDto responseDto = PlaceResponseDto.DtoToEntity(savedPlace);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(savedPlace);
 
         return responseDto;
 
@@ -36,17 +36,17 @@ public class PlaceService {
 
         Place findPlace = findPlaceById(placeId);
 
-        PlaceResponseDto responseDto = PlaceResponseDto.DtoToEntity(findPlace);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(findPlace);
 
         return responseDto;
     }
 
     @Transactional(readOnly = true)
-    public Page<PlaceResponseDto> findPlaces(Pageable pageable, PlaceFilterRequestDto requestDto) {
+    public Page<PlaceResponseDto> findPlaces(Pageable pageable, Integer storedCount) {
 
-        Page<Place> findPlaces = placeRepository.findPlaceWithFilter(pageable, requestDto);
+        Page<Place> findPlaces = placeRepository.findPlaceWithFilter(pageable, storedCount);
 
-        Page<PlaceResponseDto> result = findPlaces.map(PlaceResponseDto::DtoToEntity);
+        Page<PlaceResponseDto> result = findPlaces.map(PlaceResponseDto::fromEntity);
 
         return result;
 
@@ -57,7 +57,7 @@ public class PlaceService {
 
         Place place = findPlaceById(placeId);
         place.update(requestDto);
-        PlaceResponseDto responseDto = PlaceResponseDto.DtoToEntity(place);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(place);
 
         return responseDto;
     }

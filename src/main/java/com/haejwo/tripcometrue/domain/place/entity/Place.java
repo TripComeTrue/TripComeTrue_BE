@@ -51,32 +51,14 @@ public class Place extends BaseTimeEntity {
     }
 
     public void update(PlaceRequestDto requestDto) {
-        if(requestDto.name() != null) {
-            this.name = requestDto.name();
-        }
-        if(requestDto.address() != null) {
-            this.address = requestDto.address();
-        }
-        if(requestDto.description() != null) {
-            this.description = requestDto.description();
-        }
-        if(requestDto.weekdayOpenTime() != null) {
-            this.weekdayOpenTime = requestDto.weekdayOpenTime();
-        }
-        if(requestDto.weekdayCloseTime() != null) {
-            this.weekdayCloseTime = requestDto.weekdayCloseTime();
-        }
-        if(requestDto.weekendOpenTime() != null) {
-            this.weekendOpenTime = requestDto.weekendOpenTime();
-        }
-        if(requestDto.weekendCloseTime() != null) {
-            this.weekendCloseTime = requestDto.weekendCloseTime();
-        }
-        if(requestDto.storedCount() != null) {
-            this.storedCount = requestDto.storedCount();
-        }
-        if(requestDto.cityId() != null) {
-            this.cityId = requestDto.cityId();
-        }
+        this.name = requestDto.name();
+        this.address = requestDto.address();
+        this.description = requestDto.description();
+        this.weekdayOpenTime = requestDto.weekdayOpenTime();
+        this.weekdayCloseTime = requestDto.weekdayCloseTime();
+        this.weekendOpenTime = requestDto.weekendOpenTime();
+        this.weekendCloseTime = requestDto.weekendCloseTime();
+        this.storedCount = requestDto.storedCount();
+        this.cityId = requestDto.cityId();
     }
 }
