@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class S3Service {
     // TODO: 1/6/24 파일 용량 제한 걸기
     // TODO: 1/6/24 uuid로 고유 파일명 만들기
     // TODO: 1/6/24 저장 디렉토리 분리하기
-    public S3ResponseDto saveImage(MultipartFile multipartFile) throws IOException {
+    public S3ResponseDto saveImage(MultipartFile multipartFile) {
         validateFileExists(multipartFile);
 
         String originalFilename = multipartFile.getOriginalFilename();
@@ -40,6 +42,21 @@ public class S3Service {
         }
 
         return new S3ResponseDto(amazonS3.getUrl(bucketName, originalFilename).toString());
+    }
+
+    // TODO: 1/6/24 파일이 존재하지 않을 경우 예외 발생 추가
+    public void removeImage(String url) {
+        String filename = getFilename(url);
+        amazonS3.deleteObject(bucketName, filename);
+    }
+
+    //디코드를 해야지 제대로 삭제가 가능하다. 객체지향적으로 바꾸도록 해보자.
+    private String getFilename(String url) {
+        String encodedName = url.substring(url.lastIndexOf("/") + 1);
+        try {
+            return URLDecoder.decode(encodedName, StandardCharsets.UTF_8.toString());
+        } catch (Exception e) {}
+        return "";
     }
 
     private void validateFileExists(MultipartFile multipartFile) {
