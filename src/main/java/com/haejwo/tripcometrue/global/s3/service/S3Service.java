@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.global.s3.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.haejwo.tripcometrue.global.s3.exception.FileEmptyException;
 import com.haejwo.tripcometrue.global.s3.exception.FileUploadFailException;
 import com.haejwo.tripcometrue.global.s3.response.S3ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,8 @@ public class S3Service {
     // TODO: 1/6/24 uuid로 고유 파일명 만들기
     // TODO: 1/6/24 저장 디렉토리 분리하기
     public S3ResponseDto saveImage(MultipartFile multipartFile) throws IOException {
+        validateFileExists(multipartFile);
+
         String originalFilename = multipartFile.getOriginalFilename();
 
         ObjectMetadata metadata = new ObjectMetadata();
@@ -37,5 +40,11 @@ public class S3Service {
         }
 
         return new S3ResponseDto(amazonS3.getUrl(bucketName, originalFilename).toString());
+    }
+
+    private void validateFileExists(MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            throw new FileEmptyException();
+        }
     }
 }

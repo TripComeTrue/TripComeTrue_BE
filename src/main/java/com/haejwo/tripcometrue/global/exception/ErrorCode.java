@@ -28,6 +28,7 @@ public enum ErrorCode {
 
     // S3
     FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
+    FILE_EMPTY(HttpStatus.BAD_REQUEST, "파일이 존재하지 않습니다."),
 
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
