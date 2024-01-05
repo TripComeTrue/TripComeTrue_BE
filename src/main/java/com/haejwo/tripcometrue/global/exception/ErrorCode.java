@@ -26,6 +26,9 @@ public enum ErrorCode {
     // PLACE
     PLCAE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행지입니다."),
 
+    // S3
+    FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
+
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
 
