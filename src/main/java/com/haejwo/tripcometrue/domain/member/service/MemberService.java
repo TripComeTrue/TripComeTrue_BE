@@ -1,10 +1,10 @@
 package com.haejwo.tripcometrue.domain.member.service;
 
+import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
-import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,5 +29,11 @@ public class MemberService {
         Member newMember = signUpRequestDto.toEntity(encodedPassword);
         memberRepository.save(newMember);
         return SignUpResponseDto.fromEntity(newMember);
+    }
+
+    public void checkDuplicateEmail(String email) {
+        memberRepository.findByMemberBaseEmail(email).ifPresent(user -> {
+            throw new EmailDuplicateException();
+        });
     }
 }

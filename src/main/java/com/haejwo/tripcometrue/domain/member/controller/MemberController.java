@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,6 +43,16 @@ public class MemberController {
 
         TestUserResponseDto testUserResponseDto = TestUserResponseDto.fromEntity(member);
         ResponseDTO<TestUserResponseDto> response = ResponseDTO.okWithData(testUserResponseDto);
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @GetMapping("/check-duplicated-email")
+    public ResponseEntity<ResponseDTO<Void>> checkDuplicateEmail(
+        @RequestParam String email) {
+        memberService.checkDuplicateEmail(email);
+        ResponseDTO<Void> response = ResponseDTO.ok();
         return ResponseEntity
             .status(response.getCode())
             .body(response);
