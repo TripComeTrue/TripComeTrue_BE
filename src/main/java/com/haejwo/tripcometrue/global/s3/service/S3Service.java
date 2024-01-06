@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -24,24 +25,26 @@ public class S3Service {
     private String bucketName;
 
     // TODO: 1/6/24 파일 용량 제한 걸기
-    // TODO: 1/6/24 uuid로 고유 파일명 만들기
     // TODO: 1/6/24 저장 디렉토리 분리하기
     public S3ResponseDto saveImage(MultipartFile multipartFile) {
         validateFileExists(multipartFile);
-
-        String originalFilename = multipartFile.getOriginalFilename();
+        String filename = generateFilename(multipartFile);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3.putObject(bucketName, originalFilename, inputStream, metadata);
+            amazonS3.putObject(bucketName, filename, inputStream, metadata);
         } catch (IOException e) {
             throw new FileUploadFailException();
         }
 
-        return new S3ResponseDto(amazonS3.getUrl(bucketName, originalFilename).toString());
+        return new S3ResponseDto(amazonS3.getUrl(bucketName, filename).toString());
+    }
+
+    private String generateFilename(MultipartFile multipartFile) {
+        return UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
     }
 
     // TODO: 1/6/24 파일이 존재하지 않을 경우 예외 발생 추가
