@@ -27,7 +27,9 @@ public class S3Controller {
     }
 
     @DeleteMapping("/v1/images")
-    public void deleteImage(@RequestBody S3DeleteRequestDto requestDto) {
+    public ResponseEntity<ResponseDTO> deleteImage(@RequestBody S3DeleteRequestDto requestDto) {
         s3Service.removeImage(requestDto.url());
+        ResponseDTO<Void> responseDTO = ResponseDTO.ok();
+        return ResponseEntity.status(responseDTO.getCode()).body(responseDTO);
     }
 }
