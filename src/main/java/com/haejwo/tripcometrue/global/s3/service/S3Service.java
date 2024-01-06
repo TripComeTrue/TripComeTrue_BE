@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.haejwo.tripcometrue.global.s3.exception.FileEmptyException;
 import com.haejwo.tripcometrue.global.s3.exception.FileUploadFailException;
-import com.haejwo.tripcometrue.global.s3.response.S3ResponseDto;
+import com.haejwo.tripcometrue.global.s3.response.S3UploadResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,21 +26,23 @@ public class S3Service {
 
     // TODO: 1/6/24 파일 용량 제한 걸기
     // TODO: 1/6/24 저장 디렉토리 분리하기
-    public S3ResponseDto saveImage(MultipartFile multipartFile) {
+    public S3UploadResponseDto saveImage(MultipartFile multipartFile) {
         validateFileExists(multipartFile);
         String filename = generateFilename(multipartFile);
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(multipartFile.getSize());
-        metadata.setContentType(multipartFile.getContentType());
-
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3.putObject(bucketName, filename, inputStream, metadata);
+            amazonS3.putObject(bucketName, filename, inputStream, getObjectMetadata(multipartFile));
         } catch (IOException e) {
             throw new FileUploadFailException();
         }
+        return new S3UploadResponseDto(amazonS3.getUrl(bucketName, filename).toString());
+    }
 
-        return new S3ResponseDto(amazonS3.getUrl(bucketName, filename).toString());
+    private ObjectMetadata getObjectMetadata(MultipartFile multipartFile) {
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
+        return metadata;
     }
 
     private String generateFilename(MultipartFile multipartFile) {

@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.global.s3.controller;
 
-import com.haejwo.tripcometrue.global.s3.response.S3ResponseDto;
+import com.haejwo.tripcometrue.global.s3.request.S3DeleteRequestDto;
+import com.haejwo.tripcometrue.global.s3.response.S3UploadResponseDto;
 import com.haejwo.tripcometrue.global.s3.service.S3Service;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +20,14 @@ public class S3Controller {
     private final S3Service s3Service;
 
     @PostMapping("/v1/images")
-    public ResponseEntity<ResponseDTO<S3ResponseDto>> uploadImage(
+    public ResponseEntity<ResponseDTO<S3UploadResponseDto>> uploadImage(
             @RequestPart("file") MultipartFile multipartFile) throws IOException {
-        ResponseDTO<S3ResponseDto> responseDto = ResponseDTO.okWithData(s3Service.saveImage(multipartFile));
+        ResponseDTO<S3UploadResponseDto> responseDto = ResponseDTO.okWithData(s3Service.saveImage(multipartFile));
         return ResponseEntity.status(responseDto.getCode()).body(responseDto);
     }
 
     @DeleteMapping("/v1/images")
-    public void deleteImage(@RequestBody S3ResponseDto requestDto) {
+    public void deleteImage(@RequestBody S3DeleteRequestDto requestDto) {
         s3Service.removeImage(requestDto.url());
     }
 }
