@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.member.entity;
 
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +19,8 @@ public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    @Column(name = "member_id")
+    private Long id;
 
     @Embedded
     protected MemberBase memberBase;
