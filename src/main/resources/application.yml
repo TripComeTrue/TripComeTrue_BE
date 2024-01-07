@@ -5,6 +5,10 @@ spring:
     active: dev
   config:
     import: optional:file:.env[.properties]
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 cloud:
   aws:
@@ -15,3 +19,4 @@ cloud:
       static: ${AWS_S3_REGION}
     s3:
       bucket: ${AWS_S3_BUCKET}
+
