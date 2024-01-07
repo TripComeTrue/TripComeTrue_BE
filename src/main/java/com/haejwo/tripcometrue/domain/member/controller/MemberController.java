@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.member.controller;
 
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.LoginResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.TestUserResponseDto;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
@@ -53,6 +54,17 @@ public class MemberController {
         @RequestParam String email) {
         memberService.checkDuplicateEmail(email);
         ResponseDTO<Void> response = ResponseDTO.ok();
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @GetMapping("/oauth2/info")
+    public ResponseEntity<ResponseDTO<LoginResponseDto>> oauth2Test(
+        @RequestParam String token, @RequestParam String email, @RequestParam String name) {
+        LoginResponseDto loginResponseDto = new LoginResponseDto(email, name, token);
+
+        ResponseDTO<LoginResponseDto> response = ResponseDTO.okWithData(loginResponseDto);
         return ResponseEntity
             .status(response.getCode())
             .body(response);
