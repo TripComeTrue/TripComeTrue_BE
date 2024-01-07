@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.global.s3.controller;
 
-import com.haejwo.tripcometrue.global.s3.request.S3DeleteRequestDto;
 import com.haejwo.tripcometrue.global.s3.response.S3UploadResponseDto;
 import com.haejwo.tripcometrue.global.s3.service.S3Service;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -27,8 +26,8 @@ public class S3Controller {
     }
 
     @DeleteMapping("/v1/images")
-    public ResponseEntity<ResponseDTO> deleteImage(@RequestBody S3DeleteRequestDto requestDto) {
-        s3Service.removeImage(requestDto.url());
+    public ResponseEntity<ResponseDTO> deleteImage(@RequestParam("imageUrl") String imageUrl) {
+        s3Service.removeImage(imageUrl);
         ResponseDTO<Void> responseDTO = ResponseDTO.ok();
         return ResponseEntity.status(responseDTO.getCode()).body(responseDTO);
     }
