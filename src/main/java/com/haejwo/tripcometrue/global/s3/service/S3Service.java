@@ -25,10 +25,6 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    // TODO: 1/6/24 멀티파트 파일을 일반 파일로 전환??
-    // TODO: 1/6/24 파일 용량 제한 걸기
-    // TODO: 1/6/24 저장 디렉토리 분리하기??
-    // TODO: 1/6/24 개발 버킷과 배포 버킷을 구분하기
     public S3UploadResponseDto saveImage(MultipartFile multipartFile) {
         validateFileExists(multipartFile);
         String filename = generateFilename(multipartFile);
@@ -61,7 +57,6 @@ public class S3Service {
         amazonS3.deleteObject(bucketName, filename);
     }
 
-    //디코드를 해야지 제대로 삭제가 가능하다. 객체지향적으로 바꾸도록 해보자.
     private String getFilename(String url) {
         String encodedName = url.substring(url.lastIndexOf("/") + 1);
         try {
