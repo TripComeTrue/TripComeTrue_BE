@@ -4,7 +4,7 @@ import com.haejwo.tripcometrue.global.exception.ApplicationException;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 
 public class PlaceNotFoundException extends ApplicationException {
-    private static final ErrorCode ERROR_CODE = ErrorCode.PLCAE_NOT_FOUND;
+    private static final ErrorCode ERROR_CODE = ErrorCode.PLACE_NOT_FOUND;
 
     public PlaceNotFoundException() {
         super(ERROR_CODE);
