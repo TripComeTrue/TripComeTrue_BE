@@ -34,6 +34,10 @@ public enum ErrorCode {
     TRIP_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행후기입니다."),
     EXPENSE_RANGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 비용범위입니다."),
 
+    // Likes
+    LIKES_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 데이터가 존재하지 않습니다."),
+    LIKES_ALREADY_EXIST(HttpStatus.NO_CONTENT, "이미 좋아요가 등록되어 있습니다."),
+
     // S3
     FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
     FILE_EMPTY(HttpStatus.BAD_REQUEST, "첨부 파일이 없습니다."),
