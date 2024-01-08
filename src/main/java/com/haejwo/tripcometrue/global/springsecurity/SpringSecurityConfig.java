@@ -70,6 +70,7 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/member/check-duplicated-email")).permitAll()
 
             .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/trip-record/**")).permitAll()
             .anyRequest().authenticated());
 
         http.exceptionHandling(exceptionHandling -> {
