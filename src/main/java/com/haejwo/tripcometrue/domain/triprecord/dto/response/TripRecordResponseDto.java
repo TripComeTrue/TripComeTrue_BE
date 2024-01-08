@@ -42,7 +42,7 @@ public record TripRecordResponseDto(
             .id(entity.getId())
             .title(entity.getTitle())
             .content(entity.getContent())
-            .average_rating(entity.getAverage_rating())
+            .average_rating(entity.getAverageRating())
             .expenseType(entity.getExpenseType())
             .tripStartDay(entity.getTripStartDay())
             .tripEndDay(entity.getTripEndDay())
