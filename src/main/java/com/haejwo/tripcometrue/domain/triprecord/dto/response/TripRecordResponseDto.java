@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.haejwo.tripcometrue.domain.triprecord.entity.ExpenseType;
+import com.haejwo.tripcometrue.domain.triprecord.entity.ExpenseRangeType;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import java.time.LocalDate;
 import lombok.Builder;
@@ -11,7 +11,7 @@ public record TripRecordResponseDto(
     String title,
     String content,
     Integer average_rating,
-    ExpenseType expenseType,
+    ExpenseRangeType expenseRangeType,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripStartDay,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
     Integer totalDays,
@@ -22,13 +22,13 @@ public record TripRecordResponseDto(
 
     @Builder
     public TripRecordResponseDto(Long id, String title, String content, Integer average_rating,
-        ExpenseType expenseType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
+        ExpenseRangeType expenseRangeType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
         String countries, Integer viewCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.average_rating = average_rating;
-        this.expenseType = expenseType;
+        this.expenseRangeType = expenseRangeType;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
@@ -43,7 +43,7 @@ public record TripRecordResponseDto(
             .title(entity.getTitle())
             .content(entity.getContent())
             .average_rating(entity.getAverageRating())
-            .expenseType(entity.getExpenseType())
+            .expenseRangeType(entity.getExpenseRangeType())
             .tripStartDay(entity.getTripStartDay())
             .tripEndDay(entity.getTripEndDay())
             .totalDays(entity.getTotalDays())

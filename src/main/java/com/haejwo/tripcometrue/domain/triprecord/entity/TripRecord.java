@@ -37,7 +37,7 @@ public class TripRecord {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private ExpenseType expenseType;
+    private ExpenseRangeType expenseRangeType;
 
     private String countries;
 
@@ -54,13 +54,13 @@ public class TripRecord {
 
     @Builder
     public TripRecord(Long id, String title, String content, Integer averageRating,
-        ExpenseType expenseType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
+        ExpenseRangeType expenseRangeType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
         String countries, Integer viewCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.averageRating = averageRating;
-        this.expenseType = expenseType;
+        this.expenseRangeType = expenseRangeType;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
@@ -72,7 +72,7 @@ public class TripRecord {
     public void update(TripRecordRequestDto requestDto) {
         this.title = requestDto.title();
         this.content = requestDto.content();
-        this.expenseType = requestDto.expenseType();
+        this.expenseRangeType = requestDto.expenseRangeType();
         this.tripStartDay = requestDto.tripStartDay();
         this.tripEndDay = requestDto.tripEndDay();
         this.countries = requestDto.countries();

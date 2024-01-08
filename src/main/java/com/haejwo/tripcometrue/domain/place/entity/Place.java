@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.place.entity;
 
-import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDTO;
+import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,7 +60,7 @@ public class Place extends BaseTimeEntity {
         this.cityId = cityId;
     }
 
-    public void update(PlaceRequestDTO requestDto) {
+    public void update(PlaceRequestDto requestDto) {
         this.name = requestDto.name();
         this.address = requestDto.address();
         this.description = requestDto.description();
