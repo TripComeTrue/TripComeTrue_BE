@@ -14,9 +14,10 @@ public record SignUpRequestDto(
     String password
 ) {
 
-    public Member toEntity(String encodedPassword) {
+    public Member toEntity(String encodedPassword, String name) {
         return Member.builder()
             .email(email)
+            .nickname(name)
             .password(encodedPassword)
             .authority("ROLE_USER")
             .build();
