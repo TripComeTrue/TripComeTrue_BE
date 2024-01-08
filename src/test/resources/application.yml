@@ -4,8 +4,6 @@ spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:mysql:8:///tripcometrue?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-  config:
-    import: optional:file:.env[.properties]
 
   jpa:
     show-sql: true
