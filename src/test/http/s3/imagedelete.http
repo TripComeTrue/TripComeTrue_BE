@@ -1,0 +1,7 @@
+### 이미지 삭제 (여기서 실행 안됨)
+DELETE POST localhost:8080/v1/images
+Content-Type: application/x-www-form-urlencoded
+
+{
+  "imageUrl": "삭제 이미지 url"
+}
