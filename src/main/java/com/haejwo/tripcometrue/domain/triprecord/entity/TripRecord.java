@@ -1,6 +1,9 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
+import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
+import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +13,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -25,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TripRecord {
+public class TripRecord extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,25 +55,39 @@ public class TripRecord {
 
 
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<TripRecordSchedule> tripRecordSchedules =new ArrayList<>();
+    private List<TripRecordSchedule> tripRecordSchedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<TripRecordTag> tripRecordTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<TripRecordImage> tripRecordImages = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
-    public TripRecord(Long id, String title, String content, Integer averageRating,
-        ExpenseRangeType expenseRangeType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
-        String countries, Integer viewCount) {
+    public TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
+        String countries, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
+        Integer averageRating, Integer viewCount, List<TripRecordSchedule> tripRecordSchedules,
+        List<TripRecordTag> tripRecordTags, List<TripRecordImage> tripRecordImages, Member member) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.averageRating = averageRating;
         this.expenseRangeType = expenseRangeType;
+        this.countries = countries;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
-        this.countries = countries;
+        this.averageRating = averageRating;
         this.viewCount = viewCount;
+        this.tripRecordSchedules = tripRecordSchedules;
+        this.tripRecordTags = tripRecordTags;
+        this.tripRecordImages = tripRecordImages;
+        this.member = member;
     }
 
-    // TODO: update 함수
     public void update(TripRecordRequestDto requestDto) {
         this.title = requestDto.title();
         this.content = requestDto.content();
