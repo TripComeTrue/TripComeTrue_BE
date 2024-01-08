@@ -1,5 +1,6 @@
-package com.haejwo.tripcometrue.domain.triprecord.entity;
+package com.haejwo.tripcometrue.domain.triprecord.entity.type;
 
+import com.haejwo.tripcometrue.domain.triprecord.exception.ExpenseRangeTypeNotFoundException;
 import java.util.stream.Stream;
 
 public enum ExpenseRangeType {
@@ -20,7 +21,7 @@ public enum ExpenseRangeType {
         return Stream.of(ExpenseRangeType.values())
                     .filter(p -> p.max == max)
                     .findFirst()
-                    .orElseThrow(); // TODO: ExpenseType 예외 추가
+                    .orElseThrow(ExpenseRangeTypeNotFoundException::new);
     }
 
 }
