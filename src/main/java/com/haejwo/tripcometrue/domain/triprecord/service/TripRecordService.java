@@ -1,9 +1,12 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
+import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +18,9 @@ public class TripRecordService {
     private final TripRecordRepository tripRecordRepository;
 
     @Transactional
-    public TripRecordResponseDto addTripRecord(TripRecordRequestDto requestDto) {
+    public TripRecordResponseDto addTripRecord(PrincipalDetails principalDetails, TripRecordRequestDto requestDto) {
 
-        TripRecord requestTripRecord = requestDto.toEntity();
+        TripRecord requestTripRecord = requestDto.toEntity(principalDetails.getMember());
         TripRecord savedTripRecord = tripRecordRepository.save(requestTripRecord);
         TripRecordResponseDto responseDto = TripRecordResponseDto.fromEntity(savedTripRecord);
 
@@ -34,25 +37,35 @@ public class TripRecordService {
     }
 
     @Transactional
-    public TripRecordResponseDto modifyTripRecord(Long tripRecordId, TripRecordRequestDto requestDto) {
+    public TripRecordResponseDto modifyTripRecord(PrincipalDetails principalDetails, Long tripRecordId, TripRecordRequestDto requestDto) {
 
         TripRecord findTripRecord =  findTripRecordById(tripRecordId);
+
+        if(principalDetails.getMember().getId() != findTripRecord.getMember().getId()) {
+            throw new UserInvalidAccessException();
+        }
+        
         findTripRecord.update(requestDto);
         TripRecordResponseDto responseDto = TripRecordResponseDto.fromEntity(findTripRecord);
 
         return responseDto;
     }
 
-    public void removeTripRecord(Long tripRecordId) {
+    public void removeTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
+
         TripRecord findTripRecord = findTripRecordById(tripRecordId);
+
+        if(principalDetails.getMember().getId() != findTripRecord.getMember().getId()) {
+            throw new UserInvalidAccessException();
+        }
+
         tripRecordRepository.delete(findTripRecord);
     }
 
     private TripRecord findTripRecordById(Long tripRecordId) {
         TripRecord findTripRecord = tripRecordRepository.findById(tripRecordId)
-            .orElseThrow(); // TODO: 여행후기 조회 예외 추가
+            .orElseThrow(TripRecordNotFoundException::new);
         return findTripRecord;
     }
-
 
 }

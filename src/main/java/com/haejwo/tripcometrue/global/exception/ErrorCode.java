@@ -19,6 +19,7 @@ public enum ErrorCode {
     // USER
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 회원입니다."),
     USER_ALREADY_REGISTERED(HttpStatus.BAD_REQUEST, "이미 가입된 회원입니다."),
+    USER_INVALID_ACCESS(HttpStatus.BAD_REQUEST, "잘못된 유저의 접근입니다."),
 
     // AUTH
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
@@ -27,7 +28,11 @@ public enum ErrorCode {
     CITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 도시입니다."),
 
     // PLACE
-    PLCAE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행지입니다."),
+    PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행지입니다."),
+
+    // TRIP_RECORD
+    TRIP_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행후기입니다."),
+    EXPENSE_RANGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 비용범위입니다."),
 
     // S3
     FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),

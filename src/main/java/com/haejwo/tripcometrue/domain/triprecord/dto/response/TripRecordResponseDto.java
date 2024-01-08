@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.haejwo.tripcometrue.domain.triprecord.entity.ExpenseRangeType;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import java.time.LocalDate;
 import lombok.Builder;
@@ -16,14 +16,15 @@ public record TripRecordResponseDto(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
     Integer totalDays,
     String countries,
-    Integer viewCount
+    Integer viewCount,
+    Long memberId
 
 ) {
 
     @Builder
     public TripRecordResponseDto(Long id, String title, String content, Integer average_rating,
         ExpenseRangeType expenseRangeType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
-        String countries, Integer viewCount) {
+        String countries, Integer viewCount, Long memberId) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -34,6 +35,7 @@ public record TripRecordResponseDto(
         this.totalDays = totalDays;
         this.countries = countries;
         this.viewCount = viewCount;
+        this.memberId = memberId;
     }
 
 
@@ -49,6 +51,7 @@ public record TripRecordResponseDto(
             .totalDays(entity.getTotalDays())
             .countries(entity.getCountries())
             .viewCount(entity.getViewCount())
+            .memberId(entity.getMember().getId())
             .build();
 
     }

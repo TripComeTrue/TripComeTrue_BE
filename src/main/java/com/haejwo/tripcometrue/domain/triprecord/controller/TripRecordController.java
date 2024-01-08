@@ -3,9 +3,11 @@ package com.haejwo.tripcometrue.domain.triprecord.controller;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordService;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,10 +26,11 @@ public class TripRecordController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<TripRecordResponseDto>> tripRecordAdd(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         @RequestBody TripRecordRequestDto requestDto
     ) {
 
-        TripRecordResponseDto responseDto = tripRecordService.addTripRecord(requestDto);
+        TripRecordResponseDto responseDto = tripRecordService.addTripRecord(principalDetails, requestDto);
         ResponseDTO<TripRecordResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
@@ -50,11 +53,12 @@ public class TripRecordController {
 
     @PutMapping("/{tripRecordId}")
     public ResponseEntity<ResponseDTO<TripRecordResponseDto>> tripRecordModify(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long tripRecordId,
         @RequestBody TripRecordRequestDto requestDto
     ) {
 
-        TripRecordResponseDto responseDto = tripRecordService.modifyTripRecord(tripRecordId, requestDto);
+        TripRecordResponseDto responseDto = tripRecordService.modifyTripRecord(principalDetails, tripRecordId, requestDto);
         ResponseDTO<TripRecordResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
@@ -65,10 +69,11 @@ public class TripRecordController {
 
     @DeleteMapping("/{tripRecordId}")
     public ResponseEntity<ResponseDTO> tripRecordRemove(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long tripRecordId
     ) {
 
-        tripRecordService.removeTripRecord(tripRecordId);
+        tripRecordService.removeTripRecord(principalDetails, tripRecordId);
         ResponseDTO responseBody = ResponseDTO.ok();
 
         return ResponseEntity
