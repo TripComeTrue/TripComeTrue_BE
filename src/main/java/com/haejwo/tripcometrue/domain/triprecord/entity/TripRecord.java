@@ -4,6 +4,8 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDt
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +15,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,6 +36,7 @@ public class TripRecord {
     private String title;
     private String content;
 
+    @Enumerated(EnumType.STRING)
     private ExpenseType expenseType;
 
     private String countries;
@@ -41,21 +45,21 @@ public class TripRecord {
     private LocalDate tripEndDay;
 
     private Integer totalDays;
-    private Integer average_rating;
+    private Integer averageRating;
     private Integer viewCount;
 
 
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<TripRecordSchedule> tripRecordSchedules;
+    private List<TripRecordSchedule> tripRecordSchedules =new ArrayList<>();
 
     @Builder
-    public TripRecord(Long id, String title, String content, Integer average_rating,
+    public TripRecord(Long id, String title, String content, Integer averageRating,
         ExpenseType expenseType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
         String countries, Integer viewCount) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.average_rating = average_rating;
+        this.averageRating = averageRating;
         this.expenseType = expenseType;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
