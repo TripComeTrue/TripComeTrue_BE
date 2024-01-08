@@ -2,7 +2,7 @@ package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import java.util.stream.Stream;
 
-public enum ExpenseType {
+public enum ExpenseRangeType {
 
     BELOW_50(50),
     BELOW_100(100),
@@ -10,14 +10,14 @@ public enum ExpenseType {
     BELOW_300(300),
     ABOVE_300(Integer.MAX_VALUE);
 
-    private int max;
+    private final int max;
 
-    ExpenseType(int max) {
+    ExpenseRangeType(int max) {
         this.max = max;
     }
 
-    public static ExpenseType findByMax(int max) {
-        return Stream.of(ExpenseType.values())
+    public static ExpenseRangeType findByMax(int max) {
+        return Stream.of(ExpenseRangeType.values())
                     .filter(p -> p.max == max)
                     .findFirst()
                     .orElseThrow(); // TODO: ExpenseType 예외 추가
