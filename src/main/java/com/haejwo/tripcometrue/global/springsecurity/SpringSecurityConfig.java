@@ -24,6 +24,8 @@ public class SpringSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final PrincipalOauth2UserService principalOauth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -68,10 +70,25 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/member/signup")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/test/jwt")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/check-duplicated-email")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/oauth2/info/**")).permitAll()
 
             .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/images/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/trip-record/**")).permitAll()
             .anyRequest().authenticated());
+
+        /**
+         * @author liyusang1
+         * @implNote 사용자 프로필 정보를 가져오고 그 정보를 토대로 회원가입을 자동으로 진행
+         * 정보가 추가 적으로 필요하면 추가적으로 요구 받아야함
+         * OAuth 완료가 되면 엑세스토큰 + 사용자 프로필 정보를 한번에 받음 로그인 성공시 principalOauth2UserService에서 처리 후
+         * oAuth2LoginSuccessHandler에서 리디렉트 처리
+         */
+        http.oauth2Login(oauth2 -> oauth2
+            .userInfoEndpoint(
+                userInfoEndpoint -> userInfoEndpoint.userService(principalOauth2UserService))
+            .successHandler(oAuth2LoginSuccessHandler)
+        );
 
         http.exceptionHandling(exceptionHandling -> {
             exceptionHandling.authenticationEntryPoint(

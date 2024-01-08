@@ -34,7 +34,13 @@ public class Member extends BaseTimeEntity {
     private Double member_rating;
 
     @Builder
-    public Member(String email, String nickname, String password, String authority) {
+    public Member(String email, String nickname, String password, String authority,
+        String provider) {
         this.memberBase = new MemberBase(email, nickname, password, authority);
+        this.provider = provider;
+    }
+
+    public void updateProfileImage(String profileImage){
+        this.profile_image = profileImage;
     }
 }

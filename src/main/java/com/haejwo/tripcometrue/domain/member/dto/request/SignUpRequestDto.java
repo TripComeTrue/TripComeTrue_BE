@@ -10,17 +10,14 @@ public record SignUpRequestDto(
     @NotNull(message = "email은 필수값입니다")
     String email,
 
-    @NotNull(message = "nickname은 필수값입니다")
-    String nickname,
-
     @NotNull(message = "password는 필수값입니다")
     String password
 ) {
 
-    public Member toEntity(String encodedPassword) {
+    public Member toEntity(String encodedPassword, String name) {
         return Member.builder()
             .email(email)
-            .nickname(nickname)
+            .nickname(name)
             .password(encodedPassword)
             .authority("ROLE_USER")
             .build();

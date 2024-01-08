@@ -6,3 +6,14 @@ Content-Type: application/json
   "email": "liyusang1@naver.com",
   "password": "123456"
 }
+
+### google (Do not run it within an http file)
+http://localhost:8080/oauth2/authorization/google
+###
+http://tripcometrue.site/oauth2/authorization/google
+
+### naver (Do not run it within an http file)
+http://localhost:8080/oauth2/authorization/naver
+
+### kakao (Do not run it within an http file)
+http://localhost:8080/oauth2/authorization/kakao
