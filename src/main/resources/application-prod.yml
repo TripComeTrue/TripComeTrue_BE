@@ -42,13 +42,13 @@ spring:
               - email
             client-name: Naver
             authorization-grant-type: authorization_code
-            redirect-uri: http://tripcometrue.site:8080/login/oauth2/code/naver
+            redirect-uri: http://tripcometrue.site/login/oauth2/code/naver
 
           kakao:
             client-id: ${KAKAO_ID}
             client-secret: ${KAKAO_KEY}
             client-authentication-method: client_secret_post
-            redirect-uri: http://tripcometrue.site:8080/login/oauth2/code/kakao
+            redirect-uri: http://tripcometrue.site/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-name: Kakao
             scope:
@@ -71,3 +71,8 @@ spring:
 logging:
   level:
     "[org.springframework.security]": DEBUG
+
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET}

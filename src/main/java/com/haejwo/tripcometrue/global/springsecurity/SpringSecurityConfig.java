@@ -73,6 +73,7 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/member/oauth2/info/**")).permitAll()
 
             .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/images/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-record/**")).permitAll()
             .anyRequest().authenticated());
 

@@ -6,9 +6,7 @@ networks:
 services:
   tripcometrue-db:
     container_name: tripcometrue-db
-    build:
-      context: ./database
-      dockerfile: Dockerfile
+    image: jo0oy/tripcometrue-mysql
     ports:
       - "3307:3306"
     environment:

@@ -1,8 +1,11 @@
 package com.haejwo.tripcometrue.global.exception;
 
+import com.haejwo.tripcometrue.global.s3.exception.FileMaxSizeExceededException;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author liyusang1
@@ -76,5 +83,13 @@ public class GlobalExceptionRestAdvice {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ResponseDTO.errorWithMessage(HttpStatus.BAD_REQUEST, errorMessage));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ResponseDTO<Void>> maxUploadSizeExceededExceptionHandler() {
+        HttpStatus status = HttpStatus.PAYLOAD_TOO_LARGE;
+        return ResponseEntity
+                .status(status)
+                .body(ResponseDTO.error(new FileMaxSizeExceededException().getErrorCode()));
     }
 }

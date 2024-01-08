@@ -3,9 +3,8 @@ POST http://localhost:8080/v1/member/signup
 Content-Type: application/json
 
 {
-  "email": "test1@naver.com",
-  "password": "123456",
-  "nickname": "testusername"
+  "email": "test123@naver.com",
+  "password": "123456"
 }
 
 ### 이메일 중복 체크
