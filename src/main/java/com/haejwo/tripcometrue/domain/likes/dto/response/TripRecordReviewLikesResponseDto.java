@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.likes.dto;
+package com.haejwo.tripcometrue.domain.likes.dto.response;
 
 import com.haejwo.tripcometrue.domain.likes.entity.TripRecordReviewLikes;
 import lombok.Builder;
