@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import java.time.LocalTime;
 import lombok.Builder;
-public record PlaceResponseDTO(
+public record PlaceResponseDto(
     Long id,
     String name,
     String address,
@@ -18,7 +18,7 @@ public record PlaceResponseDTO(
 ) {
 
     @Builder
-    public PlaceResponseDTO(
+    public PlaceResponseDto(
         Long id,
         String name,
         String address,
@@ -42,8 +42,8 @@ public record PlaceResponseDTO(
         this.cityId = cityId;
     }
 
-    public static PlaceResponseDTO fromEntity(Place entity) {
-        return PlaceResponseDTO.builder()
+    public static PlaceResponseDto fromEntity(Place entity) {
+        return PlaceResponseDto.builder()
             .id(entity.getId())
             .name(entity.getName())
             .address(entity.getAddress())

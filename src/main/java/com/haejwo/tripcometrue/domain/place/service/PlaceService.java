@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.place.service;
 
-import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDTO;
-import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDTO;
+import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
@@ -20,45 +20,43 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     @Transactional
-    public PlaceResponseDTO addPlace(PlaceRequestDTO requestDto) {
+    public PlaceResponseDto addPlace(PlaceRequestDto requestDto) {
 
-        System.out.println(requestDto.storedCount());
         Place requestPlace = requestDto.toEntity();
         Place savedPlace = placeRepository.save(requestPlace);
-        System.out.println(savedPlace.getStoredCount());
-        PlaceResponseDTO responseDto = PlaceResponseDTO.fromEntity(savedPlace);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(savedPlace);
 
         return responseDto;
 
     }
 
     @Transactional(readOnly = true)
-    public PlaceResponseDTO findPlace(Long placeId) {
+    public PlaceResponseDto findPlace(Long placeId) {
 
         Place findPlace = findPlaceById(placeId);
 
-        PlaceResponseDTO responseDto = PlaceResponseDTO.fromEntity(findPlace);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(findPlace);
 
         return responseDto;
     }
 
     @Transactional(readOnly = true)
-    public Page<PlaceResponseDTO> findPlaces(Pageable pageable, Integer storedCount) {
+    public Page<PlaceResponseDto> findPlaces(Pageable pageable, Integer storedCount) {
 
         Page<Place> findPlaces = placeRepository.findPlaceWithFilter(pageable, storedCount);
 
-        Page<PlaceResponseDTO> result = findPlaces.map(PlaceResponseDTO::fromEntity);
+        Page<PlaceResponseDto> result = findPlaces.map(PlaceResponseDto::fromEntity);
 
         return result;
 
     }
 
     @Transactional
-    public PlaceResponseDTO modifyPlace(Long placeId, PlaceRequestDTO requestDto) {
+    public PlaceResponseDto modifyPlace(Long placeId, PlaceRequestDto requestDto) {
 
         Place place = findPlaceById(placeId);
         place.update(requestDto);
-        PlaceResponseDTO responseDto = PlaceResponseDTO.fromEntity(place);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(place);
 
         return responseDto;
     }
