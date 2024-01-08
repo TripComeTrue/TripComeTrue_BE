@@ -38,7 +38,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         //한국어 인코딩 설정
         String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
 
-        String redirectUrl = "http://localhost:8080/v1/member/oauth2/info?token=" + token
+        String redirectUrl = "/v1/member/oauth2/info?token=" + token
             + "&email=" + email + "&name=" + encodedName;
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
