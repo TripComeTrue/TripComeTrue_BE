@@ -1,0 +1,31 @@
+### 여행후기 조회
+GET http://localhost:8080/v1/trip-record/1
+
+### 여행후기 저장
+POST http://localhost:8080/v1/trip-record
+Content-Type: application/json
+
+{
+    "title": "제목01",
+    "content": "내용01",
+    "expenseRangeType": "BELOW_50",
+    "tripStartDay": "2024-01-10",
+    "tripEndDay": "2024-01-20",
+    "countries": "한국,일본"
+}
+
+### 여행후기 수정
+PUT http://localhost:8080/v1/trip-record/1
+Content-Type: application/json
+
+{
+  "title": "수정된 제목01",
+  "content": "수정된 내용01",
+  "expenseRangeType": "BELOW_100",
+  "tripStartDay": "2024-12-11",
+  "tripEndDay": "2024-12-30",
+  "countries": "미국,일본"
+}
+
+### 여행후기 삭제
+DELETE http://localhost:8080/v1/trip-record/1
