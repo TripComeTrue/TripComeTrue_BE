@@ -1,7 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -39,12 +40,12 @@ public class TripRecordController {
     }
 
     @GetMapping("/{tripRecordId}")
-    public ResponseEntity<ResponseDTO<TripRecordResponseDto>> tripRecordDetails(
+    public ResponseEntity<ResponseDTO<TripRecordDetailResponseDto>> tripRecordDetail(
         @PathVariable Long tripRecordId
     ) {
 
-        TripRecordResponseDto responseDto = tripRecordService.findTripRecord(tripRecordId);
-        ResponseDTO<TripRecordResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+        TripRecordDetailResponseDto responseDto = tripRecordService.findTripRecord(tripRecordId);
+        ResponseDTO<TripRecordDetailResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
             .status(responseBody.getCode())
