@@ -1,10 +1,9 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
-import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import java.time.LocalDate;
 import lombok.Builder;
 
