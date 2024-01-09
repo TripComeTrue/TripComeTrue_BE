@@ -1,5 +1,9 @@
 package com.haejwo.tripcometrue.domain.likes.service;
 
+import com.haejwo.tripcometrue.domain.Review.entity.PlaceReview;
+import com.haejwo.tripcometrue.domain.Review.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.Review.repository.PlaceReviewRepository;
+import com.haejwo.tripcometrue.domain.Review.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.likes.dto.response.PlaceReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.dto.response.TripRecordReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
@@ -61,9 +65,9 @@ import org.springframework.stereotype.Service;
       }
 
       Member member = memberRepository.findById(memberId)
-          .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+          .orElseThrow(() -> new EntityNotFoundException());
       TripRecordReview tripRecordReview = tripRecordReviewRepository.findById(tripRecordReviewId)
-          .orElseThrow(() -> new EntityNotFoundException("Trip Record Review not found"));
+          .orElseThrow(() -> new EntityNotFoundException());
 
       TripRecordReviewLikes like = TripRecordReviewLikes.builder()
           .member(member)
