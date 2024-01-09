@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TripRecordReviewLikesRepository extends JpaRepository {
+public interface TripRecordReviewLikesRepository extends JpaRepository<TripRecordReviewLikes,Long> {
 
   Optional<TripRecordReviewLikes> findByMemberIdAndTripRecordReviewId(Long memberId, Long tripRecordReviewId);
 }
