@@ -2,7 +2,8 @@ package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
@@ -28,10 +29,10 @@ public class TripRecordService {
     }
 
     @Transactional(readOnly = true)
-    public TripRecordResponseDto findTripRecord(Long tripRecordId) {
+    public TripRecordDetailResponseDto findTripRecord(Long tripRecordId) {
         
         TripRecord findTripRecord = findTripRecordById(tripRecordId);
-        TripRecordResponseDto responseDto = TripRecordResponseDto.fromEntity(findTripRecord);
+        TripRecordDetailResponseDto responseDto = TripRecordDetailResponseDto.fromEntity(findTripRecord);
 
         return responseDto;
     }
