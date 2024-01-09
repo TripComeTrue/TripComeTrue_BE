@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.dto.response;
+package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
@@ -10,50 +10,48 @@ public record TripRecordResponseDto(
     Long id,
     String title,
     String content,
-    Integer average_rating,
     ExpenseRangeType expenseRangeType,
+    String countries,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripStartDay,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
     Integer totalDays,
-    String countries,
     Integer viewCount,
+    Integer average_rating,
     Long memberId
 
 ) {
 
     @Builder
-    public TripRecordResponseDto(Long id, String title, String content, Integer average_rating,
-        ExpenseRangeType expenseRangeType, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
-        String countries, Integer viewCount, Long memberId) {
+    public TripRecordResponseDto(Long id, String title, String content,
+        ExpenseRangeType expenseRangeType, String countries, LocalDate tripStartDay, LocalDate tripEndDay,
+        Integer totalDays, Integer viewCount, Integer average_rating, Long memberId) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.average_rating = average_rating;
         this.expenseRangeType = expenseRangeType;
+        this.countries = countries;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
-        this.countries = countries;
         this.viewCount = viewCount;
+        this.average_rating = average_rating;
         this.memberId = memberId;
     }
-
 
     public static TripRecordResponseDto fromEntity(TripRecord entity) {
         return TripRecordResponseDto.builder()
             .id(entity.getId())
             .title(entity.getTitle())
             .content(entity.getContent())
-            .average_rating(entity.getAverageRating())
             .expenseRangeType(entity.getExpenseRangeType())
+            .countries(entity.getCountries())
             .tripStartDay(entity.getTripStartDay())
             .tripEndDay(entity.getTripEndDay())
             .totalDays(entity.getTotalDays())
-            .countries(entity.getCountries())
             .viewCount(entity.getViewCount())
+            .average_rating(entity.getAverageRating())
             .memberId(entity.getMember().getId())
             .build();
-
     }
 
 }

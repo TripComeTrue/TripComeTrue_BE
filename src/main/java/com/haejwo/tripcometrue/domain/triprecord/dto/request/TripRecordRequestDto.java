@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -11,21 +12,21 @@ public record TripRecordRequestDto(
     String title,
     String content,
     ExpenseRangeType expenseRangeType,
+    String countries,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripStartDay,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
-    String countries,
     Member member
 ) {
 
     @Builder
     public TripRecordRequestDto(String title, String content, ExpenseRangeType expenseRangeType,
-        LocalDate tripStartDay, LocalDate tripEndDay, String countries, Member member) {
+        String countries, LocalDate tripStartDay, LocalDate tripEndDay, Member member) {
         this.title = title;
         this.content = content;
         this.expenseRangeType = expenseRangeType;
+        this.countries = countries;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
-        this.countries = countries;
         this.member = member;
     }
 
