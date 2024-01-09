@@ -1,10 +1,14 @@
 package com.haejwo.tripcometrue.domain.triprecordreview.controller;
 
-import com.haejwo.tripcometrue.domain.triprecordreview.request.TripRecordReviewRegisterRequest;
+import com.haejwo.tripcometrue.domain.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
+import com.haejwo.tripcometrue.domain.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
 import com.haejwo.tripcometrue.domain.triprecordreview.service.TripRecordReviewService;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,12 +17,18 @@ public class TripRecordReviewController {
 
     private final TripRecordReviewService tripRecordReviewService;
 
-    @PostMapping("/v1/trip-record-reviews/{tripRecordReviewId}")
-    public ResponseEntity<> registerTripRecordReview(
-            @PathVariable Long tripRecordReviewId,
-            @RequestBody @Valid TripRecordReviewRegisterRequest request) {
-        tripRecordReviewService.saveTripRecordReview(tripRecordReviewId, request);
-        return new ResponseEntity()
+    @PostMapping("/v1/trip-records/{tripRecordId}/reviews")
+    public ResponseEntity<ResponseDTO<TripRecordReviewEvaluateResponseDto>> evaluateTripRecord(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordId,
+            @RequestBody @Valid TripRecordReviewEvaluateRequestDto request) {
+
+        TripRecordReviewEvaluateResponseDto responseDto = tripRecordReviewService.saveTripRecordReview(principalDetails, tripRecordId, request);
+        ResponseDTO<TripRecordReviewEvaluateResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+
+        return ResponseEntity
+                .status(responseBody.getCode())
+                .body(responseBody);
     }
 
 }

@@ -1,16 +1,18 @@
 package com.haejwo.tripcometrue.domain.triprecordreview.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class TripRecordReview extends BaseTimeEntity {
 
     @Id
@@ -26,10 +28,12 @@ public class TripRecordReview extends BaseTimeEntity {
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
+    @NotNull
+    private Short rating;
+
     @Lob
     private String content;
 
-    private Short rating;
     private Integer likeCount;
     private String imageUrl;
 
