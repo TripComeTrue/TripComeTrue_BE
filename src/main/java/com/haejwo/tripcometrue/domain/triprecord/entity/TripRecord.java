@@ -97,9 +97,18 @@ public class TripRecord extends BaseTimeEntity {
         this.countries = requestDto.countries();
     }
 
+    public void incrementViewCount() {
+        if(this.viewCount == null) {
+            this.viewCount = 1;
+        } else {
+            this.viewCount++;
+        }
+    }
+
     @PrePersist
     public void prePersist() {
         this.totalDays = calculateTotalDays();
+        this.viewCount = 0;
     }
 
     @PreUpdate

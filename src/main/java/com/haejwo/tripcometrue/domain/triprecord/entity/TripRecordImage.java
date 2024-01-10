@@ -27,6 +27,7 @@ public class TripRecordImage extends BaseTimeEntity {
     @Column(name = "trip_record_image_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private TripRecordImageType imageType;
     private String imageUrl;
 

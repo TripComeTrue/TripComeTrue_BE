@@ -5,18 +5,24 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDt
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TripRecordService {
 
     private final TripRecordRepository tripRecordRepository;
+    private final TripRecordViewCountRepository tripRecordViewCountRepository;
 
     @Transactional
     public TripRecordResponseDto addTripRecord(PrincipalDetails principalDetails, TripRecordRequestDto requestDto) {
@@ -28,10 +34,15 @@ public class TripRecordService {
         return responseDto;
     }
 
-    @Transactional(readOnly = true)
-    public TripRecordDetailResponseDto findTripRecord(Long tripRecordId) {
-        
+    @Transactional
+    public TripRecordDetailResponseDto findTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
+
+        Long memberId = principalDetails.getMember().getId();
         TripRecord findTripRecord = findTripRecordById(tripRecordId);
+
+        if(memberId != findTripRecord.getMember().getId()) { findTripRecord.incrementViewCount(); }
+        incrementViewCount(findTripRecord);
+
         TripRecordDetailResponseDto responseDto = TripRecordDetailResponseDto.fromEntity(findTripRecord);
 
         return responseDto;
@@ -52,6 +63,7 @@ public class TripRecordService {
         return responseDto;
     }
 
+    @Transactional
     public void removeTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
 
         TripRecord findTripRecord = findTripRecordById(tripRecordId);
@@ -62,6 +74,29 @@ public class TripRecordService {
 
         tripRecordRepository.delete(findTripRecord);
     }
+
+    @Transactional
+    public void incrementViewCount(TripRecord tripRecord) {
+
+        LocalDate today = LocalDate.now();
+
+        TripRecordViewCount viewCountEntity = tripRecordViewCountRepository.findByTripRecordAndDate(tripRecord, today)
+            .orElseGet(() -> createNewViewCount(tripRecord, today));
+
+        viewCountEntity.incrementViewCount();
+        tripRecordViewCountRepository.save(viewCountEntity);
+
+    }
+
+    private TripRecordViewCount createNewViewCount(TripRecord tripRecord, LocalDate today) {
+        return TripRecordViewCount.builder()
+            .date(today)
+            .tripRecord(tripRecord)
+            .viewCount(0)
+            .build();
+    }
+
+
 
     private TripRecord findTripRecordById(Long tripRecordId) {
         TripRecord findTripRecord = tripRecordRepository.findById(tripRecordId)
