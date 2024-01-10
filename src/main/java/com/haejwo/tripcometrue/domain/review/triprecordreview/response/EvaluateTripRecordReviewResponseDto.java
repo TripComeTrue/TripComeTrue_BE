@@ -2,13 +2,13 @@ package com.haejwo.tripcometrue.domain.review.triprecordreview.response;
 
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 
-public record TripRecordReviewEvaluateResponseDto(
+public record EvaluateTripRecordReviewResponseDto(
         Long id,
         short rating
 
 ) {
-    public static TripRecordReviewEvaluateResponseDto fromEntity(TripRecordReview tripRecordReview) {
-        return new TripRecordReviewEvaluateResponseDto(
+    public static EvaluateTripRecordReviewResponseDto fromEntity(TripRecordReview tripRecordReview) {
+        return new EvaluateTripRecordReviewResponseDto(
                 tripRecordReview.getId(),
                 tripRecordReview.getRating()
         );

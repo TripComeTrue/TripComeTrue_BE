@@ -2,8 +2,8 @@ package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.request.EvaluateTripRecordReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
@@ -25,10 +25,10 @@ public class TripRecordReviewService {
      * @return 저장한 리뷰 식별자를 반환
      */
     @Transactional
-    public TripRecordReviewEvaluateResponseDto saveTripRecordReview(
+    public EvaluateTripRecordReviewResponseDto saveTripRecordReview(
             PrincipalDetails principalDetails,
             Long tripRecordId,
-            TripRecordReviewEvaluateRequestDto request) {
+            EvaluateTripRecordReviewRequestDto request) {
 
         Member member = principalDetails.getMember();
         TripRecord tripRecord = tripRecordRepository.findById(tripRecordId)
@@ -37,7 +37,7 @@ public class TripRecordReviewService {
         TripRecordReview tripRecordReview = request.toEntity(member, tripRecord);
         TripRecordReview savedTripRecordReview = tripRecordReviewRepository.save(tripRecordReview);
 
-        return TripRecordReviewEvaluateResponseDto
+        return EvaluateTripRecordReviewResponseDto
                 .fromEntity(savedTripRecordReview);
     }
 }
