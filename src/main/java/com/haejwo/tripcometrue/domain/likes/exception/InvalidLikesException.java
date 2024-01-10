@@ -1,5 +1,4 @@
 package com.haejwo.tripcometrue.domain.likes.exception;
-
 import com.haejwo.tripcometrue.global.exception.ApplicationException;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 
