@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
+
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
@@ -8,6 +8,9 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRec
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
+import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordViewCountRepository;
+import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordViewHistoryService;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -26,6 +29,7 @@ public class TripRecordService {
 
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordViewCountRepository tripRecordViewCountRepository;
+    private final TripRecordViewHistoryService tripRecordViewHistoryService;
 
 
     @Transactional
@@ -36,6 +40,7 @@ public class TripRecordService {
 
         if(memberId != findTripRecord.getMember().getId()) { findTripRecord.incrementViewCount(); }
         incrementViewCount(findTripRecord);
+        tripRecordViewHistoryService.addViewHistory(principalDetails, tripRecordId);
 
         TripRecordDetailResponseDto responseDto = TripRecordDetailResponseDto.fromEntity(findTripRecord);
 
