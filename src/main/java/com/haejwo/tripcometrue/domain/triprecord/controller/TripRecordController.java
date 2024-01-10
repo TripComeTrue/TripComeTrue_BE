@@ -41,10 +41,11 @@ public class TripRecordController {
 
     @GetMapping("/{tripRecordId}")
     public ResponseEntity<ResponseDTO<TripRecordDetailResponseDto>> tripRecordDetail(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long tripRecordId
     ) {
 
-        TripRecordDetailResponseDto responseDto = tripRecordService.findTripRecord(tripRecordId);
+        TripRecordDetailResponseDto responseDto = tripRecordService.findTripRecord(principalDetails, tripRecordId);
         ResponseDTO<TripRecordDetailResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
