@@ -5,19 +5,19 @@ import lombok.Builder;
 
 public record TripRecordMemberResponseDto(
     String nickname,
-    String profile_image
+    String profileImage
 ) {
 
     @Builder
-    public TripRecordMemberResponseDto(String nickname, String profile_image) {
+    public TripRecordMemberResponseDto(String nickname, String profileImage) {
         this.nickname = nickname;
-        this.profile_image = profile_image;
+        this.profileImage = profileImage;
     }
 
     public static TripRecordMemberResponseDto formEntity(Member entity) {
         return TripRecordMemberResponseDto.builder()
             .nickname(entity.getMemberBase().getNickname())
-            .nickname(entity.getProfile_image())
+            .profileImage(entity.getProfile_image())
             .build();
     }
 
