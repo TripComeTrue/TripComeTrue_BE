@@ -8,7 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,8 +25,25 @@ public class TripRecordViewCount extends BaseTimeEntity {
 
     private Integer viewCount;
 
+    private LocalDate date;
+
     @ManyToOne
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
+    @Builder
+    public TripRecordViewCount(Long id, Integer viewCount, LocalDate date, TripRecord tripRecord) {
+        this.id = id;
+        this.viewCount = viewCount;
+        this.date = date;
+        this.tripRecord = tripRecord;
+    }
+
+    public void incrementViewCount() {
+        if(this.viewCount == null) {
+            this.viewCount = 1;
+        } else {
+            this.viewCount++;
+        }
+    }
 }
