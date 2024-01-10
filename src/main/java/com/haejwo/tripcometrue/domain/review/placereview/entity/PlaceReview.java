@@ -17,7 +17,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class PlaceReview extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_review_id")
     private Long id;
 
