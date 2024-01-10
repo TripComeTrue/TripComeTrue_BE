@@ -1,20 +1,20 @@
 ### 여행지 리뷰 좋아요(placeReviewId 1에 대한)
-POST http://localhost:8080/v1/likes/placeReview/1
+POST http://localhost:8080/v1/likes/place-review/1
 Content-Type: application/json
 Authorization: (로그인 후 토큰값)
 
 ### 여행지 리뷰 좋아요 취소(placeReviewId 1에 대한)
-DELETE http://localhost:8080/v1/likes/placeReview/1
+DELETE http://localhost:8080/v1/likes/place-review/1
 Content-Type: application/json
 Authorization: (로그인 후 토큰값)
 
 ### 여행후기 리뷰 좋아요(tripRecordReviewId 1에 대한)
-POST http://localhost:8080/v1/likes/tripRecordReview/1
+POST http://localhost:8080/v1/likes/trip-record-review/1
 Content-Type: application/json
 Authorization: (로그인 후 토큰값)
 
 ### 여행후기 리뷰 좋아요(tripRecordReviewId 1에 대한)
-DELETE http://localhost:8080/v1/likes/tripRecordReview/1
+DELETE http://localhost:8080/v1/likes/trip-record-review/1
 Content-Type: application/json
 Authorization: (로그인 후 토큰값)
 
