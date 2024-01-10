@@ -1,0 +1,66 @@
+# 도시 보관
+POST http://localhost:8080/v1/store/city
+Content-Type: application/json
+Authorization: 토큰 값 입력
+
+{
+  "cityId":
+}
+
+
+###
+
+# 여행지 보관
+POST http://localhost:8080/v1/store/place
+Content-Type: application/json
+Authorization: 토큰 값 입력
+
+{
+  "placeId":
+}
+###
+
+# 여행 후기 보관
+POST http://localhost:8080/v1/store/tripRecord
+Content-Type: application/json
+Authorization: 토큰 값 입력
+
+
+{
+  "tripRecordId":
+}
+
+###
+
+# 도시 보관 삭제
+DELETE http://localhost:8080/v1/store/city/{cityId}
+
+###
+
+# 여행지 보관 삭제
+DELETE http://localhost:8080/v1/store/place/{placeId}
+
+###
+
+# 여행 후기 보관 삭제
+DELETE http://localhost:8080/v1/store/tripRecord/{tripRecordId}
+
+###
+
+# 도시 보관 조회
+GET http://localhost:8080/v1/store/cities
+Authorization: 토큰 값 입력
+
+
+###
+
+# 여행지 보관 조회
+GET http://localhost:8080/v1/store/places
+Authorization: 토큰 값 입력
+
+
+###
+
+# 여행 후기 보관 조회
+GET http://localhost:8080/v1/store/tripRecords
+Authorization: 토큰 값 입력
