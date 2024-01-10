@@ -26,10 +26,6 @@ public class PlaceReviewController {
             @RequestBody RegisterPlaceReviewRequestDto requestDto) {
 
         RegisterPlaceReviewResponseDto responseDto = placeReviewService.savePlaceReview(principalDetails, tripPlaceId, requestDto);
-        ResponseDTO<RegisterPlaceReviewResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
-
-        return ResponseEntity
-                .status(responseBody.getCode())
-                .body(responseBody);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 }
