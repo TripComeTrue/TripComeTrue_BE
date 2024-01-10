@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.controller;
 
-import com.haejwo.tripcometrue.domain.review.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.response.EvaluateTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.service.TripRecordReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -18,13 +18,13 @@ public class TripRecordReviewController {
     private final TripRecordReviewService tripRecordReviewService;
 
     @PostMapping("/v1/trip-records/{tripRecordId}/reviews")
-    public ResponseEntity<ResponseDTO<TripRecordReviewEvaluateResponseDto>> evaluateTripRecord(
+    public ResponseEntity<ResponseDTO<EvaluateTripRecordReviewResponseDto>> evaluateTripRecord(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
-            @RequestBody @Valid TripRecordReviewEvaluateRequestDto request) {
+            @RequestBody @Valid EvaluateTripRecordReviewRequestDto request) {
 
-        TripRecordReviewEvaluateResponseDto responseDto = tripRecordReviewService.saveTripRecordReview(principalDetails, tripRecordId, request);
-        ResponseDTO<TripRecordReviewEvaluateResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+        EvaluateTripRecordReviewResponseDto responseDto = tripRecordReviewService.saveTripRecordReview(principalDetails, tripRecordId, request);
+        ResponseDTO<EvaluateTripRecordReviewResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
                 .status(responseBody.getCode())
