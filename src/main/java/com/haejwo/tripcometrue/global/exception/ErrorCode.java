@@ -36,7 +36,7 @@ public enum ErrorCode {
 
     // Likes
     LIKES_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 데이터가 존재하지 않습니다."),
-    LIKES_ALREADY_EXIST(HttpStatus.NO_CONTENT, "이미 좋아요가 등록되어 있습니다."),
+    LIKES_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 좋아요가 등록되어 있습니다."),
 
     // S3
     FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
