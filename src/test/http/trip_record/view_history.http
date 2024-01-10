@@ -1,0 +1,4 @@
+#최근에 본 후기 조회
+GET http://localhost:8080/v1/trip-record/view-history
+Content-Type: application/json
+Authorization: 토큰 값 입력
