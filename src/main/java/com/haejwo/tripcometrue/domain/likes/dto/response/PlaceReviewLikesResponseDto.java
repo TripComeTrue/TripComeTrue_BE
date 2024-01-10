@@ -1,5 +1,4 @@
 package com.haejwo.tripcometrue.domain.likes.dto.response;
-
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import lombok.Builder;
 

@@ -1,9 +1,7 @@
 package com.haejwo.tripcometrue.domain.likes.controller;
-
-
 import com.haejwo.tripcometrue.domain.likes.dto.response.PlaceReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.dto.response.TripRecordReviewLikesResponseDto;
-import com.haejwo.tripcometrue.domain.likes.service.LikesServiceImpl;
+import com.haejwo.tripcometrue.domain.likes.service.LikesService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
   @RequiredArgsConstructor
   public class LikesController {
 
-    private final LikesServiceImpl likesService;
+    private final LikesService likesService;
 
-    @PostMapping("/placeReview/{placeReviewId}")
+    @PostMapping("/place-review/{placeReviewId}")
     public ResponseEntity<ResponseDTO<PlaceReviewLikesResponseDto>> likePlaceReview(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long placeReviewId) {
@@ -31,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
       return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
-    @PostMapping("/tripRecordReview/{tripRecordReviewId}")
+    @PostMapping("/trip-record-review/{tripRecordReviewId}")
     public ResponseEntity<ResponseDTO<TripRecordReviewLikesResponseDto>> likeTripRecordReview(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long tripRecordReviewId) {
@@ -40,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
       return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
-    @DeleteMapping("/placeReview/{placeReviewId}")
+    @DeleteMapping("/place-review/{placeReviewId}")
     public ResponseEntity<ResponseDTO<Void>> unlikePlaceReview(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long placeReviewId) {
@@ -49,7 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
       return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @DeleteMapping("/tripRecordReview/{tripRecordReviewId}")
+    @DeleteMapping("/trip-record-review/{tripRecordReviewId}")
     public ResponseEntity<ResponseDTO<Void>> unlikeTripRecordReview(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long tripRecordReviewId) {

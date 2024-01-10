@@ -1,5 +1,4 @@
 package com.haejwo.tripcometrue.domain.likes.controller;
-
 import com.haejwo.tripcometrue.domain.likes.exception.InvalidLikesException;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import org.springframework.http.HttpStatus;

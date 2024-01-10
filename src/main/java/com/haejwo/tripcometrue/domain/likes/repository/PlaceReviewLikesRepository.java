@@ -1,5 +1,4 @@
 package com.haejwo.tripcometrue.domain.likes.repository;
-
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
