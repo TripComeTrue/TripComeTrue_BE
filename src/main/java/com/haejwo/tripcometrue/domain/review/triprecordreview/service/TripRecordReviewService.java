@@ -1,12 +1,13 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class TripRecordReviewService {
 
         Member member = principalDetails.getMember();
         TripRecord tripRecord = tripRecordRepository.findById(tripRecordId)
-                .orElseThrow(IllegalAccessError::new);//여행 후기 없는 예외 던지기
+                .orElseThrow(TripRecordNotFoundException::new);
 
         TripRecordReview tripRecordReview = request.toEntity(member, tripRecord);
         TripRecordReview savedTripRecordReview = tripRecordReviewRepository.save(tripRecordReview);
