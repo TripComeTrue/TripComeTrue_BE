@@ -1,12 +1,12 @@
-package com.haejwo.tripcometrue.domain.triprecordreview.service;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
-import com.haejwo.tripcometrue.domain.triprecordreview.entity.TripRecordReview;
-import com.haejwo.tripcometrue.domain.triprecordreview.repository.TripRecordReviewRepository;
-import com.haejwo.tripcometrue.domain.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
-import com.haejwo.tripcometrue.domain.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

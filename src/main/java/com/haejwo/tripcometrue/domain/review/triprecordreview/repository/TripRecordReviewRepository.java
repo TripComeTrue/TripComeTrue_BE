@@ -1,6 +1,6 @@
-package com.haejwo.tripcometrue.domain.triprecordreview.repository;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.repository;
 
-import com.haejwo.tripcometrue.domain.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

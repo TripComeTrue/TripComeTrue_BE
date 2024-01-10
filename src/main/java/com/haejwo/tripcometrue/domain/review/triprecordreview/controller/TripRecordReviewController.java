@@ -1,8 +1,8 @@
-package com.haejwo.tripcometrue.domain.triprecordreview.controller;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.controller;
 
-import com.haejwo.tripcometrue.domain.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
-import com.haejwo.tripcometrue.domain.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
-import com.haejwo.tripcometrue.domain.triprecordreview.service.TripRecordReviewService;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.response.TripRecordReviewEvaluateResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.request.TripRecordReviewEvaluateRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.service.TripRecordReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import jakarta.validation.Valid;

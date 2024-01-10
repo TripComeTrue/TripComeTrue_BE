@@ -1,6 +1,6 @@
-package com.haejwo.tripcometrue.domain.triprecordreview.response;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.response;
 
-import com.haejwo.tripcometrue.domain.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 
 public record TripRecordReviewEvaluateResponseDto(
         Long id,

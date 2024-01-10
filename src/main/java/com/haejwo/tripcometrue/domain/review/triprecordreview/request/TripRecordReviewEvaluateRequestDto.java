@@ -1,8 +1,8 @@
-package com.haejwo.tripcometrue.domain.triprecordreview.request;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.request;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
-import com.haejwo.tripcometrue.domain.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
