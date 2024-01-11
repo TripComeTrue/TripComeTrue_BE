@@ -1,5 +1,4 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
-
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
