@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TripRecordScheduleImage extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trip_record_schedule_image_id")
     private Long id;
 
@@ -29,9 +30,8 @@ public class TripRecordScheduleImage extends BaseTimeEntity {
     private TripRecordSchedule tripRecordSchedule;
 
     @Builder
-    public TripRecordScheduleImage(Long id, String imageUrl,
+    public TripRecordScheduleImage(String imageUrl,
         TripRecordSchedule tripRecordSchedule) {
-        this.id = id;
         this.imageUrl = imageUrl;
         this.tripRecordSchedule = tripRecordSchedule;
     }
