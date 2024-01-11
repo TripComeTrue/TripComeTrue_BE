@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.review.placereview.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -44,5 +45,10 @@ public class PlaceReview extends BaseTimeEntity {
         this.place = place;
         this.content = content;
         this.imageUrl = imageUrl;
+    }
+
+    public void update(PlaceReviewRequestDto requestDto) {
+        this.content = requestDto.content();
+        this.imageUrl = requestDto.imageUrl();
     }
 }

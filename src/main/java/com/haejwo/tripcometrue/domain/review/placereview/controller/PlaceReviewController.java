@@ -26,7 +26,8 @@ public class PlaceReviewController {
             @PathVariable Long placeId,
             @RequestBody PlaceReviewRequestDto requestDto) {
 
-        RegisterPlaceReviewResponseDto responseDto = placeReviewService.savePlaceReview(principalDetails, placeId, requestDto);
+        RegisterPlaceReviewResponseDto responseDto = placeReviewService
+                .savePlaceReview(principalDetails, placeId, requestDto);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
@@ -35,7 +36,19 @@ public class PlaceReviewController {
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeReviewId) {
 
-        PlaceReviewResponseDto responseDto = placeReviewService.getPlaceReview(principalDetails, placeReviewId);
+        PlaceReviewResponseDto responseDto = placeReviewService
+                .getPlaceReview(principalDetails, placeReviewId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @PutMapping("/reviews/{placeReviewId}")
+    public ResponseEntity<ResponseDTO<PlaceReviewResponseDto>> modifyPlaceReview(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long placeReviewId,
+            @RequestBody PlaceReviewRequestDto requestDto) {
+
+        PlaceReviewResponseDto responseDto = placeReviewService
+                .modifyPlaceReview(principalDetails, placeReviewId, requestDto);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 }
