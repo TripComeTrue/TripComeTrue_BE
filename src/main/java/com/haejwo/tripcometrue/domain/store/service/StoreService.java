@@ -44,7 +44,7 @@ public class StoreService{
 
     @Transactional
     public CityStoreResponseDto storeCity(CityStoreRequestDto request, PrincipalDetails principalDetails) {
-        City city = cityRepository.findById(request.getCityId())
+        City city = cityRepository.findById(request.cityId())
             .orElseThrow(() -> new CityNotFoundException());
 
         cityStoreRepository.findByMemberAndCity(principalDetails.getMember(), city)
@@ -58,7 +58,7 @@ public class StoreService{
 
     @Transactional
     public PlaceStoreResponseDto storePlace(PlaceStoreRequestDto request, PrincipalDetails principalDetails) {
-        Place place = placeRepository.findById(request.getPlaceId())
+        Place place = placeRepository.findById(request.placeId())
             .orElseThrow(() -> new PlaceNotFoundException());
 
         placeStoreRepository.findByMemberAndPlace(principalDetails.getMember(), place)
@@ -72,7 +72,7 @@ public class StoreService{
 
     @Transactional
     public TripRecordStoreResponseDto storeTripRecord(TripRecordStoreRequestDto request, PrincipalDetails principalDetails) {
-        TripRecord tripRecord = tripRecordRepository.findById(request.getTripRecordId())
+        TripRecord tripRecord = tripRecordRepository.findById(request.tripRecordId())
             .orElseThrow(() -> new TripRecordNotFoundException());
 
         tripRecordStoreRepository.findByMemberAndTripRecord(principalDetails.getMember(), tripRecord)
@@ -83,7 +83,6 @@ public class StoreService{
         TripRecordStore store = tripRecordStoreRepository.save(request.toEntity(principalDetails.getMember(), tripRecord));
         return TripRecordStoreResponseDto.fromEntity(store);
     }
-
 
     @Transactional
     public void unstoreCity(PrincipalDetails principalDetails, Long cityId) {
@@ -109,19 +108,16 @@ public class StoreService{
         tripRecordStoreRepository.delete(tripRecordStore);
     }
 
-    @Transactional
     public Page<CityStoreResponseDto> getStoredCities(PrincipalDetails principalDetails, Pageable pageable) {
         Page<CityStore> storedCities = cityStoreRepository.findByMember(principalDetails.getMember(), pageable);
         return storedCities.map(CityStoreResponseDto::fromEntity);
     }
 
-    @Transactional
     public Page<PlaceStoreResponseDto> getStoredPlaces(PrincipalDetails principalDetails, Pageable pageable) {
         Page<PlaceStore> storedPlaces = placeStoreRepository.findByMember(principalDetails.getMember(), pageable);
         return storedPlaces.map(PlaceStoreResponseDto::fromEntity);
     }
 
-    @Transactional
     public Page<TripRecordStoreResponseDto> getStoredTripRecords(PrincipalDetails principalDetails, Pageable pageable) {
         Page<TripRecordStore> storedTripRecords = tripRecordStoreRepository.findByMember(principalDetails.getMember(), pageable);
         return storedTripRecords.map(TripRecordStoreResponseDto::fromEntity);
