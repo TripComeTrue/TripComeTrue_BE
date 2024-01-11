@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.city.dto.request;
 
 import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
 import com.haejwo.tripcometrue.global.enums.Country;
 
 public record AddCityRequestDto(
@@ -21,7 +22,7 @@ public record AddCityRequestDto(
             .timeDifference(this.timeDifference)
             .voltage(this.voltage)
             .visa(this.visa)
-            .currency(this.currency)
+            .currency(CurrencyUnit.valueOf(this.currency))
             .weatherRecommendation(this.weatherRecommendation)
             .weatherDescription(this.weatherDescription)
             .country(this.country)
