@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPlaceReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.service.PlaceReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -14,18 +15,26 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/trip-places")
+@RequestMapping("/v1/places")
 public class PlaceReviewController {
 
     private final PlaceReviewService placeReviewService;
 
-    @PostMapping("/{tripPlaceId}/reviews")
+    @PostMapping("/{placeId}/reviews")
     public ResponseEntity<ResponseDTO<RegisterPlaceReviewResponseDto>> registerPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long tripPlaceId,
+            @PathVariable Long placeId,
             @RequestBody RegisterPlaceReviewRequestDto requestDto) {
 
-        RegisterPlaceReviewResponseDto responseDto = placeReviewService.savePlaceReview(principalDetails, tripPlaceId, requestDto);
+        RegisterPlaceReviewResponseDto responseDto = placeReviewService.savePlaceReview(principalDetails, placeId, requestDto);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @GetMapping("/reviews/{placeReviewId}")
+    public ResponseEntity<ResponseDTO<PlaceReviewResponseDto>> getOnePlaceReview(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long placeReviewId) {
+
+        placeReviewService.getPlaceReview(principalDetails, placeReviewId);
     }
 }
