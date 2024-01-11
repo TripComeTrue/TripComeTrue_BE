@@ -7,6 +7,7 @@ import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPla
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
+import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class PlaceReviewService {
 
     private PlaceReview getPlaceReviewById(Long placeReviewId) {
         return placeReviewRepository.findById(placeReviewId)
-                .orElseThrow(PlaceNotFoundException::new);
+                .orElseThrow(PlaceReviewNotFoundException::new);
     }
 
     /*
