@@ -25,15 +25,14 @@ public class TripRecordTag extends BaseTimeEntity {
     @Column(name = "trip_record_tag_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private HashTagType hashTagType;
+    private String hashTagType;
 
     @ManyToOne
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
     @Builder
-    public TripRecordTag(Long id, HashTagType hashTagType, TripRecord tripRecord) {
+    public TripRecordTag(Long id, String hashTagType, TripRecord tripRecord) {
         this.id = id;
         this.hashTagType = hashTagType;
         this.tripRecord = tripRecord;
