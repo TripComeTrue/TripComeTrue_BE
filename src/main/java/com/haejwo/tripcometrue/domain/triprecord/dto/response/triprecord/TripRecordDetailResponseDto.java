@@ -64,7 +64,7 @@ public record TripRecordDetailResponseDto(
 
     public static TripRecordDetailResponseDto fromEntity(TripRecord entity) {
 
-        TripRecordMemberResponseDto member = TripRecordMemberResponseDto.formEntity(entity.getMember());
+        TripRecordMemberResponseDto member = TripRecordMemberResponseDto.fromEntity(entity.getMember());
 
         List<TripRecordImage> images = entity.getTripRecordImages();
         List<TripRecordImageResponseDto> imageDtos = images.stream()
