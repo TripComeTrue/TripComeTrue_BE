@@ -3,7 +3,7 @@ package com.haejwo.tripcometrue.domain.triprecord.controller;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.CreateSchedulePlaceRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule.SearchScheduleTripResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordAddService;
+import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordEditService;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class TripRecordAddController {
+public class TripRecordEditController {
 
-    private final TripRecordAddService tripRecordAddService;
+    private final TripRecordEditService tripRecordEditService;
 
     @PostMapping("/v1/trip-record")
     public ResponseEntity<ResponseDTO<Void>> tripRecordAdd(
@@ -29,7 +29,7 @@ public class TripRecordAddController {
         @RequestBody TripRecordRequestDto requestDto
     ) {
 
-        tripRecordAddService.addTripRecord(principalDetails, requestDto);
+        tripRecordEditService.addTripRecord(principalDetails, requestDto);
         ResponseDTO<Void> responseBody = ResponseDTO.ok();
 
         return ResponseEntity
@@ -43,7 +43,7 @@ public class TripRecordAddController {
         @RequestParam String city
     ) {
         ResponseDTO<List<SearchScheduleTripResponseDto>> responseBody
-            = ResponseDTO.okWithData(tripRecordAddService.searchSchedulePlace(country, city));
+            = ResponseDTO.okWithData(tripRecordEditService.searchSchedulePlace(country, city));
 
         return ResponseEntity
             .status(responseBody.getCode())
@@ -56,7 +56,7 @@ public class TripRecordAddController {
     ) {
         ResponseDTO<Long> responseBody
             = ResponseDTO.okWithData(
-            tripRecordAddService.createSchedulePlace(createSchedulePlaceRequestDto));
+            tripRecordEditService.createSchedulePlace(createSchedulePlaceRequestDto));
 
         return ResponseEntity
             .status(responseBody.getCode())

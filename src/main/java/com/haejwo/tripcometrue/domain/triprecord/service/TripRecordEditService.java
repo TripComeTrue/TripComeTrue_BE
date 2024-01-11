@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class TripRecordAddService {
+public class TripRecordEditService {
 
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordImageRepository tripRecordImageRepository;
