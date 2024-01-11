@@ -23,48 +23,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/v1/store")
+@RequestMapping("/v1/stores")
 @RequiredArgsConstructor
 public class StoreController {
 
     private final StoreService storeService;
 
-    @PostMapping("/city")
-    public ResponseEntity<ResponseDTO<CityStoreResponseDto>> storeCity(@RequestBody CityStoreRequestDto request,
+    @PostMapping("/cities")
+    public ResponseEntity<ResponseDTO<CityStoreResponseDto>> storeCity(
+        @RequestBody CityStoreRequestDto request,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CityStoreResponseDto response = storeService.storeCity(request, principalDetails);
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 
-    @PostMapping("/place")
-    public ResponseEntity<ResponseDTO<PlaceStoreResponseDto>> storePlace(@RequestBody PlaceStoreRequestDto request,
+    @PostMapping("/places")
+    public ResponseEntity<ResponseDTO<PlaceStoreResponseDto>> storePlace(
+        @RequestBody PlaceStoreRequestDto request,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         PlaceStoreResponseDto response = storeService.storePlace(request, principalDetails);
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 
-    @PostMapping("/trip-record")
-    public ResponseEntity<ResponseDTO<TripRecordStoreResponseDto>> storeTripRecord(@RequestBody TripRecordStoreRequestDto request,
+    @PostMapping("/trip-records")
+    public ResponseEntity<ResponseDTO<TripRecordStoreResponseDto>> storeTripRecord(
+        @RequestBody TripRecordStoreRequestDto request,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         TripRecordStoreResponseDto response = storeService.storeTripRecord(request, principalDetails);
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 
-    @DeleteMapping("/city/{cityId}")
+    @DeleteMapping("/cities/{cityId}")
     public ResponseEntity<ResponseDTO<Void>> unstoreCity(@PathVariable Long cityId,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         storeService.unstoreCity(principalDetails, cityId);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @DeleteMapping("/place/{placeId}")
+    @DeleteMapping("/places/{placeId}")
     public ResponseEntity<ResponseDTO<Void>> unstorePlace(@PathVariable Long placeId,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         storeService.unstorePlace(principalDetails, placeId);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @DeleteMapping("/trip-record/{tripRecordId}")
+    @DeleteMapping("/trip-records/{tripRecordId}")
     public ResponseEntity<ResponseDTO<Void>> unstoreTripRecord(@PathVariable Long tripRecordId,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         storeService.unstoreTripRecord(principalDetails, tripRecordId);
@@ -72,21 +75,24 @@ public class StoreController {
     }
 
     @GetMapping("/cities")
-    public ResponseEntity<ResponseDTO<Page<CityStoreResponseDto>>> getStoredCities(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ResponseEntity<ResponseDTO<Page<CityStoreResponseDto>>> getStoredCities(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable) {
         Page<CityStoreResponseDto> storedCities = storeService.getStoredCities(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedCities));
     }
 
     @GetMapping("/places")
-    public ResponseEntity<ResponseDTO<Page<PlaceStoreResponseDto>>> getStoredPlaces(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ResponseEntity<ResponseDTO<Page<PlaceStoreResponseDto>>> getStoredPlaces(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable) {
         Page<PlaceStoreResponseDto> storedPlaces = storeService.getStoredPlaces(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedPlaces));
     }
 
     @GetMapping("/trip-records")
-    public ResponseEntity<ResponseDTO<Page<TripRecordStoreResponseDto>>> getStoredTripRecords(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ResponseEntity<ResponseDTO<Page<TripRecordStoreResponseDto>>> getStoredTripRecords(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable) {
         Page<TripRecordStoreResponseDto> storedTripRecords = storeService.getStoredTripRecords(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedTripRecords));
