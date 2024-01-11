@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
@@ -28,6 +30,9 @@ public class PlaceReview extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "place_id")
     private Place place;
+
+    @OneToMany(mappedBy = "placeReview")
+    private List<PlaceReviewLike> placeReviewLikes = new ArrayList<>();
 
     private String content;
     private String imageUrl;
