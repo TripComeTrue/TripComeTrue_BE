@@ -1,13 +1,10 @@
 package com.haejwo.tripcometrue.domain.place.entity;
 
+import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+
 import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,8 +31,9 @@ public class Place extends BaseTimeEntity {
     private LocalTime weekendCloseTime;
     private Integer storedCount;
 
-    // 임시 City 테이블 데이터
-    private Long cityId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @PrePersist
     public void prePersist() {
@@ -47,7 +45,7 @@ public class Place extends BaseTimeEntity {
         Long id, String name, String address, String description,
         LocalTime weekdayOpenTime, LocalTime weekdayCloseTime,
         LocalTime weekendOpenTime, LocalTime weekendCloseTime,
-        Integer storedCount, Long cityId) {
+        Integer storedCount, City city) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -57,7 +55,7 @@ public class Place extends BaseTimeEntity {
         this.weekendOpenTime = weekendOpenTime;
         this.weekendCloseTime = weekendCloseTime;
         this.storedCount = storedCount;
-        this.cityId = cityId;
+        this.city = city;
     }
 
     public void update(PlaceRequestDto requestDto) {
@@ -69,6 +67,5 @@ public class Place extends BaseTimeEntity {
         this.weekendOpenTime = requestDto.weekendOpenTime();
         this.weekendCloseTime = requestDto.weekendCloseTime();
         this.storedCount = requestDto.storedCount();
-        this.cityId = requestDto.cityId();
     }
 }
