@@ -6,6 +6,7 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.HashTagType;
 import com.querydsl.core.BooleanBuilder;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -31,11 +32,11 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
 
         // hashtag
         if(request.hashtag() != null) {
-            booleanBuilder.and(qTripRecordTag.hashTagType.eq(request.hashtag()));
+            booleanBuilder.and(qTripRecordTag.hashTagType.eq(HashTagType.valueOf(request.hashtag())));
         }
         // placeId
         if(request.placeId() != null) {
-            booleanBuilder.and(qTripRecordSchedule.placeId.eq(request.placeId()));
+            booleanBuilder.and(qTripRecordSchedule.place.id.eq(request.placeId()));
         }
 
         // expenseRangeType
