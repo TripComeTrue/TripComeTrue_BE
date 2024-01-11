@@ -27,23 +27,24 @@ public class PlaceReviewService {
     /*
     여행지 리뷰 등록
      */
-    //todo 코드 리팩토링 - 메소드 분리하기, 인라인
     @Transactional
     public RegisterPlaceReviewResponseDto savePlaceReview(
             PrincipalDetails principalDetails,
             Long placeId,
             RegisterPlaceReviewRequestDto requestDto) {
 
-        Place findPlace = placeRepository.findById(placeId)
-                .orElseThrow(PlaceNotFoundException::new);
-
         PlaceReview placeReview = RegisterPlaceReviewRequestDto.toEntity(
                 principalDetails.getMember(),
-                findPlace,
+                getPlaceById(placeId),
                 requestDto);
 
         PlaceReview savedPlaceReview = placeReviewRepository.save(placeReview);
         return RegisterPlaceReviewResponseDto.fromEntity(savedPlaceReview);
+    }
+
+    private Place getPlaceById(Long placeId) {
+        return placeRepository.findById(placeId)
+                .orElseThrow(PlaceNotFoundException::new);
     }
 
     /*
