@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
-import com.haejwo.tripcometrue.domain.member.entity.Member;
+
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
@@ -37,12 +37,6 @@ public class TripRecordSchedule extends BaseTimeEntity {
 
     private String content;
 
-    @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<TripRecordScheduleImage> tripRecordScheduleImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "place_id")
     private Place place;
@@ -51,19 +45,24 @@ public class TripRecordSchedule extends BaseTimeEntity {
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<TripRecordScheduleImage> tripRecordScheduleImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
 
     @Builder
-    public TripRecordSchedule(Long id, Integer dayNumber, Integer ordering,
-                              String content, Place place, TripRecord tripRecord, Member member) {
+    public TripRecordSchedule(Long id, Integer dayNumber, Integer ordering, String content,
+        Place place, TripRecord tripRecord, List<TripRecordScheduleImage> tripRecordScheduleImages,
+        List<TripRecordScheduleVideo> tripRecordScheduleVideos) {
+
         this.id = id;
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
         this.place = place;
         this.tripRecord = tripRecord;
-        this.member = member;
+        this.tripRecordScheduleImages = tripRecordScheduleImages;
+        this.tripRecordScheduleVideos = tripRecordScheduleVideos;
     }
 }

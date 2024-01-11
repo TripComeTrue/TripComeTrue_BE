@@ -11,13 +11,13 @@ public enum ExpenseRangeType {
     BELOW_300(300),
     ABOVE_300(Integer.MAX_VALUE);
 
-    private final int max;
+    private final Integer max;
 
-    ExpenseRangeType(int max) {
+    ExpenseRangeType(Integer max) {
         this.max = max;
     }
 
-    public static ExpenseRangeType findByMax(int max) {
+    public static ExpenseRangeType findByMax(Integer max) {
         return Stream.of(ExpenseRangeType.values())
                     .filter(p -> p.max == max)
                     .findFirst()

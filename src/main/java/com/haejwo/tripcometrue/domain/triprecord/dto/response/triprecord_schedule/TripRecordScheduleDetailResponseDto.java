@@ -13,7 +13,7 @@ public record TripRecordScheduleDetailResponseDto(
     Integer dayNumber,
     Integer ordering,
     String content,
-    Long memberId,
+    Long placeId,
     Long tripRecordId,
     List<TripRecordScheduleImageResponseDto> images,
     List<TripRecordScheduleVideoResponseDto> videos
@@ -21,14 +21,14 @@ public record TripRecordScheduleDetailResponseDto(
 
     @Builder
     public TripRecordScheduleDetailResponseDto(Long id, Integer dayNumber, Integer ordering,
-        String content, Long memberId, Long tripRecordId,
+        String content, Long placeId, Long tripRecordId,
         List<TripRecordScheduleImageResponseDto> images,
         List<TripRecordScheduleVideoResponseDto> videos) {
         this.id = id;
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
-        this.memberId = memberId;
+        this.placeId = placeId;
         this.tripRecordId = tripRecordId;
         this.images = images;
         this.videos = videos;
@@ -51,7 +51,7 @@ public record TripRecordScheduleDetailResponseDto(
             .dayNumber(entity.getDayNumber())
             .ordering(entity.getOrdering())
             .content(entity.getContent())
-            .memberId(entity.getMember() != null ? entity.getMember().getId() : null)
+            .placeId(entity.getPlaceId())
             .tripRecordId(entity.getTripRecord() != null ? entity.getTripRecord().getId() : null)
             .images(imageDtos)
             .videos(videoDtos)
