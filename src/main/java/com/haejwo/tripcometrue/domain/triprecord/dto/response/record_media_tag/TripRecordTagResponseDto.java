@@ -6,12 +6,12 @@ import lombok.Builder;
 
 public record TripRecordTagResponseDto(
     Long id,
-    HashTagType hashTagType,
+    String hashTagType,
     Long tripRecordId
 ) {
 
     @Builder
-    public TripRecordTagResponseDto(Long id, HashTagType hashTagType, Long tripRecordId) {
+    public TripRecordTagResponseDto(Long id, String hashTagType, Long tripRecordId) {
         this.id = id;
         this.hashTagType = hashTagType;
         this.tripRecordId = tripRecordId;
