@@ -35,6 +35,7 @@ public class PlaceReviewController {
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeReviewId) {
 
-        placeReviewService.getPlaceReview(principalDetails, placeReviewId);
+        PlaceReviewResponseDto responseDto = placeReviewService.getPlaceReview(principalDetails, placeReviewId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 }
