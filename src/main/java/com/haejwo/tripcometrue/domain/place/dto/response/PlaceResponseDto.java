@@ -53,7 +53,7 @@ public record PlaceResponseDto(
             .weekendOpenTime(entity.getWeekendOpenTime())
             .weekendCloseTime(entity.getWeekendCloseTime())
             .storedCount(entity.getStoredCount())
-            .cityId(entity.getCityId())
+            .cityId(entity.getCity().getId())
             .build();
     }
 
