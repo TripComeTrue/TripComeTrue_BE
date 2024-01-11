@@ -13,12 +13,12 @@ public record PlaceReviewResponseDto(
         String imageUrl,
         String content,
         Integer likeCount,
-
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH-mm-ss")
-        LocalDateTime createdAt
-) {
+        LocalDateTime createdAt,
+        boolean amILike
 
-        public static PlaceReviewResponseDto fromEntity(PlaceReview placeReview) {
+) {
+        public static PlaceReviewResponseDto fromEntity(PlaceReview placeReview, boolean amILike) {
                 return new PlaceReviewResponseDto(
                         placeReview.getId(),
                         placeReview.getMember().getId(),
@@ -27,7 +27,8 @@ public record PlaceReviewResponseDto(
                         placeReview.getImageUrl(),
                         placeReview.getContent(),
                         placeReview.getLikeCount(),
-                        placeReview.getCreatedAt()
+                        placeReview.getCreatedAt(),
+                        amILike
                 );
         }
 }
