@@ -36,19 +36,19 @@ public class TripRecordSchedule extends BaseTimeEntity {
 
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne
+    @JoinColumn(name = "trip_record_id")
+    private TripRecord tripRecord;
+
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleImage> tripRecordScheduleImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    private Place place;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trip_record_id")
-    private TripRecord tripRecord;
 
     @Builder
     public TripRecordSchedule(Long id, Integer dayNumber, Integer ordering, String content,
