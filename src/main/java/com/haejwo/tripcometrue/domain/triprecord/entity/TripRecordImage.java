@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +26,6 @@ public class TripRecordImage extends BaseTimeEntity {
     @Column(name = "trip_record_image_id")
     private Long id;
 
-    private TripRecordImageType imageType;
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
@@ -39,10 +37,8 @@ public class TripRecordImage extends BaseTimeEntity {
     private TripRecord tripRecord;
 
     @Builder
-    public TripRecordImage(Long id, TripRecordImageType imageType, String imageUrl,
+    public TripRecordImage(TripRecordImageType imageType, String imageUrl,
         ExternalLinkTagType tagType, String tagUrl, TripRecord tripRecord) {
-        this.id = id;
-        this.imageType = imageType;
         this.imageUrl = imageUrl;
         this.tagType = tagType;
         this.tagUrl = tagUrl;
