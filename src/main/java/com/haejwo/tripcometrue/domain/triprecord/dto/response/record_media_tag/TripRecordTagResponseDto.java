@@ -1,7 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.response.record_media_tag;
 
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordTag;
-import com.haejwo.tripcometrue.domain.triprecord.entity.type.HashTagType;
 import lombok.Builder;
 
 public record TripRecordTagResponseDto(
