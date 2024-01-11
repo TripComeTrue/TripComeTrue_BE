@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
-import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPlaceReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.service.PlaceReviewService;
@@ -24,7 +24,7 @@ public class PlaceReviewController {
     public ResponseEntity<ResponseDTO<RegisterPlaceReviewResponseDto>> registerPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeId,
-            @RequestBody RegisterPlaceReviewRequestDto requestDto) {
+            @RequestBody PlaceReviewRequestDto requestDto) {
 
         RegisterPlaceReviewResponseDto responseDto = placeReviewService.savePlaceReview(principalDetails, placeId, requestDto);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
