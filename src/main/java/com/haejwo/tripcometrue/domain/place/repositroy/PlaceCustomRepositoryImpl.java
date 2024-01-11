@@ -1,9 +1,12 @@
 package com.haejwo.tripcometrue.domain.place.repositroy;
 
+import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
 import com.querydsl.core.BooleanBuilder;
 import java.util.List;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +14,11 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport implements PlaceCustomRepository {
 
-    public PlaceCustomRepositoryImpl() {
+    private final JPAQueryFactory queryFactory;
+
+    public PlaceCustomRepositoryImpl(JPAQueryFactory queryFactory) {
         super(Place.class);
+        this.queryFactory = queryFactory;
     }
 
     @Override
@@ -36,5 +42,19 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return new PageImpl<>(result, pageable, total);
 
+    }
+
+    @Override
+    public List<Place> findPlacesByCityAndOrderByStoredCountLimitSize(City city, int size) {
+
+        QPlace place = QPlace.place;
+
+        return queryFactory
+            .selectFrom(place)
+            .join(place.city)
+            .where(place.city.eq(city))
+            .orderBy(place.storedCount.desc(), place.createdAt.desc())
+            .limit(size)
+            .fetch();
     }
 }
