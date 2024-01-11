@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExternalLinkTagType;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
@@ -40,20 +41,23 @@ public class TripRecordSchedule extends BaseTimeEntity {
 
     private String content;
 
-    private Long placeId;
-
-    @ManyToOne
-    @JoinColumn(name = "tripRecord_id")
-    private TripRecord tripRecord;
-
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleImage> tripRecordScheduleImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne
+    @JoinColumn(name = "trip_record_id")
+    private TripRecord tripRecord;
+
     @Enumerated(EnumType.STRING)
     private ExternalLinkTagType tagType;
+
     private String tagUrl;
 
     @ManyToOne
@@ -62,16 +66,15 @@ public class TripRecordSchedule extends BaseTimeEntity {
 
     @Builder
     public TripRecordSchedule(Integer dayNumber, Integer ordering, String content,
-        Long placeId, TripRecord tripRecord, ExternalLinkTagType tagType, String tagUrl,
+        Place place, TripRecord tripRecord, ExternalLinkTagType tagType, String tagUrl,
         Member member) {
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
-        this.placeId = placeId;
+        this.place = place;
         this.tripRecord = tripRecord;
         this.tagType = tagType;
         this.tagUrl = tagUrl;
         this.member = member;
-
     }
 }
