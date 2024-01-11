@@ -1,0 +1,79 @@
+### 여행후기 저장
+POST http://localhost:8080/v1/trip-record
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDQ4ODAwNTUsImV4cCI6MTcwNTAyNDA1NX0.CxgA80_iaos4nyeYoV49Du4bpWezOuVjAnTT3qXfawI
+Content-Type: application/json
+
+{
+  "tripRecordImages": [
+    {
+      "imageUrl": "이미지링크1",
+      "tagType": "FOOD_TOURISM_LOCATION",
+      "tagUrl": "태그주소1"
+    },
+    {
+      "imageUrl": "이미지링크2",
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "태그주소2"
+    }
+  ],
+  "title": "피드 제목",
+  "content": "여행의 전반적인 후기나 메모",
+  "expenseRangeType": "BELOW_50",
+  "hashTags": [
+    "연인끼리",
+    "친구끼리"
+  ],
+  "countries": "한국,일본",
+  "tripStartDay": "2024-01-10",
+  "tripEndDay": "2024-01-20",
+  "tripRecordSchedules": [
+    {
+      "dayNumber": 1,
+      "orderNumber": 1,
+      "placeId": 2,
+      "content": "방문한 장소에 대한 메모나 정보",
+      "tripRecordScheduleImages": [
+        "스케줄 이미지 링크1",
+        "스케줄 이미지 링크2"
+      ],
+      "tripRecordScheduleVideos": [
+        "스케줄 비디오 링크1",
+        "스케줄 비디오 링크2",
+        "스케줄 비디오 링크3"
+      ],
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "스케줄 태그 링크1"
+    },
+    {
+      "dayNumber": 1,
+      "orderNumber": 2,
+      "placeId": 2,
+      "content": "내용",
+      "tripRecordScheduleImages": [
+        "스케줄 이미지 링크3",
+        "스케줄 이미지 링크4"
+      ],
+      "tripRecordScheduleVideos": [
+        "스케줄 비디오 링크4",
+        "스케줄 비디오 링크5",
+        "스케줄 비디오 링크6"
+      ],
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "스케줄 태그 링크2"
+    }
+  ]
+}
+
+### 여행스케줄 장소 검색하기
+GET http://localhost:8080/v1/trip-record/search-schedule-places?country=KOREA&city=서울
+
+### 여행스케줄 장소 직접 등록하기
+POST http://localhost:8080/v1/trip-record/schedule-place
+Content-Type: application/json
+
+{
+  "address": "서울특별시 강남구 테헤란로 427",
+  "name": "강남역",
+  "latitude": 37.498085,
+  "longitude": 127.027486
+}
