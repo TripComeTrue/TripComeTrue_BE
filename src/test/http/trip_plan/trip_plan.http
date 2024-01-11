@@ -1,0 +1,29 @@
+
+### 여행 계획 작성
+POST http://localhost:8080/v1/trip-plan
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDQ4ODAwNTUsImV4cCI6MTcwNTAyNDA1NX0.CxgA80_iaos4nyeYoV49Du4bpWezOuVjAnTT3qXfawI
+Content-Type: application/json
+
+{
+  "countries": "한국,일본",
+  "tripStartDay": "2024-01-10",
+  "tripEndDay": "2024-01-20",
+  "tripPlanSchedules": [
+    {
+      "dayNumber": 1,
+      "orderNumber": 1,
+      "placeId": 2,
+      "content": "방문한 장소에 대한 메모나 정보",
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "스케줄 태그 링크1"
+    },
+    {
+      "dayNumber": 1,
+      "orderNumber": 2,
+      "placeId": 2,
+      "content": "내용",
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "스케줄 태그 링크2"
+    }
+  ]
+}
