@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,7 +44,11 @@ public class TripRecordSchedule extends BaseTimeEntity {
     private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "tripRecord_id")
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne
+    @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
     @ManyToOne
@@ -51,12 +56,13 @@ public class TripRecordSchedule extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public TripRecordSchedule(Long id, Integer dayNumber, Integer ordering, String content,
-        TripRecord tripRecord, Member member) {
+    public TripRecordSchedule(Long id, Integer dayNumber, Integer ordering,
+                              String content, Place place, TripRecord tripRecord, Member member) {
         this.id = id;
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
+        this.place = place;
         this.tripRecord = tripRecord;
         this.member = member;
     }
