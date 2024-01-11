@@ -1,13 +1,18 @@
 package com.haejwo.tripcometrue.domain.city.controller;
 
 import com.haejwo.tripcometrue.domain.city.dto.request.AddCityRequestDto;
+import com.haejwo.tripcometrue.domain.city.dto.response.CityInfoResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.CityResponseDto;
+import com.haejwo.tripcometrue.domain.city.dto.response.ExchangeRateResponseDto;
+import com.haejwo.tripcometrue.domain.city.dto.response.WeatherResponseDto;
 import com.haejwo.tripcometrue.domain.city.service.CityService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/cities")
@@ -28,24 +33,59 @@ public class CityController {
             );
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO<CityResponseDto>> findCity(
-        @PathVariable("id") Long id
+    @GetMapping("/{cityId}")
+    public ResponseEntity<ResponseDTO<CityInfoResponseDto>> getCityInfo(
+        @PathVariable("cityId") Long cityId
     ) {
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(
-                ResponseDTO.okWithData(cityService.findCity(id))
+                ResponseDTO.okWithData(cityService.getCityInfo(cityId))
             );
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<Void>> deleteCity(
-        @PathVariable("id") Long id
+    @GetMapping("/exchange-rates")
+    public ResponseEntity<ResponseDTO<ExchangeRateResponseDto>> getExchangeRate(
+        @RequestParam(name = "curUnit") String curUnit
     ) {
 
-        cityService.deleteCity(id);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(
+                ResponseDTO.okWithData(cityService.getExchangeRate(curUnit))
+            );
+    }
+
+    @GetMapping("/{cityId}/weathers")
+    public ResponseEntity<ResponseDTO<List<WeatherResponseDto>>> getWeatherInfo(
+        @PathVariable("cityId") Long cityId
+    ) {
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(
+                ResponseDTO.okWithData(cityService.getWeatherInfo(cityId))
+            );
+    }
+
+    @GetMapping("/v1/cities/{cityId}/hot-places")
+    public ResponseEntity<ResponseDTO<?>> getHotPlaces(
+        @PathVariable("cityId") Long cityId
+    ) {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(
+                ResponseDTO.okWithData(cityService.getHotPlaces(cityId))
+            );
+    }
+
+    @DeleteMapping("/{cityId}")
+    public ResponseEntity<ResponseDTO<Void>> deleteCity(
+        @PathVariable("cityId") Long cityId
+    ) {
+
+        cityService.deleteCity(cityId);
 
         return ResponseEntity
             .status(HttpStatus.OK)
