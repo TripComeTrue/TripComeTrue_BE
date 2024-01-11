@@ -1,7 +1,9 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
+import com.haejwo.tripcometrue.domain.triprecord.dto.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -11,8 +13,11 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository
 import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +51,23 @@ public class TripRecordService {
         TripRecordDetailResponseDto responseDto = TripRecordDetailResponseDto.fromEntity(findTripRecord);
 
         return responseDto;
+    }
+
+//    public List<TripRecordListResponseDto> findTripRecordList(String hashtag, String expenseRangeType, Long totalDays, Long placeId) {
+//    }
+
+    @Transactional
+    public List<TripRecordListResponseDto> findTripRecordList(
+        Pageable pageable, TripRecordListRequestAttribute request
+    ) {
+
+        List<TripRecord> result = tripRecordRepository.finTripRecordWithFilter(pageable, request);
+
+        List<TripRecordListResponseDto> responseDtos = result.stream()
+                                    .map(TripRecordListResponseDto::fromEntity)
+                                    .toList();
+
+        return responseDtos;
     }
 
     @Transactional
@@ -103,5 +125,7 @@ public class TripRecordService {
             .orElseThrow(TripRecordNotFoundException::new);
         return findTripRecord;
     }
+
+
 
 }
