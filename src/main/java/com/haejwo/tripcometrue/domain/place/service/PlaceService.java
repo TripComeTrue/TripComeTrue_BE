@@ -1,5 +1,8 @@
 package com.haejwo.tripcometrue.domain.place.service;
 
+import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
+import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
@@ -18,11 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final CityRepository cityRepository;
 
     @Transactional
     public PlaceResponseDto addPlace(PlaceRequestDto requestDto) {
-
-        Place requestPlace = requestDto.toEntity();
+        City city = cityRepository.findById(requestDto.cityId())
+            .orElseThrow(CityNotFoundException::new);
+        Place requestPlace = requestDto.toEntity(city);
         Place savedPlace = placeRepository.save(requestPlace);
         PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(savedPlace);
 
