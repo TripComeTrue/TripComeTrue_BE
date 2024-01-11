@@ -23,7 +23,7 @@ public record TripRecordImageResponseDto(
         this.tripRecordId = tripRecordId;
     }
 
-    public static TripRecordImageResponseDto formEntity(TripRecordImage entity) {
+    public static TripRecordImageResponseDto fromEntity(TripRecordImage entity) {
         return TripRecordImageResponseDto.builder()
             .id(entity.getId())
             .imageUrl(entity.getImageUrl())
