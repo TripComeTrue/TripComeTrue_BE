@@ -1,6 +1,7 @@
 spring:
   config:
     import: optional:file:.env[.properties]
+
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:mysql:8:///tripcometrue?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -13,6 +14,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+        default_batch_fetch_size: 200
 
   data:
     redis:
@@ -77,3 +79,8 @@ cloud:
       static: ${AWS_S3_REGION}
     s3:
       bucket: ${AWS_S3_DEV_BUCKET}
+
+exchange-rate:
+  api:
+    url: ${EXCHANGE_RATE_API_URL}
+    key: ${EXCHANGE_RATE_API_KEY}
