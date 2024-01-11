@@ -38,4 +38,12 @@ public class PlaceReviewController {
         PlaceReviewResponseDto responseDto = placeReviewService.getPlaceReview(principalDetails, placeReviewId);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
+
+    @DeleteMapping("/reviews/{placeReviewId}")
+    public ResponseEntity<ResponseDTO<Void>> removePlaceReview(
+            @PathVariable Long placeReviewId) {
+
+        placeReviewService.deletePlaceReview(placeReviewId);
+        return ResponseEntity.ok(ResponseDTO.ok());
+    }
 }

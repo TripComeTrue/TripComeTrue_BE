@@ -118,4 +118,8 @@ public class PlaceReviewService {
     /*
     여행지에 대한 특정 리뷰 삭제
      */
+    @Transactional
+    public void deletePlaceReview(Long tripReviewId) {
+        placeReviewRepository.delete(getPlaceReviewById(tripReviewId));
+    }
 }
