@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
+import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -35,27 +36,29 @@ public class TripRecordSchedule extends BaseTimeEntity {
 
     private String content;
 
-    private Long placeId;
-
-    @ManyToOne
-    @JoinColumn(name = "tripRecord_id")
-    private TripRecord tripRecord;
-
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleImage> tripRecordScheduleImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trip_record_id")
+    private TripRecord tripRecord;
+
     @Builder
     public TripRecordSchedule(Long id, Integer dayNumber, Integer ordering, String content,
-        Long placeId, TripRecord tripRecord, List<TripRecordScheduleImage> tripRecordScheduleImages,
+        Place place, TripRecord tripRecord, List<TripRecordScheduleImage> tripRecordScheduleImages,
         List<TripRecordScheduleVideo> tripRecordScheduleVideos) {
         this.id = id;
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
-        this.placeId = placeId;
+        this.place = place;
         this.tripRecord = tripRecord;
         this.tripRecordScheduleImages = tripRecordScheduleImages;
         this.tripRecordScheduleVideos = tripRecordScheduleVideos;
