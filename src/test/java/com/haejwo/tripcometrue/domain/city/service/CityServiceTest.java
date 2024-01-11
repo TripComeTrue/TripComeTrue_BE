@@ -100,7 +100,6 @@ class CityServiceTest extends AbstractContainersSupport {
     void getWeatherInfo() {
         // given
         long cityId = city.getId();
-        int curMonth = LocalDate.now().getMonthValue();
 
         // when
         List<WeatherResponseDto> weatherInfos = cityService.getWeatherInfo(cityId);
