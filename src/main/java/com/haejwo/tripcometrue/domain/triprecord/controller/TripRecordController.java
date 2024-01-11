@@ -32,19 +32,6 @@ public class TripRecordController {
 
     private final TripRecordService tripRecordService;
 
-    @PostMapping
-    public ResponseEntity<ResponseDTO<TripRecordResponseDto>> tripRecordAdd(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @RequestBody TripRecordRequestDto requestDto
-    ) {
-
-        TripRecordResponseDto responseDto = tripRecordService.addTripRecord(principalDetails, requestDto);
-        ResponseDTO<TripRecordResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
-
-        return ResponseEntity
-            .status(responseBody.getCode())
-            .body(responseBody);
-    }
 
     @GetMapping("/{tripRecordId}")
     public ResponseEntity<ResponseDTO<TripRecordDetailResponseDto>> tripRecordDetail(

@@ -14,18 +14,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/trip-record")
 @RequiredArgsConstructor
 public class TripRecordAddController {
 
     private final TripRecordAddService tripRecordAddService;
 
-    @PostMapping
+    @PostMapping("/v1/trip-record")
     public ResponseEntity<ResponseDTO<Void>> tripRecordAdd(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @RequestBody TripRecordRequestDto requestDto
@@ -39,7 +37,7 @@ public class TripRecordAddController {
             .body(responseBody);
     }
 
-    @GetMapping("/search-schedule-places")
+    @GetMapping("/v1/search-schedule-places")
     public ResponseEntity<ResponseDTO<List<SearchScheduleTripResponseDto>>> searchSchedulePlace(
         @RequestParam Country country,
         @RequestParam String city
@@ -52,7 +50,7 @@ public class TripRecordAddController {
             .body(responseBody);
     }
 
-    @PostMapping("/schedule-place")
+    @PostMapping("/v1/schedule-place")
     public ResponseEntity<ResponseDTO<Long>> createSchedulePlace(
         @RequestBody CreateSchedulePlaceRequestDto createSchedulePlaceRequestDto
     ) {

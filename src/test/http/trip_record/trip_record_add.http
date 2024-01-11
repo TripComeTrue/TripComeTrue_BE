@@ -65,10 +65,10 @@ Content-Type: application/json
 }
 
 ### 여행스케줄 장소 검색하기
-GET http://localhost:8080/v1/trip-record/search-schedule-places?country=KOREA&city=서울
+GET http://localhost:8080/v1/search-schedule-places?country=KOREA&city=서울
 
 ### 여행스케줄 장소 직접 등록하기
-POST http://localhost:8080/v1/trip-record/schedule-place
+POST http://localhost:8080/v1/schedule-place
 Content-Type: application/json
 
 {
