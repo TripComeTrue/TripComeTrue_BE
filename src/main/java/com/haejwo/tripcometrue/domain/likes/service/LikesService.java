@@ -51,7 +51,7 @@ import org.springframework.stereotype.Service;
           .placeReview(placeReview)
           .build();
       placeReviewLikesRepository.save(like);
-//      placeReview.increaseLikesCount();
+      placeReview.increaseLikesCount();
 
       return PlaceReviewLikesResponseDto.fromEntity(like);
     }
@@ -89,7 +89,7 @@ import org.springframework.stereotype.Service;
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.LIKES_NOT_FOUND));
 
       placeReviewLikesRepository.delete(like);
-//      placeReview.decreaseLikesCount();
+      placeReview.decreaseLikesCount();
     }
 
     private PlaceReview findByPlaceReviewId(Long placeReviewId) {

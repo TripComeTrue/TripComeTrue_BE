@@ -53,4 +53,17 @@ public class PlaceReview extends BaseTimeEntity {
         this.content = requestDto.content();
         this.imageUrl = requestDto.imageUrl();
     }
+
+    public void increaseLikesCount() {
+        likeCount += 1;
+    }
+
+    public void decreaseLikesCount() {
+        likeCount -= 1;
+    }
+
+    @PrePersist
+    private void init() {
+        likeCount = 0;
+    }
 }
