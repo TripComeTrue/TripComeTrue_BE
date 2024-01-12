@@ -8,6 +8,8 @@ import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPlaceReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeleteAllSuccessPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeletePlaceReviewResponseDto;
@@ -19,9 +21,12 @@ import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNo
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -164,5 +169,19 @@ public class PlaceReviewService {
 
     private static boolean isDeleteAllFail(List<Long> placeReviewIds, List<Long> failedIds) {
         return placeReviewIds.size() == failedIds.size();
+    }
+    /*
+    여행지에 대한 특정 리뷰 삭제
+     */
+
+    @Transactional(readOnly = true)
+    public List<PlaceReviewListResponseDto> findMyPlaceReviewsList(
+        PrincipalDetails principalDetails, Pageable pageable) {
+        Long memberId = principalDetails.getMember().getId();
+        List<PlaceReview> reviews = placeReviewRepository.findByMemberId(memberId, pageable);
+
+        return reviews.stream()
+            .map(PlaceReviewListResponseDto::fromEntity)
+            .collect(Collectors.toList());
     }
 }
