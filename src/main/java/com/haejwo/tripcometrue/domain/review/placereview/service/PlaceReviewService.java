@@ -1,10 +1,12 @@
 package com.haejwo.tripcometrue.domain.review.placereview.service;
 
+import com.haejwo.tripcometrue.domain.likes.repository.PlaceReviewLikesRepository;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPlaceReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
@@ -24,7 +26,6 @@ public class PlaceReviewService {
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
     private final PlaceReviewLikesRepository likesRepository;
-    private final MemberRepository memberRepository;
 
     /*
     여행지 리뷰 등록
@@ -55,17 +56,17 @@ public class PlaceReviewService {
     1. likeRepository에서 로그인한 멤버와 여행지리뷰가 존재하는지 확인하기 (일단 이거 적용해보자)
     2. 여행지 리뷰가 좋아요를 가지고 있기.(양방향)
      */
-//    public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
+    public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
 
-    // ** 버전 1  -  단반향 매핑
-//        PlaceReview placeReview = getPlaceReviewById(placeReviewId);
-//        boolean amILike = false;
-//
-//        if (isLogin(principalDetails)) {
-//            amILike = likesRepository.existsByMemberAndPlaceReview(principalDetails.getMember(), placeReview);
-//        }
-//
-//        return PlaceReviewResponseDto.fromEntity(placeReview, amILike);
+//     ** 버전 1  -  단반향 매핑
+        PlaceReview placeReview = getPlaceReviewById(placeReviewId);
+        boolean amILike = false;
+
+        if (isLogin(principalDetails)) {
+            amILike = likesRepository.existsByMemberAndPlaceReview(principalDetails.getMember(), placeReview);
+        }
+
+        return PlaceReviewResponseDto.fromEntity(placeReview, amILike);
 
 
     // ** 버전 2  -  양방향 매핑
@@ -82,7 +83,7 @@ public class PlaceReviewService {
 //        }
 
 //        return PlaceReviewResponseDto.fromEntity(placeReview, amILike);
-//    }
+    }
 
     private boolean isLogin(PrincipalDetails principalDetails) {
         return principalDetails != null;
