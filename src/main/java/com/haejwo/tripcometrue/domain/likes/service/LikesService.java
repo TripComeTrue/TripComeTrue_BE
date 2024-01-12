@@ -1,8 +1,4 @@
 package com.haejwo.tripcometrue.domain.likes.service;
-import com.haejwo.tripcometrue.domain.Review.entity.PlaceReview;
-import com.haejwo.tripcometrue.domain.Review.entity.TripRecordReview;
-import com.haejwo.tripcometrue.domain.Review.repository.PlaceReviewRepository;
-import com.haejwo.tripcometrue.domain.Review.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.likes.dto.response.PlaceReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.dto.response.TripRecordReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
@@ -12,6 +8,12 @@ import com.haejwo.tripcometrue.domain.likes.repository.PlaceReviewLikesRepositor
 import com.haejwo.tripcometrue.domain.likes.repository.TripRecordReviewLikesRepository;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
+import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
+import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
+import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.persistence.EntityNotFoundException;
@@ -49,6 +51,7 @@ import org.springframework.stereotype.Service;
           .placeReview(placeReview)
           .build();
       placeReviewLikesRepository.save(like);
+      placeReview.increaseLikesCount();
 
       return PlaceReviewLikesResponseDto.fromEntity(like);
     }
@@ -72,6 +75,7 @@ import org.springframework.stereotype.Service;
           .tripRecordReview(tripRecordReview)
           .build();
       tripRecordReviewLikesRepository.save(like);
+      tripRecordReview.increaseLikesCount();
 
       return TripRecordReviewLikesResponseDto.fromEntity(like);
     }
@@ -79,21 +83,35 @@ import org.springframework.stereotype.Service;
     @Transactional
     public void unlikePlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
       Long memberId = principalDetails.getMember().getId();
+      PlaceReview placeReview = findByPlaceReviewId(placeReviewId);
 
       PlaceReviewLikes like = placeReviewLikesRepository.findByMemberIdAndPlaceReviewId(memberId, placeReviewId)
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.LIKES_NOT_FOUND));
 
+      placeReview.decreaseLikesCount();
       placeReviewLikesRepository.delete(like);
+    }
+
+    private PlaceReview findByPlaceReviewId(Long placeReviewId) {
+      return placeReviewRepository.findById(placeReviewId)
+          .orElseThrow(PlaceNotFoundException::new);
     }
 
     @Transactional
     public void unlikeTripRecordReview(PrincipalDetails principalDetails, Long tripRecordReviewId) {
       Long memberId = principalDetails.getMember().getId();
+      TripRecordReview tripRecordReview = findByTripRecordReviewId(tripRecordReviewId);
 
       TripRecordReviewLikes like = tripRecordReviewLikesRepository.findByMemberIdAndTripRecordReviewId(memberId, tripRecordReviewId)
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.LIKES_NOT_FOUND));
 
+      tripRecordReview.decreaseLikesCount();
       tripRecordReviewLikesRepository.delete(like);
+    }
+
+    private TripRecordReview findByTripRecordReviewId(Long tripRecordReviewId) {
+      return tripRecordReviewRepository.findById(tripRecordReviewId)
+          .orElseThrow(TripRecordNotFoundException::new);
     }
   }
 
