@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
-import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPlaceReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.service.PlaceReviewService;
@@ -24,9 +24,10 @@ public class PlaceReviewController {
     public ResponseEntity<ResponseDTO<RegisterPlaceReviewResponseDto>> registerPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeId,
-            @RequestBody RegisterPlaceReviewRequestDto requestDto) {
+            @RequestBody PlaceReviewRequestDto requestDto) {
 
-        RegisterPlaceReviewResponseDto responseDto = placeReviewService.savePlaceReview(principalDetails, placeId, requestDto);
+        RegisterPlaceReviewResponseDto responseDto = placeReviewService
+                .savePlaceReview(principalDetails, placeId, requestDto);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
@@ -35,7 +36,27 @@ public class PlaceReviewController {
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeReviewId) {
 
-        PlaceReviewResponseDto responseDto = placeReviewService.getPlaceReview(principalDetails, placeReviewId);
+        PlaceReviewResponseDto responseDto = placeReviewService
+                .getPlaceReview(principalDetails, placeReviewId);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @PutMapping("/reviews/{placeReviewId}")
+    public ResponseEntity<ResponseDTO<PlaceReviewResponseDto>> modifyPlaceReview(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long placeReviewId,
+            @RequestBody PlaceReviewRequestDto requestDto) {
+
+        PlaceReviewResponseDto responseDto = placeReviewService
+                .modifyPlaceReview(principalDetails, placeReviewId, requestDto);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @DeleteMapping("/reviews/{placeReviewId}")
+    public ResponseEntity<ResponseDTO<Void>> removePlaceReview(
+            @PathVariable Long placeReviewId) {
+
+        placeReviewService.deletePlaceReview(placeReviewId);
+        return ResponseEntity.ok(ResponseDTO.ok());
     }
 }
