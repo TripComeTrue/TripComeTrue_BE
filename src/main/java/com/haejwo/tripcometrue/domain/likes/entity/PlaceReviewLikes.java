@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.likes.entity;
-import com.haejwo.tripcometrue.domain.Review.entity.PlaceReview;
+
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
