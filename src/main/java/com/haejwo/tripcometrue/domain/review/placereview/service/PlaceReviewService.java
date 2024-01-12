@@ -1,6 +1,8 @@
 package com.haejwo.tripcometrue.domain.review.placereview.service;
 
+import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.likes.repository.PlaceReviewLikesRepository;
+import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -58,30 +62,14 @@ public class PlaceReviewService {
     //fixme fetch join이 적용 안되서 n+1 문제 고치기
     public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
 
-//     ** 버전 1  -  단반향 매핑
         PlaceReview placeReview = getPlaceReviewById(placeReviewId);
-        boolean amILike = false;
+        boolean hasLiked = false;
 
         if (isLoggedIn(principalDetails)) {
-            amILike = hasLikedPlaceReview(principalDetails, placeReview);
+            hasLiked = hasLikedPlaceReview(principalDetails, placeReview);
         }
 
-        return PlaceReviewResponseDto.fromEntity(placeReview, amILike);
-
-    // ** 버전 2  -  양방향 매핑
-//        PlaceReview placeReview = getPlaceReviewById(placeReviewId);
-//        boolean amILike = false;
-//
-//        if (isLogin(principalDetails)) {
-//            List<PlaceReviewLike> placeReviewLikes = placeReview.getPlaceReviewLikes();
-//            List<Long> ids = placeReviewLikes.stream()
-//                    .map(PlaceReviewLike::getPlaceReview)
-//                    .map(PlaceReview::getId)
-//                    .collect(Collectors.toList());
-//            amILike = ids.contains(placeReviewId);
-//        }
-
-//        return PlaceReviewResponseDto.fromEntity(placeReview, amILike);
+        return PlaceReviewResponseDto.fromEntity(placeReview, hasLiked);
     }
 
     private PlaceReview getPlaceReviewById(Long placeReviewId) {
@@ -94,7 +82,11 @@ public class PlaceReviewService {
     }
 
     private boolean hasLikedPlaceReview(PrincipalDetails principalDetails, PlaceReview placeReview) {
-        return likesRepository.existsByMemberAndPlaceReview(principalDetails.getMember(), placeReview);
+        List<Long> memberIds = placeReview.getPlaceReviewLikeses().stream()
+                .map(PlaceReviewLikes::getMember)
+                .map(Member::getId)
+                .toList();
+        return memberIds.contains(principalDetails.getMember().getId());
     }
 
     /*

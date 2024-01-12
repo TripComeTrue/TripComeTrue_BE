@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.review.placereview.entity;
 
+import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -32,8 +34,8 @@ public class PlaceReview extends BaseTimeEntity {
     @JoinColumn(name = "place_id")
     private Place place;
 
-//    @OneToMany(mappedBy = "placeReview")
-//    private List<PlaceReviewLike> placeReviewLikes = new ArrayList<>();
+    @OneToMany(mappedBy = "placeReview")
+    private List<PlaceReviewLikes> placeReviewLikeses = new ArrayList<>();
 
     private String content;
     private String imageUrl;
