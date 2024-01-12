@@ -19,7 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
     private Long id;
 
@@ -33,6 +34,8 @@ public class Place extends BaseTimeEntity {
     private LocalTime weekendOpenTime;
     private LocalTime weekendCloseTime;
     private Integer storedCount;
+    private Double latitude;
+    private Double longitude;
 
     // 임시 City 테이블 데이터
     private Long cityId;
@@ -47,7 +50,7 @@ public class Place extends BaseTimeEntity {
         Long id, String name, String address, String description,
         LocalTime weekdayOpenTime, LocalTime weekdayCloseTime,
         LocalTime weekendOpenTime, LocalTime weekendCloseTime,
-        Integer storedCount, Long cityId) {
+        Integer storedCount, Long cityId, Double latitude, Double longitude) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -58,6 +61,8 @@ public class Place extends BaseTimeEntity {
         this.weekendCloseTime = weekendCloseTime;
         this.storedCount = storedCount;
         this.cityId = cityId;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public void update(PlaceRequestDto requestDto) {

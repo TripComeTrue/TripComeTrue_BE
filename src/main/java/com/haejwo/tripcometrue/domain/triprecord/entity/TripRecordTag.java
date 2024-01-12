@@ -1,11 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
-import com.haejwo.tripcometrue.domain.triprecord.entity.type.HashTagType;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TripRecordTag extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trip_record_tag_id")
     private Long id;
 
@@ -32,8 +30,7 @@ public class TripRecordTag extends BaseTimeEntity {
     private TripRecord tripRecord;
 
     @Builder
-    public TripRecordTag(Long id, String hashTagType, TripRecord tripRecord) {
-        this.id = id;
+    public TripRecordTag(String hashTagType, TripRecord tripRecord) {
         this.hashTagType = hashTagType;
         this.tripRecord = tripRecord;
     }

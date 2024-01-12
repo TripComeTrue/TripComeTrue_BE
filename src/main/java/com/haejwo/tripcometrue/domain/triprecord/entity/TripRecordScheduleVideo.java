@@ -31,9 +31,8 @@ public class TripRecordScheduleVideo extends BaseTimeEntity {
     private TripRecordSchedule tripRecordSchedule;
 
     @Builder
-    public TripRecordScheduleVideo(Long id, String videoUrl,
+    public TripRecordScheduleVideo(String videoUrl,
         TripRecordSchedule tripRecordSchedule) {
-        this.id = id;
         this.videoUrl = videoUrl;
         this.tripRecordSchedule = tripRecordSchedule;
     }

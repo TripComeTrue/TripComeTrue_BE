@@ -4,30 +4,25 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import lombok.Builder;
+import java.util.List;
 
 public record TripRecordRequestDto(
+
+    List<TripRecordImageRequestDto> tripRecordImages,
+    @NotNull(message = "title은 필수값입니다")
     String title,
+    @NotNull(message = "content은 필수값입니다")
     String content,
     ExpenseRangeType expenseRangeType,
+    List<String> hashTags,
+    @NotNull(message = "countries은 필수값입니다")
     String countries,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripStartDay,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
-    Member member
+    List<TripRecordScheduleRequestDto> tripRecordSchedules
 ) {
-
-    @Builder
-    public TripRecordRequestDto(String title, String content, ExpenseRangeType expenseRangeType,
-        String countries, LocalDate tripStartDay, LocalDate tripEndDay, Member member) {
-        this.title = title;
-        this.content = content;
-        this.expenseRangeType = expenseRangeType;
-        this.countries = countries;
-        this.tripStartDay = tripStartDay;
-        this.tripEndDay = tripEndDay;
-        this.member = member;
-    }
 
     public TripRecord toEntity() {
         return TripRecord.builder()
@@ -51,5 +46,4 @@ public record TripRecordRequestDto(
             .member(member)
             .build();
     }
-
 }

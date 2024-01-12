@@ -29,15 +29,6 @@ public class TripRecordService {
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordViewCountRepository tripRecordViewCountRepository;
 
-    @Transactional
-    public TripRecordResponseDto addTripRecord(PrincipalDetails principalDetails, TripRecordRequestDto requestDto) {
-
-        TripRecord requestTripRecord = requestDto.toEntity(principalDetails.getMember());
-        TripRecord savedTripRecord = tripRecordRepository.save(requestTripRecord);
-        TripRecordResponseDto responseDto = TripRecordResponseDto.fromEntity(savedTripRecord);
-
-        return responseDto;
-    }
 
     @Transactional
     public TripRecordDetailResponseDto findTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {

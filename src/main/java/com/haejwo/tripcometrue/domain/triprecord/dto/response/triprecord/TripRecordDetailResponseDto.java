@@ -68,7 +68,7 @@ public record TripRecordDetailResponseDto(
 
         List<TripRecordImage> images = entity.getTripRecordImages();
         List<TripRecordImageResponseDto> imageDtos = images.stream()
-                        .map(TripRecordImageResponseDto::formEntity)
+                        .map(TripRecordImageResponseDto::fromEntity)
                         .toList();
 
         List<TripRecordTag> tags = entity.getTripRecordTags();
