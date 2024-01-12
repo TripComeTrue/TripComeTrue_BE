@@ -2,6 +2,8 @@ package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.place.entity.Place;
+import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.CreateSchedulePlaceRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
@@ -70,8 +72,11 @@ public class TripRecordEditService {
     private void saveTripRecordSchedules(TripRecordRequestDto requestDto,
         TripRecord requestTripRecord, Member member) {
         requestDto.tripRecordSchedules().forEach(tripRecordScheduleRequestDto -> {
+            Place place = placeRepository.findById(tripRecordScheduleRequestDto.placeId())
+                .orElseThrow(PlaceNotFoundException::new);
+
             TripRecordSchedule tripRecordSchedule = tripRecordScheduleRequestDto.toEntity(
-                requestTripRecord, member);
+                requestTripRecord, member, place);
             tripRecordScheduleRepository.save(tripRecordSchedule);
 
             saveTripRecordScheduleImages(tripRecordScheduleRequestDto, tripRecordSchedule);
