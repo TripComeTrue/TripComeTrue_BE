@@ -1,0 +1,24 @@
+
+###
+# MY TripPlan 조회
+GET http://localhost:8080/v1/trip-plan/my-plans-list
+Authorization:
+Content-Type: application/json
+
+###
+# MY TripRecord 조회
+GET http://localhost:8080/v1/trip-record/my-trip-records-list
+Authorization:
+Content-Type: application/json
+
+###
+# MY PlaceReview 조회
+#GET http://localhost:8080/v1/place-reviews/my-reviews-list
+Authorization:
+Content-Type: application/json
+
+###
+# MY TripRecordReview 조회
+#GET http://localhost:8080/v1/trip-record-reviews/my-reviews-list
+Authorization:
+Content-Type: application/json
