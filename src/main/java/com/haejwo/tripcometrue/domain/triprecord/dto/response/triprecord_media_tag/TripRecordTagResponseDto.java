@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.dto.response.record_media_tag;
+package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_media_tag;
 
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordTag;
 import lombok.Builder;

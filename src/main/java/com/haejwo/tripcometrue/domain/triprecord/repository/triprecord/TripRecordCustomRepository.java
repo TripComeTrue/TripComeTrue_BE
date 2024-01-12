@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.repository;
+package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;

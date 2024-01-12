@@ -7,7 +7,7 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.request.EvaluateTr
 import com.haejwo.tripcometrue.domain.review.triprecordreview.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

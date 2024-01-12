@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordScheduleImageResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordScheduleVideoResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;

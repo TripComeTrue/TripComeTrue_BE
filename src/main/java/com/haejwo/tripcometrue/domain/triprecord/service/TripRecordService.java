@@ -9,14 +9,13 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRec
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordViewCountRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

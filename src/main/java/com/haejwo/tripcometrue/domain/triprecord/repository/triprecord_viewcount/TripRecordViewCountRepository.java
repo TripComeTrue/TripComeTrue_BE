@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.repository;
+package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount;
 
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;

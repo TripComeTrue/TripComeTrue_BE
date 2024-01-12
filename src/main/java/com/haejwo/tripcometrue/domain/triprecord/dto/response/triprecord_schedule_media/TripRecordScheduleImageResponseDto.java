@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media;
+package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media;
 
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleImage;
 import lombok.Builder;
