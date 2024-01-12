@@ -5,11 +5,15 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordR
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.response.EvaluateTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,5 +44,17 @@ public class TripRecordReviewService {
 
         return EvaluateTripRecordReviewResponseDto
                 .fromEntity(savedTripRecordReview);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TripRecordReviewListResponseDto> findMyTripRecordReviewsList(
+        PrincipalDetails principalDetails, Pageable pageable) {
+        Long memberId = principalDetails.getMember().getId();
+        List<TripRecordReview> reviews
+            = tripRecordReviewRepository.findByMemberId(memberId, pageable);
+
+        return reviews.stream()
+            .map(TripRecordReviewListResponseDto::fromEntity)
+            .collect(Collectors.toList());
     }
 }
