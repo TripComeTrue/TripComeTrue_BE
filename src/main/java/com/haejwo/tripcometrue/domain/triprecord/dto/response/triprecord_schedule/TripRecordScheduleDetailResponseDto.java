@@ -51,7 +51,7 @@ public record TripRecordScheduleDetailResponseDto(
             .dayNumber(entity.getDayNumber())
             .ordering(entity.getOrdering())
             .content(entity.getContent())
-            .placeId(entity.getPlaceId())
+            .placeId(entity.getPlace().getId())
             .tripRecordId(entity.getTripRecord() != null ? entity.getTripRecord().getId() : null)
             .images(imageDtos)
             .videos(videoDtos)

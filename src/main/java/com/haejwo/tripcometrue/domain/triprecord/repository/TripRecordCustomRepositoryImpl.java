@@ -35,7 +35,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         }
         // placeId
         if(request.placeId() != null) {
-            booleanBuilder.and(qTripRecordSchedule.placeId.eq(request.placeId()));
+            booleanBuilder.and(qTripRecordSchedule.place.id.eq(request.placeId()));
         }
 
         // expenseRangeType
