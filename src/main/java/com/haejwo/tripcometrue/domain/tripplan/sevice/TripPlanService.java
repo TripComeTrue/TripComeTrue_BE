@@ -10,6 +10,7 @@ import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanScheduleReque
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.CopyTripPlanFromTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanListReponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
 import com.haejwo.tripcometrue.domain.tripplan.exception.TripPlanNotFoundException;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanRepository;
@@ -22,6 +23,7 @@ import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -133,5 +135,16 @@ public class TripPlanService {
         return CopyTripPlanFromTripRecordResponseDto.fromEntity(
             tripRecordStore.getTripRecord(),
             responseDtos);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TripPlanListReponseDto> findMyTripPlansList(
+        PrincipalDetails principalDetails, Pageable pageable) {
+        Long memberId = principalDetails.getMember().getId();
+        List<TripPlan> tripPlans = tripPlanRepository.findByMemberId(memberId, pageable);
+
+        return tripPlans.stream()
+            .map(TripPlanListReponseDto::fromEntity)
+            .collect(Collectors.toList());
     }
 }

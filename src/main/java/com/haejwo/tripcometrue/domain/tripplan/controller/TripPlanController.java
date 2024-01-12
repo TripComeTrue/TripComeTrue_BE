@@ -3,15 +3,20 @@ package com.haejwo.tripcometrue.domain.tripplan.controller;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.CopyTripPlanFromTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanListReponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.sevice.TripPlanService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,6 +93,21 @@ public class TripPlanController {
 
         return ResponseEntity
             .status(responseBody.getCode())
+            .body(responseBody);
+    }
+
+    @GetMapping("/my-plans-list")
+    public ResponseEntity<ResponseDTO<List<TripPlanListReponseDto>>> getMyTripPlans(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        Pageable pageable
+    ) {
+        List<TripPlanListReponseDto> responseDtos
+            = tripPlanService.findMyTripPlansList(principalDetails, pageable);
+        ResponseDTO<List<TripPlanListReponseDto>> responseBody
+            = ResponseDTO.okWithData(responseDtos);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
             .body(responseBody);
     }
 }
