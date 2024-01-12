@@ -12,6 +12,7 @@ import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordVi
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -88,6 +89,15 @@ public class TripRecordService {
         return findTripRecord;
     }
 
+    @Transactional(readOnly = true)
+    public List<TripRecordListResponseDto> findMyTripRecordsList(
+        PrincipalDetails principalDetails, Pageable pageable) {
+        Long memberId = principalDetails.getMember().getId();
+        List<TripRecord> tripRecords = tripRecordRepository.findByMemberId(memberId, pageable);
 
+        return tripRecords.stream()
+            .map(TripRecordListResponseDto::fromEntity)
+            .collect(Collectors.toList());
+    }
 
 }
