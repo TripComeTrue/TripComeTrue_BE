@@ -51,7 +51,7 @@ import org.springframework.stereotype.Service;
           .placeReview(placeReview)
           .build();
       placeReviewLikesRepository.save(like);
-      placeReview.increaseLikesCount();
+//      placeReview.increaseLikesCount();
 
       return PlaceReviewLikesResponseDto.fromEntity(like);
     }
@@ -75,7 +75,7 @@ import org.springframework.stereotype.Service;
           .tripRecordReview(tripRecordReview)
           .build();
       tripRecordReviewLikesRepository.save(like);
-      tripRecordReview.increaseLikesCount();
+//      tripRecordReview.increaseLikesCount();
 
       return TripRecordReviewLikesResponseDto.fromEntity(like);
     }
@@ -88,8 +88,8 @@ import org.springframework.stereotype.Service;
       PlaceReviewLikes like = placeReviewLikesRepository.findByMemberIdAndPlaceReviewId(memberId, placeReviewId)
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.LIKES_NOT_FOUND));
 
-      placeReview.decreaseLikesCount();
       placeReviewLikesRepository.delete(like);
+//      placeReview.decreaseLikesCount();
     }
 
     private PlaceReview findByPlaceReviewId(Long placeReviewId) {
@@ -105,8 +105,8 @@ import org.springframework.stereotype.Service;
       TripRecordReviewLikes like = tripRecordReviewLikesRepository.findByMemberIdAndTripRecordReviewId(memberId, tripRecordReviewId)
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.LIKES_NOT_FOUND));
 
-      tripRecordReview.decreaseLikesCount();
       tripRecordReviewLikesRepository.delete(like);
+//      tripRecordReview.decreaseLikesCount();
     }
 
     private TripRecordReview findByTripRecordReviewId(Long tripRecordReviewId) {
