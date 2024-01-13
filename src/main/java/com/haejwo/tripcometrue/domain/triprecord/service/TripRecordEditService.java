@@ -1,7 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
-import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
@@ -54,7 +53,7 @@ public class TripRecordEditService {
 
         saveTripRecordImages(requestDto, requestTripRecord);
         saveHashTags(requestDto, requestTripRecord);
-        saveTripRecordSchedules(requestDto, requestTripRecord, principalDetails.getMember());
+        saveTripRecordSchedules(requestDto, requestTripRecord);
     }
 
     private void saveTripRecordImages(TripRecordRequestDto requestDto,
@@ -74,13 +73,13 @@ public class TripRecordEditService {
     }
 
     private void saveTripRecordSchedules(TripRecordRequestDto requestDto,
-        TripRecord requestTripRecord, Member member) {
+        TripRecord requestTripRecord) {
         requestDto.tripRecordSchedules().forEach(tripRecordScheduleRequestDto -> {
             Place place = placeRepository.findById(tripRecordScheduleRequestDto.placeId())
                 .orElseThrow(PlaceNotFoundException::new);
 
             TripRecordSchedule tripRecordSchedule = tripRecordScheduleRequestDto.toEntity(
-                requestTripRecord, member, place);
+                requestTripRecord, place);
             tripRecordScheduleRepository.save(tripRecordSchedule);
 
             saveTripRecordScheduleImages(tripRecordScheduleRequestDto, tripRecordSchedule);
@@ -152,7 +151,7 @@ public class TripRecordEditService {
                 deleteTripRecordAssociations(foundTripRecord);
                 saveTripRecordImages(requestDto, foundTripRecord);
                 saveHashTags(requestDto, foundTripRecord);
-                saveTripRecordSchedules(requestDto, foundTripRecord, principalDetails.getMember());
+                saveTripRecordSchedules(requestDto, foundTripRecord);
 
             } else {
                 throw new PermissionDeniedException();
