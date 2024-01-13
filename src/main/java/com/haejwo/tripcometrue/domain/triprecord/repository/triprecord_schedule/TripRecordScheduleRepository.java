@@ -7,4 +7,6 @@ public interface TripRecordScheduleRepository extends
     JpaRepository<TripRecordSchedule, Long>,
     TripRecordScheduleCustomRepository {
 
+
+    void deleteAllByTripRecordId(Long recordId);
 }

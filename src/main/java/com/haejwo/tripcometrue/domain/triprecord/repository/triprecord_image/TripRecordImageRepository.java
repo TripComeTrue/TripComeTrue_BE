@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TripRecordImageRepository extends JpaRepository<TripRecordImage, Long> {
 
+    void deleteAllByTripRecordId(Long recordId);
 }
