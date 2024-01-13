@@ -135,4 +135,36 @@ public class TripRecordEditService {
             throw new TripRecordNotFoundException();
         }
     }
+
+    @Transactional
+    public void modifyTripRecord(PrincipalDetails principalDetails,
+        TripRecordRequestDto requestDto, Long tripRecordId) {
+
+        Optional<TripRecord> tripRecord = tripRecordRepository.findById(tripRecordId);
+
+        if (tripRecord.isPresent()) {
+            TripRecord foundTripRecord = tripRecord.get();
+            if (foundTripRecord.getMember().getId().equals(principalDetails.getMember().getId())) {
+
+                foundTripRecord.update(requestDto);
+                tripRecordRepository.save(foundTripRecord);
+
+                deleteTripRecordAssociations(foundTripRecord);
+                saveTripRecordImages(requestDto, foundTripRecord);
+                saveHashTags(requestDto, foundTripRecord);
+                saveTripRecordSchedules(requestDto, foundTripRecord, principalDetails.getMember());
+
+            } else {
+                throw new PermissionDeniedException();
+            }
+        } else {
+            throw new TripRecordNotFoundException();
+        }
+    }
+
+    private void deleteTripRecordAssociations(TripRecord foundTripRecord) {
+        tripRecordImageRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+        tripRecordTagRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+        tripRecordScheduleRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+    }
 }
