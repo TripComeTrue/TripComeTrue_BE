@@ -1,0 +1,32 @@
+### 여행지 리뷰 작성
+POST http://localhost:8080/v1/places/1/reviews
+Content-Type: application/json
+
+{
+  "imageUrl": "https://tripcometrue-dev-s3-bucket.s3.ap-northeast-2.amazonaws.com/f42c9d89-b7ac-4565-943f-4cff8fa9747c.png",
+  "content": "너무 멋진 여행지입니다. 다음에 또 오고 싶어요!!"
+}
+
+
+### 여행지 리뷰 단 건 조회
+GET http://localhost:8080/v1/places/reviews/1
+
+
+### 여행지 리뷰 수정
+PUT http://localhost:8080/v1/places/reviews/1
+Content-Type: application/json
+
+{
+  "imageUrl": "https://tripcometrue-dev-s3-bucket.s3.ap-northeast-2.amazonaws.com/f42c9d89-b7ac-4565-943f-4cff8fa9747c.png",
+  "content": "내용 수정하고 싶어요!"
+}
+
+
+### 여행지 리뷰 삭제
+DELETE http://localhost:8080/v1/places/reviews
+Content-Type: application/json
+
+//  복수 개의 여행지 리뷰 삭제 가능합니다.
+{
+  "placeReviewIds": [1, 2, 3]
+}
