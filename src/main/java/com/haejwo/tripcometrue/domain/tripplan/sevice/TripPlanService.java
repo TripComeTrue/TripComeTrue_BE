@@ -1,12 +1,19 @@
 package com.haejwo.tripcometrue.domain.tripplan.sevice;
 
+import com.haejwo.tripcometrue.domain.place.entity.Place;
+import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
+import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
 import com.haejwo.tripcometrue.domain.tripplan.exception.TripPlanNotFoundException;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanRepository;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanScheduleRepository;
 import com.haejwo.tripcometrue.global.exception.PermissionDeniedException;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +24,7 @@ public class TripPlanService {
 
     private final TripPlanRepository tripPlanRepository;
     private final TripPlanScheduleRepository tripPlanScheduleRepository;
+    private final PlaceRepository placeRepository;
 
     @Transactional
     public void addTripPlan(PrincipalDetails principalDetails, TripPlanRequestDto requestDto) {
@@ -29,9 +37,9 @@ public class TripPlanService {
             .forEach(tripPlanScheduleRepository::save);
     }
 
-    public void deleteTripPlan(PrincipalDetails principalDetails, String planId) {
+    public void deleteTripPlan(PrincipalDetails principalDetails, Long planId) {
 
-        TripPlan tripPlan = tripPlanRepository.findById(Long.parseLong(planId))
+        TripPlan tripPlan = tripPlanRepository.findById(planId)
             .orElseThrow(TripPlanNotFoundException::new);
 
         if (!tripPlan.getMember().getId().equals(principalDetails.getMember().getId())) {
@@ -42,10 +50,10 @@ public class TripPlanService {
     }
 
     @Transactional
-    public void modifyTripPlan(PrincipalDetails principalDetails, String planId,
+    public void modifyTripPlan(PrincipalDetails principalDetails, Long planId,
         TripPlanRequestDto requestDto) {
 
-        TripPlan tripPlan = tripPlanRepository.findById(Long.parseLong(planId))
+        TripPlan tripPlan = tripPlanRepository.findById(planId)
             .orElseThrow(TripPlanNotFoundException::new);
 
         if (!tripPlan.getMember().getId().equals(principalDetails.getMember().getId())) {
@@ -60,5 +68,23 @@ public class TripPlanService {
             .map(tripPlanScheduleRequestDto ->
                 tripPlanScheduleRequestDto.toEntity(tripPlan))
             .forEach(tripPlanScheduleRepository::save);
+    }
+
+    public TripPlanDetailsResponseDto getTripPlanDetails(Long planId) {
+
+        TripPlan tripPlan = tripPlanRepository.findById(planId)
+            .orElseThrow(TripPlanNotFoundException::new);
+
+        List<TripPlanScheduleResponseDto> responseDtos = tripPlanScheduleRepository
+            .findAllByTripPlanId(tripPlan.getId())
+            .stream()
+            .map(tripPlanSchedule -> {
+                Place place = placeRepository.findById(tripPlanSchedule.getPlaceId())
+                    .orElseThrow(PlaceNotFoundException::new);
+                return TripPlanScheduleResponseDto.fromEntity(tripPlanSchedule, place);
+            })
+            .collect(Collectors.toList());
+
+        return TripPlanDetailsResponseDto.fromEntity(tripPlan, responseDtos);
     }
 }
