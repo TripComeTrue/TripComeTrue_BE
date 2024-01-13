@@ -1,5 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
+import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
@@ -115,7 +117,10 @@ public class TripRecordEditService {
     }
 
     public Long createSchedulePlace(CreateSchedulePlaceRequestDto createSchedulePlaceRequestDto) {
-        return placeRepository.save(createSchedulePlaceRequestDto.toEntity()).getId();
+        City city = cityRepository.findByNameAndCountry(createSchedulePlaceRequestDto.cityname(),
+            createSchedulePlaceRequestDto.country()).orElseThrow(CityNotFoundException::new);
+
+        return placeRepository.save(createSchedulePlaceRequestDto.toEntity(city)).getId();
     }
 
     @Transactional

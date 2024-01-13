@@ -146,5 +146,7 @@ Content-Type: application/json
   "address": "서울특별시 강남구 테헤란로 427",
   "name": "강남역",
   "latitude": 37.498085,
-  "longitude": 127.027486
+  "longitude": 127.027486,
+  "country": "KOREA",
+  "cityname": "서울"
 }
