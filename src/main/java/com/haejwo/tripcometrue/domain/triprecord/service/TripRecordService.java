@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
-import com.haejwo.tripcometrue.domain.triprecord.dto.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
@@ -43,8 +43,6 @@ public class TripRecordService {
         return responseDto;
     }
 
-//    public List<TripRecordListResponseDto> findTripRecordList(String hashtag, String expenseRangeType, Long totalDays, Long placeId) {
-//    }
 
     @Transactional
     public List<TripRecordListResponseDto> findTripRecordList(
@@ -59,6 +57,7 @@ public class TripRecordService {
 
         return responseDtos;
     }
+
 
     @Transactional
     public TripRecordResponseDto modifyTripRecord(PrincipalDetails principalDetails, Long tripRecordId, TripRecordRequestDto requestDto) {
