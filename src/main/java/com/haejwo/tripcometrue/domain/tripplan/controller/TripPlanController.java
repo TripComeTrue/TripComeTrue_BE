@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +42,20 @@ public class TripPlanController {
         @PathVariable String planId) {
 
         tripPlanService.deleteTripPlan(principalDetails, planId);
+        ResponseDTO<Void> responseBody = ResponseDTO.ok();
+
+        return ResponseEntity
+            .status(responseBody.getCode())
+            .body(responseBody);
+    }
+
+    @PutMapping("/{planId}")
+    public ResponseEntity<ResponseDTO<Void>> modifyTripPlan(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @RequestBody TripPlanRequestDto requestDto,
+        @PathVariable String planId) {
+
+        tripPlanService.modifyTripPlan(principalDetails, planId, requestDto);
         ResponseDTO<Void> responseBody = ResponseDTO.ok();
 
         return ResponseEntity

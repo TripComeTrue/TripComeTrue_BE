@@ -40,4 +40,24 @@ public class TripPlanService {
 
         tripPlanRepository.delete(tripPlan);
     }
+
+    @Transactional
+    public void modifyTripPlan(PrincipalDetails principalDetails, String planId, TripPlanRequestDto requestDto) {
+
+        TripPlan tripPlan = tripPlanRepository.findById(Long.parseLong(planId))
+            .orElseThrow(TripPlanNotFoundException::new);
+
+        if (!tripPlan.getMember().getId().equals(principalDetails.getMember().getId())) {
+            throw new PermissionDeniedException();
+        }
+
+        tripPlan.update(requestDto);
+        tripPlanRepository.save(tripPlan);
+
+        tripPlanScheduleRepository.deleteAllByTripPlanId(tripPlan.getId());
+        requestDto.tripPlanSchedules().stream()
+            .map(tripPlanScheduleRequestDto ->
+                tripPlanScheduleRequestDto.toEntity(tripPlan, principalDetails.getMember()))
+            .forEach(tripPlanScheduleRepository::save);
+    }
 }

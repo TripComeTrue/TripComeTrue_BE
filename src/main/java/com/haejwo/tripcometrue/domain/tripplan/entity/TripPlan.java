@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.tripplan.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -59,5 +60,11 @@ public class TripPlan extends BaseTimeEntity {
         this.tripPlanSchedules = tripRecordSchedules;
         this.member = member;
         this.referencedBy = referencedBy;
+    }
+
+    public void update(TripPlanRequestDto requestDto) {
+        this.countries = requestDto.countries();
+        this.tripStartDay = requestDto.tripStartDay();
+        this.tripEndDay = requestDto.tripEndDay();
     }
 }
