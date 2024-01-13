@@ -2,7 +2,6 @@ package com.haejwo.tripcometrue.domain.review.placereview.service;
 
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
-import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
@@ -10,6 +9,7 @@ import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReview
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
+import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewAlreadyExistsException;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -29,14 +29,12 @@ public class PlaceReviewService {
 
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
-    private final MemberRepository memberRepository;
     private final EntityManager em;
 
     private static final int ONLY_CONTENT_POINT = 1;
     private static final int CONTENT_WITH_IMAGE_POINT = 2;
 
     //todo 본문 validation 추가
-    //todo 동일한 여행지 리뷰 작성시 예외 발생시키기
     /*
     여행지 리뷰 등록
      */
@@ -46,16 +44,30 @@ public class PlaceReviewService {
             Long placeId,
             PlaceReviewRequestDto requestDto) {
 
-        Member find = principalDetails.getMember();
-        Member member = em.merge(find);  //영속성 컨텍스트에 넣기
+        Member member = persistAndRetrieveMember(principalDetails);
+        Place place = getPlaceById(placeId);
+
+        isPlaceReviewExists(member, place);
 
         PlaceReview placeReview = PlaceReviewRequestDto.toEntity(
                 member,
-                getPlaceById(placeId),
+                place,
                 requestDto);
 
         calculatePoints(placeReview, member);
-        return RegisterPlaceReviewResponseDto.fromEntity(placeReviewRepository.save(placeReview));
+
+        return RegisterPlaceReviewResponseDto
+                .fromEntity(placeReviewRepository.save(placeReview));
+    }
+
+    private Member persistAndRetrieveMember(PrincipalDetails principalDetails) {
+        return em.merge(principalDetails.getMember()); //영속성 컨텍스트에 넣기
+    }
+
+    private void isPlaceReviewExists(Member member, Place place) {
+        if (placeReviewRepository.existsByMemberAndPlace(member, place)) {
+            throw new PlaceReviewAlreadyExistsException();
+        }
     }
 
     private Place getPlaceById(Long placeId) {
