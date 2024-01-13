@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.dto;
+package com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute;
 
 public record TripRecordListRequestAttribute(
     String hashtag,
