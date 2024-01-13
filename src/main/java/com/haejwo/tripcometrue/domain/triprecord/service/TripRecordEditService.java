@@ -50,6 +50,7 @@ public class TripRecordEditService {
 
     @Transactional
     public void addTripRecord(PrincipalDetails principalDetails, TripRecordRequestDto requestDto) {
+        validatePlaceId(requestDto.tripRecordSchedules());
         TripRecord requestTripRecord = requestDto.toEntity(principalDetails.getMember());
         tripRecordRepository.save(requestTripRecord);
 
@@ -144,6 +145,7 @@ public class TripRecordEditService {
     public void modifyTripRecord(PrincipalDetails principalDetails,
         TripRecordRequestDto requestDto, Long tripRecordId) {
 
+        validatePlaceId(requestDto.tripRecordSchedules());
         Optional<TripRecord> tripRecord = tripRecordRepository.findById(tripRecordId);
 
         if (tripRecord.isPresent()) {
@@ -170,5 +172,13 @@ public class TripRecordEditService {
         tripRecordImageRepository.deleteAllByTripRecordId(foundTripRecord.getId());
         tripRecordTagRepository.deleteAllByTripRecordId(foundTripRecord.getId());
         tripRecordScheduleRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+    }
+
+    private void validatePlaceId(
+        List<TripRecordScheduleRequestDto> tripRecordScheduleRequestDtoList) {
+        for (TripRecordScheduleRequestDto tripRecordScheduleRequestDto : tripRecordScheduleRequestDtoList) {
+            placeRepository.findById(tripRecordScheduleRequestDto.placeId())
+                .orElseThrow(PlaceNotFoundException::new);
+        }
     }
 }
