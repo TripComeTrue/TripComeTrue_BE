@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class PlaceReviewController {
     public ResponseEntity<ResponseDTO<RegisterPlaceReviewResponseDto>> registerPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeId,
-            @RequestBody PlaceReviewRequestDto requestDto) {
+            @RequestBody @Validated PlaceReviewRequestDto requestDto) {
 
         RegisterPlaceReviewResponseDto responseDto = placeReviewService
                 .savePlaceReview(principalDetails, placeId, requestDto);
@@ -45,7 +46,7 @@ public class PlaceReviewController {
     public ResponseEntity<ResponseDTO<PlaceReviewResponseDto>> modifyPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeReviewId,
-            @RequestBody PlaceReviewRequestDto requestDto) {
+            @RequestBody @Validated PlaceReviewRequestDto requestDto) {
 
         PlaceReviewResponseDto responseDto = placeReviewService
                 .modifyPlaceReview(principalDetails, placeReviewId, requestDto);

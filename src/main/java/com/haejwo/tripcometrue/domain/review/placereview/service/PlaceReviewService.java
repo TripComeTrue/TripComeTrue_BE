@@ -34,10 +34,6 @@ public class PlaceReviewService {
     private static final int ONLY_CONTENT_POINT = 1;
     private static final int CONTENT_WITH_IMAGE_POINT = 2;
 
-    //todo 본문 validation 추가
-    /*
-    여행지 리뷰 등록
-     */
     @Transactional
     public RegisterPlaceReviewResponseDto savePlaceReview(
             PrincipalDetails principalDetails,
@@ -125,10 +121,6 @@ public class PlaceReviewService {
 
     }
 
-    /*
-    여행지에 대한 특정 리뷰 수정
-     */
-    //todo 로그인한 사람이 아닌 경우 예외 발생
     @Transactional
     public PlaceReviewResponseDto modifyPlaceReview(
             PrincipalDetails principalDetails,
@@ -146,7 +138,6 @@ public class PlaceReviewService {
     여행지에 대한 특정 리뷰 삭제
      */
     //todo 여러 값을 제거하는 로직 추가
-    //todo 로그인이 아닌 사람 예외 발생
     @Transactional
     public void deletePlaceReview(Long tripReviewId) {
         placeReviewRepository.delete(getPlaceReviewById(tripReviewId));

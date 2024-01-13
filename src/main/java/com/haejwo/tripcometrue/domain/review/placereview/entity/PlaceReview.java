@@ -37,7 +37,9 @@ public class PlaceReview extends BaseTimeEntity {
     @OneToMany(mappedBy = "placeReview")
     private List<PlaceReviewLikes> placeReviewLikeses = new ArrayList<>();
 
+    @Column(nullable = false)
     private String content;
+
     private String imageUrl;
     private Integer likeCount;
 
