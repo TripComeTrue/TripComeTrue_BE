@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### 여행 계획 수정
-PUT http://localhost:8080/v1/trip-plan/4
+PUT http://localhost:8080/v1/trip-plan/1
 Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
 Content-Type: application/json
 
@@ -60,3 +60,6 @@ Content-Type: application/json
 ### 여행 계획 삭제
 DELETE http://localhost:8080/v1/trip-plan/1
 Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
+
+### 여행 계획 조회
+GET http://localhost:8080/v1/trip-plan/1
