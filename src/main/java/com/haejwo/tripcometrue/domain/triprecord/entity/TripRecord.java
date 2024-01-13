@@ -63,6 +63,9 @@ public class TripRecord extends BaseTimeEntity {
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordImage> tripRecordImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<TripRecordStore> tripRecordStores = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
