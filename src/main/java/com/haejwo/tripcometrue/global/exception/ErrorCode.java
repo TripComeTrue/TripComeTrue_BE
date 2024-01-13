@@ -27,6 +27,13 @@ public enum ErrorCode {
     // AUTH
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
 
+    // myPage
+    CURRENT_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다."),
+    NEW_PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "새 비밀번호가 기존 비밀번호와 동일합니다."),
+    EMAIL_NOT_MATCH(HttpStatus.BAD_REQUEST, "이메일이 일치하지 않습니다"),
+    NICKNAME_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"중복된 닉네임입니다."),
+
+
     // CITY
     CITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 도시입니다."),
     EXCHANGE_RATE_API_FAIL(HttpStatus.BAD_REQUEST, "환율 Open API 호출 실패했습니다."),
