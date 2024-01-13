@@ -1,12 +1,7 @@
 package com.haejwo.tripcometrue.domain.member.entity;
 
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +37,14 @@ public class Member extends BaseTimeEntity {
 
     public void updateProfileImage(String profileImage){
         this.profile_image = profileImage;
+    }
+
+    public void earnPoint(int point) {
+        this.total_point += point;
+    }
+
+    @PrePersist
+    private void init() {
+        total_point = 0;
     }
 }

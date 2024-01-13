@@ -1,8 +1,8 @@
 package com.haejwo.tripcometrue.domain.review.placereview.service;
 
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
-import com.haejwo.tripcometrue.domain.likes.repository.PlaceReviewLikesRepository;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
@@ -13,6 +13,7 @@ import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,14 @@ public class PlaceReviewService {
 
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
-    private final PlaceReviewLikesRepository likesRepository;
+    private final MemberRepository memberRepository;
+    private final EntityManager em;
 
-    //todo 포인트 적립 로직 추가
+    private static final int ONLY_CONTENT_POINT = 1;
+    private static final int CONTENT_WITH_IMAGE_POINT = 2;
+
+    //todo 본문 validation 추가
+    //todo 동일한 여행지 리뷰 작성시 예외 발생시키기
     /*
     여행지 리뷰 등록
      */
@@ -40,18 +46,29 @@ public class PlaceReviewService {
             Long placeId,
             PlaceReviewRequestDto requestDto) {
 
+        Member find = principalDetails.getMember();
+        Member member = em.merge(find);  //영속성 컨텍스트에 넣기
+
         PlaceReview placeReview = PlaceReviewRequestDto.toEntity(
-                principalDetails.getMember(),
+                member,
                 getPlaceById(placeId),
                 requestDto);
 
-        PlaceReview savedPlaceReview = placeReviewRepository.save(placeReview);
-        return RegisterPlaceReviewResponseDto.fromEntity(savedPlaceReview);
+        calculatePoints(placeReview, member);
+        return RegisterPlaceReviewResponseDto.fromEntity(placeReviewRepository.save(placeReview));
     }
 
     private Place getPlaceById(Long placeId) {
         return placeRepository.findById(placeId)
                 .orElseThrow(PlaceNotFoundException::new);
+    }
+
+    private static void calculatePoints(PlaceReview placeReview, Member member) {
+        if (placeReview.getImageUrl() == null) {
+            member.earnPoint(ONLY_CONTENT_POINT);
+        } else {
+            member.earnPoint(CONTENT_WITH_IMAGE_POINT);
+        }
     }
 
     /*
@@ -117,6 +134,7 @@ public class PlaceReviewService {
     /*
     여행지에 대한 특정 리뷰 삭제
      */
+    //todo 여러 값을 제거하는 로직 추가
     @Transactional
     public void deletePlaceReview(Long tripReviewId) {
         placeReviewRepository.delete(getPlaceReviewById(tripReviewId));
