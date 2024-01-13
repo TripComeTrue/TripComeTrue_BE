@@ -61,33 +61,6 @@ public class TripRecordService {
     }
 
     @Transactional
-    public TripRecordResponseDto modifyTripRecord(PrincipalDetails principalDetails, Long tripRecordId, TripRecordRequestDto requestDto) {
-
-        TripRecord findTripRecord =  findTripRecordById(tripRecordId);
-
-        if(principalDetails.getMember().getId() != findTripRecord.getMember().getId()) {
-            throw new UserInvalidAccessException();
-        }
-        
-        findTripRecord.update(requestDto);
-        TripRecordResponseDto responseDto = TripRecordResponseDto.fromEntity(findTripRecord);
-
-        return responseDto;
-    }
-
-    @Transactional
-    public void removeTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
-
-        TripRecord findTripRecord = findTripRecordById(tripRecordId);
-
-        if(principalDetails.getMember().getId() != findTripRecord.getMember().getId()) {
-            throw new UserInvalidAccessException();
-        }
-
-        tripRecordRepository.delete(findTripRecord);
-    }
-
-    @Transactional
     public void incrementViewCount(TripRecord tripRecord) {
 
         LocalDate today = LocalDate.now();

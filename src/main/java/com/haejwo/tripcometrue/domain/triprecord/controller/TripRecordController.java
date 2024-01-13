@@ -39,7 +39,8 @@ public class TripRecordController {
         @PathVariable Long tripRecordId
     ) {
 
-        TripRecordDetailResponseDto responseDto = tripRecordService.findTripRecord(principalDetails, tripRecordId);
+        TripRecordDetailResponseDto responseDto = tripRecordService.findTripRecord(principalDetails,
+            tripRecordId);
         ResponseDTO<TripRecordDetailResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
@@ -56,42 +57,12 @@ public class TripRecordController {
         List<TripRecordListResponseDto> responseDtos
             = tripRecordService.findTripRecordList(pageable, request);
 
-        ResponseDTO<List<TripRecordListResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
-
-        return  ResponseEntity
-                    .status(responseBody.getCode())
-                    .body(responseBody);
-
-    }
-
-    @PutMapping("/{tripRecordId}")
-    public ResponseEntity<ResponseDTO<TripRecordResponseDto>> tripRecordModify(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @PathVariable Long tripRecordId,
-        @RequestBody TripRecordRequestDto requestDto
-    ) {
-
-        TripRecordResponseDto responseDto = tripRecordService.modifyTripRecord(principalDetails, tripRecordId, requestDto);
-        ResponseDTO<TripRecordResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+        ResponseDTO<List<TripRecordListResponseDto>> responseBody = ResponseDTO.okWithData(
+            responseDtos);
 
         return ResponseEntity
             .status(responseBody.getCode())
             .body(responseBody);
 
     }
-
-    @DeleteMapping("/{tripRecordId}")
-    public ResponseEntity<ResponseDTO> tripRecordRemove(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @PathVariable Long tripRecordId
-    ) {
-
-        tripRecordService.removeTripRecord(principalDetails, tripRecordId);
-        ResponseDTO responseBody = ResponseDTO.ok();
-
-        return ResponseEntity
-            .status(responseBody.getCode())
-            .body(responseBody);
-    }
-
 }
