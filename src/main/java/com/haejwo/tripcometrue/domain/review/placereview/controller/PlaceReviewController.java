@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
+import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
@@ -53,11 +54,11 @@ public class PlaceReviewController {
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
-    @DeleteMapping("/reviews/{placeReviewId}")
+    @DeleteMapping("/reviews")
     public ResponseEntity<ResponseDTO<Void>> removePlaceReview(
-            @PathVariable Long placeReviewId) {
+            @RequestBody DeletePlaceReviewRequestDto requestDto) {
 
-        placeReviewService.deletePlaceReview(placeReviewId);
+        placeReviewService.deletePlaceReview(requestDto);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 }

@@ -5,6 +5,7 @@ import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
@@ -134,12 +135,9 @@ public class PlaceReviewService {
                 .fromEntity(placeReview, hasLikedPlaceReview(principalDetails, placeReview));
     }
 
-    /*
-    여행지에 대한 특정 리뷰 삭제
-     */
-    //todo 여러 값을 제거하는 로직 추가
     @Transactional
-    public void deletePlaceReview(Long tripReviewId) {
-        placeReviewRepository.delete(getPlaceReviewById(tripReviewId));
+    public void deletePlaceReview(DeletePlaceReviewRequestDto requestDto) {
+        requestDto.placeReviewIds()
+                .forEach(id -> placeReviewRepository.delete((getPlaceReviewById(id))));
     }
 }
