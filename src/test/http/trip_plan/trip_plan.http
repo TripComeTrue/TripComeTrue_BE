@@ -1,7 +1,7 @@
 
 ### 여행 계획 작성
 POST http://localhost:8080/v1/trip-plan
-Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDQ4ODAwNTUsImV4cCI6MTcwNTAyNDA1NX0.CxgA80_iaos4nyeYoV49Du4bpWezOuVjAnTT3qXfawI
+Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
 Content-Type: application/json
 
 {
@@ -27,3 +27,7 @@ Content-Type: application/json
     }
   ]
 }
+
+### 여행 계획 삭제
+DELETE http://localhost:8080/v1/trip-plan/1
+Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
