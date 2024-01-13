@@ -1,7 +1,16 @@
 package com.haejwo.tripcometrue.domain.member.controller;
 
+import com.haejwo.tripcometrue.domain.member.dto.request.EmailCheckRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.IntroductionRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.NicknameRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.PasswordChangeRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.PasswordCheckRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.ProfileImageRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.IntroductionResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.LoginResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.NicknameResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.ProfileImageResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.TestUserResponseDto;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
@@ -12,7 +21,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,5 +79,86 @@ public class MemberController {
         return ResponseEntity
             .status(response.getCode())
             .body(response);
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<ResponseDTO<Void>> changePassword(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody PasswordChangeRequestDto passwordChangeRequestDto) {
+
+        memberService.changePassword(principalDetails, passwordChangeRequestDto);
+        ResponseDTO<Void> response = ResponseDTO.ok();
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @PostMapping("/check-password")
+    public ResponseEntity<ResponseDTO<Void>> checkPassword(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody PasswordCheckRequestDto passwordCheckRequestDto) {
+
+        memberService.checkPassword(principalDetails, passwordCheckRequestDto);
+        ResponseDTO<Void> response = ResponseDTO.ok();
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<ResponseDTO<Void>> checkEmail(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody EmailCheckRequestDto emailCheckRequestDto) {
+
+        memberService.checkEmail(principalDetails, emailCheckRequestDto);
+        ResponseDTO<Void> response = ResponseDTO.ok();
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @PatchMapping("/profile-image")
+    public ResponseEntity<ResponseDTO<ProfileImageResponseDto>> updateProfileImage(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody ProfileImageRequestDto requestDto) {
+
+        ProfileImageResponseDto responseDto = memberService.updateProfileImage(principalDetails, requestDto);
+        ResponseDTO<ProfileImageResponseDto> response = ResponseDTO.okWithData(responseDto);
+
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @PatchMapping("/introduction")
+    public ResponseEntity<ResponseDTO<IntroductionResponseDto>> updateIntroduction(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody IntroductionRequestDto requestDto) {
+
+        IntroductionResponseDto responseDto = memberService.updateIntroduction(principalDetails, requestDto);
+        ResponseDTO<IntroductionResponseDto> response = ResponseDTO.okWithData(responseDto);
+
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @PatchMapping("/nickname")
+    public ResponseEntity<ResponseDTO<NicknameResponseDto>> updateNickname(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @Valid @RequestBody NicknameRequestDto requestDto) {
+
+        NicknameResponseDto responseDto = memberService.updateNickname(principalDetails, requestDto);
+        ResponseDTO<NicknameResponseDto> response = ResponseDTO.okWithData(responseDto);
+
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResponseDTO<Void>> deleteAccount(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        memberService.deleteAccount(principalDetails);
+        return ResponseEntity.ok(ResponseDTO.ok());
     }
 }
