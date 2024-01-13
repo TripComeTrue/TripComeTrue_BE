@@ -1,6 +1,6 @@
 ### 여행후기 저장
 POST http://localhost:8080/v1/trip-record
-Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDQ4ODAwNTUsImV4cCI6MTcwNTAyNDA1NX0.CxgA80_iaos4nyeYoV49Du4bpWezOuVjAnTT3qXfawI
+Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
 Content-Type: application/json
 
 {
@@ -63,6 +63,10 @@ Content-Type: application/json
     }
   ]
 }
+
+### 여행후기 삭제
+DELETE http://localhost:8080/v1/trip-record/10
+Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
 
 ### 여행스케줄 장소 검색하기
 GET http://localhost:8080/v1/search-schedule-places?country=KOREA&city=서울
