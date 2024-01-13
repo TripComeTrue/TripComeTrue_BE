@@ -15,18 +15,22 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordTag;
-import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_image.TripRecordImageRepository;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_image.TripRecordImageRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.TripRecordScheduleRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_tag.TripRecordTagRepository;
 import com.haejwo.tripcometrue.global.enums.Country;
+import com.haejwo.tripcometrue.global.exception.PermissionDeniedException;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,7 +98,7 @@ public class TripRecordEditService {
         });
     }
 
-    private void saveTripRecordScheduleVideos(TripRecordScheduleRequestDto requestDto,
+    private void saveTripRecordScheduleVideos(@NotNull TripRecordScheduleRequestDto requestDto,
         TripRecordSchedule tripRecordSchedule) {
         requestDto.tripRecordScheduleVideos().forEach(tripRecordScheduleVideoUrl -> {
             TripRecordScheduleVideo tripRecordScheduleVideo = TripRecordScheduleVideo.builder()
@@ -106,12 +110,29 @@ public class TripRecordEditService {
 
     public List<SearchScheduleTripResponseDto> searchSchedulePlace(Country country, String city) {
         return cityRepository.findByNameAndCountry(city, country).map(
-            foundCity -> placeRepository.findByCityId(foundCity.getId()) //TODO : 연관관계 추가되면 수정필요
+            foundCity -> placeRepository.findByCityId(foundCity.getId())
                 .stream().map(SearchScheduleTripResponseDto::fromEntity)
                 .collect(Collectors.toList())).orElseGet(() -> new ArrayList<>());
     }
 
     public Long createSchedulePlace(CreateSchedulePlaceRequestDto createSchedulePlaceRequestDto) {
         return placeRepository.save(createSchedulePlaceRequestDto.toEntity()).getId();
+    }
+
+    @Transactional
+    public void deleteTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
+
+        Optional<TripRecord> tripRecord = tripRecordRepository.findById(tripRecordId);
+
+        if (tripRecord.isPresent()) {
+            TripRecord foundTripRecord = tripRecord.get();
+            if (foundTripRecord.getMember().getId().equals(principalDetails.getMember().getId())) {
+                tripRecordRepository.delete(foundTripRecord);
+            } else {
+                throw new PermissionDeniedException();
+            }
+        } else {
+            throw new TripRecordNotFoundException();
+        }
     }
 }
