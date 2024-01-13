@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.domain.tripplan.entity;
 
-import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExternalLinkTagType;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -44,14 +43,10 @@ public class TripPlanSchedule extends BaseTimeEntity {
     private ExternalLinkTagType tagType;
     private String tagUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     @Builder
     public TripPlanSchedule(Integer dayNumber, Integer ordering, String content,
-        Long placeId, TripPlan tripPlan, ExternalLinkTagType tagType, String tagUrl,
-        Member member) {
+        Long placeId, TripPlan tripPlan, ExternalLinkTagType tagType, String tagUrl
+    ) {
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
@@ -59,7 +54,5 @@ public class TripPlanSchedule extends BaseTimeEntity {
         this.tripPlan = tripPlan;
         this.tagType = tagType;
         this.tagUrl = tagUrl;
-        this.member = member;
-
     }
 }

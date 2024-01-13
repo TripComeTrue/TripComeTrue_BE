@@ -25,7 +25,7 @@ public class TripPlanService {
 
         requestDto.tripPlanSchedules().stream()
             .map(tripPlanScheduleRequestDto ->
-                tripPlanScheduleRequestDto.toEntity(requestTripPlan, principalDetails.getMember()))
+                tripPlanScheduleRequestDto.toEntity(requestTripPlan))
             .forEach(tripPlanScheduleRepository::save);
     }
 
@@ -42,7 +42,8 @@ public class TripPlanService {
     }
 
     @Transactional
-    public void modifyTripPlan(PrincipalDetails principalDetails, String planId, TripPlanRequestDto requestDto) {
+    public void modifyTripPlan(PrincipalDetails principalDetails, String planId,
+        TripPlanRequestDto requestDto) {
 
         TripPlan tripPlan = tripPlanRepository.findById(Long.parseLong(planId))
             .orElseThrow(TripPlanNotFoundException::new);
@@ -57,7 +58,7 @@ public class TripPlanService {
         tripPlanScheduleRepository.deleteAllByTripPlanId(tripPlan.getId());
         requestDto.tripPlanSchedules().stream()
             .map(tripPlanScheduleRequestDto ->
-                tripPlanScheduleRequestDto.toEntity(tripPlan, principalDetails.getMember()))
+                tripPlanScheduleRequestDto.toEntity(tripPlan))
             .forEach(tripPlanScheduleRepository::save);
     }
 }
