@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordImageListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordScheduleService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import java.util.List;
@@ -21,14 +21,14 @@ public class TripRecordScheduleController {
     private final TripRecordScheduleService tripRecordScheduleService;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<TripRecordImageListResponseDto>>> tripRecordScheduleImageList(
+    public ResponseEntity<ResponseDTO<List<TripRecordScheduleImageListResponseDto>>> tripRecordScheduleImageList(
         Pageable pageable,
         @ModelAttribute TripRecordScheduleImageListRequestAttribute requestParam
     ) {
 
-        List<TripRecordImageListResponseDto> responseDtos = tripRecordScheduleService.findScheduleImages(pageable, requestParam);
+        List<TripRecordScheduleImageListResponseDto> responseDtos = tripRecordScheduleService.findScheduleImages(pageable, requestParam);
 
-        ResponseDTO<List<TripRecordImageListResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
+        ResponseDTO<List<TripRecordScheduleImageListResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
 
         return ResponseEntity
             .status(responseBody.getCode())
