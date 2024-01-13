@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.tripplan.controller;
 
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.sevice.TripPlanService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,7 +41,7 @@ public class TripPlanController {
     @DeleteMapping("/{planId}")
     public ResponseEntity<ResponseDTO<Void>> deleteTripPlan(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @PathVariable String planId) {
+        @PathVariable Long planId) {
 
         tripPlanService.deleteTripPlan(principalDetails, planId);
         ResponseDTO<Void> responseBody = ResponseDTO.ok();
@@ -53,10 +55,22 @@ public class TripPlanController {
     public ResponseEntity<ResponseDTO<Void>> modifyTripPlan(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @RequestBody TripPlanRequestDto requestDto,
-        @PathVariable String planId) {
+        @PathVariable Long planId) {
 
         tripPlanService.modifyTripPlan(principalDetails, planId, requestDto);
         ResponseDTO<Void> responseBody = ResponseDTO.ok();
+
+        return ResponseEntity
+            .status(responseBody.getCode())
+            .body(responseBody);
+    }
+
+    @GetMapping("/{planId}")
+    public ResponseEntity<ResponseDTO<TripPlanDetailsResponseDto>> getTripPlanDetails(
+        @PathVariable Long planId) {
+
+        ResponseDTO<TripPlanDetailsResponseDto> responseBody = ResponseDTO.okWithData(
+            tripPlanService.getTripPlanDetails(planId));
 
         return ResponseEntity
             .status(responseBody.getCode())
