@@ -28,6 +28,35 @@ Content-Type: application/json
   ]
 }
 
+### 여행 계획 수정
+PUT http://localhost:8080/v1/trip-plan/4
+Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
+Content-Type: application/json
+
+{
+  "countries": "한국,일본,중국",
+  "tripStartDay": "2024-01-10",
+  "tripEndDay": "2024-01-20",
+  "tripPlanSchedules": [
+    {
+      "dayNumber": 1,
+      "orderNumber": 1,
+      "placeId": 2,
+      "content": "수정 방문한 장소에 대한 메모나 정보",
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "수정 스케줄 태그 링크1"
+    },
+    {
+      "dayNumber": 1,
+      "orderNumber": 2,
+      "placeId": 2,
+      "content": "수정 내용",
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "수정 스케줄 태그 링크2"
+    }
+  ]
+}
+
 ### 여행 계획 삭제
 DELETE http://localhost:8080/v1/trip-plan/1
 Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
