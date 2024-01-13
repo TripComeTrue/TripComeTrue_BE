@@ -22,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.CONTENT_WITH_IMAGE_POINT;
+import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.ONLY_CONTENT_POINT;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,9 +34,6 @@ public class PlaceReviewService {
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
     private final EntityManager em;
-
-    private static final int ONLY_CONTENT_POINT = 1;
-    private static final int CONTENT_WITH_IMAGE_POINT = 2;
 
     @Transactional
     public RegisterPlaceReviewResponseDto savePlaceReview(
@@ -70,7 +70,7 @@ public class PlaceReviewService {
     }
 
     private static void calculateAndSavePoints(PlaceReview placeReview, Member member) {
-        int point = isImageIncluded(placeReview) ? CONTENT_WITH_IMAGE_POINT : ONLY_CONTENT_POINT;
+        int point = isImageIncluded(placeReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
         member.earnPoint(point);
     }
 
