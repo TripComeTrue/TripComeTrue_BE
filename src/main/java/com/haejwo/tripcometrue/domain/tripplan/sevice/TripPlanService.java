@@ -4,6 +4,7 @@ import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanScheduleRequestDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
@@ -28,6 +29,7 @@ public class TripPlanService {
 
     @Transactional
     public void addTripPlan(PrincipalDetails principalDetails, TripPlanRequestDto requestDto) {
+        validatePlaceId(requestDto.tripPlanSchedules());
         TripPlan requestTripPlan = requestDto.toEntity(principalDetails.getMember());
         tripPlanRepository.save(requestTripPlan);
 
@@ -53,6 +55,7 @@ public class TripPlanService {
     public void modifyTripPlan(PrincipalDetails principalDetails, Long planId,
         TripPlanRequestDto requestDto) {
 
+        validatePlaceId(requestDto.tripPlanSchedules());
         TripPlan tripPlan = tripPlanRepository.findById(planId)
             .orElseThrow(TripPlanNotFoundException::new);
 
@@ -86,5 +89,12 @@ public class TripPlanService {
             .collect(Collectors.toList());
 
         return TripPlanDetailsResponseDto.fromEntity(tripPlan, responseDtos);
+    }
+
+    private void validatePlaceId(List<TripPlanScheduleRequestDto> tripPlanSchedules) {
+        for (TripPlanScheduleRequestDto tripPlanSchedule : tripPlanSchedules) {
+            placeRepository.findById(tripPlanSchedule.placeId())
+                .orElseThrow(PlaceNotFoundException::new);
+        }
     }
 }
