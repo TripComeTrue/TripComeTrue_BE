@@ -38,6 +38,9 @@ public enum ErrorCode {
     TRIP_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행후기입니다."),
     EXPENSE_RANGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 비용범위입니다."),
 
+    // TRIP_PLAN
+    TRIP_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행계획입니다."),
+
     // Likes
     LIKES_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 데이터가 존재하지 않습니다."),
     LIKES_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 좋아요가 등록되어 있습니다."),
