@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.request;
 
-import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
@@ -23,7 +22,7 @@ public record TripRecordScheduleRequestDto(
     String tagUrl
 ) {
 
-    public TripRecordSchedule toEntity(TripRecord tripRecord, Member member, Place place) {
+    public TripRecordSchedule toEntity(TripRecord tripRecord, Place place) {
         return TripRecordSchedule.builder()
             .dayNumber(this.dayNumber)
             .ordering(this.orderNumber)
@@ -32,7 +31,6 @@ public record TripRecordScheduleRequestDto(
             .tripRecord(tripRecord)
             .tagType(this.tagType)
             .tagUrl(this.tagUrl)
-            .member(member)
             .build();
     }
 }
