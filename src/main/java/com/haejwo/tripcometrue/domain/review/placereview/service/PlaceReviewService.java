@@ -44,24 +44,26 @@ public class PlaceReviewService {
             Long placeId,
             PlaceReviewRequestDto requestDto) {
 
-        Member member = persistAndRetrieveMember(principalDetails);
+        Member member = getPersistentMember(principalDetails);
         Place place = getPlaceById(placeId);
 
         isPlaceReviewExists(member, place);
 
-        PlaceReview placeReview = PlaceReviewRequestDto.toEntity(
-                member,
-                place,
-                requestDto);
+        PlaceReview placeReview = PlaceReviewRequestDto.toEntity(member, place, requestDto);
 
-        calculatePoints(placeReview, member);
+        calculateAndSavePoints(placeReview, member);
 
         return RegisterPlaceReviewResponseDto
                 .fromEntity(placeReviewRepository.save(placeReview));
     }
 
-    private Member persistAndRetrieveMember(PrincipalDetails principalDetails) {
-        return em.merge(principalDetails.getMember()); //영속성 컨텍스트에 넣기
+    private Member getPersistentMember(PrincipalDetails principalDetails) {
+        return em.merge(principalDetails.getMember()); //준영속 상태를 영속 상태로 변경
+    }
+
+    private Place getPlaceById(Long placeId) {
+        return placeRepository.findById(placeId)
+                .orElseThrow(PlaceNotFoundException::new);
     }
 
     private void isPlaceReviewExists(Member member, Place place) {
@@ -70,17 +72,13 @@ public class PlaceReviewService {
         }
     }
 
-    private Place getPlaceById(Long placeId) {
-        return placeRepository.findById(placeId)
-                .orElseThrow(PlaceNotFoundException::new);
+    private static void calculateAndSavePoints(PlaceReview placeReview, Member member) {
+        int point = isImageIncluded(placeReview) ? CONTENT_WITH_IMAGE_POINT : ONLY_CONTENT_POINT;
+        member.earnPoint(point);
     }
 
-    private static void calculatePoints(PlaceReview placeReview, Member member) {
-        if (placeReview.getImageUrl() == null) {
-            member.earnPoint(ONLY_CONTENT_POINT);
-        } else {
-            member.earnPoint(CONTENT_WITH_IMAGE_POINT);
-        }
+    private static boolean isImageIncluded(PlaceReview placeReview) {
+        return placeReview.getImageUrl() != null;
     }
 
     /*
@@ -130,6 +128,7 @@ public class PlaceReviewService {
     /*
     여행지에 대한 특정 리뷰 수정
      */
+    //todo 로그인한 사람이 아닌 경우 예외 발생
     @Transactional
     public PlaceReviewResponseDto modifyPlaceReview(
             PrincipalDetails principalDetails,
@@ -147,6 +146,7 @@ public class PlaceReviewService {
     여행지에 대한 특정 리뷰 삭제
      */
     //todo 여러 값을 제거하는 로직 추가
+    //todo 로그인이 아닌 사람 예외 발생
     @Transactional
     public void deletePlaceReview(Long tripReviewId) {
         placeReviewRepository.delete(getPlaceReviewById(tripReviewId));
