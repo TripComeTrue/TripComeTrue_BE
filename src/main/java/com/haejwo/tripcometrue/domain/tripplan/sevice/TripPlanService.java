@@ -2,8 +2,10 @@ package com.haejwo.tripcometrue.domain.tripplan.sevice;
 
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
+import com.haejwo.tripcometrue.domain.tripplan.exception.TripPlanNotFoundException;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanRepository;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanScheduleRepository;
+import com.haejwo.tripcometrue.global.exception.PermissionDeniedException;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,5 +27,17 @@ public class TripPlanService {
             .map(tripPlanScheduleRequestDto ->
                 tripPlanScheduleRequestDto.toEntity(requestTripPlan, principalDetails.getMember()))
             .forEach(tripPlanScheduleRepository::save);
+    }
+
+    public void deleteTripPlan(PrincipalDetails principalDetails, String planId) {
+
+        TripPlan tripPlan = tripPlanRepository.findById(Long.parseLong(planId))
+            .orElseThrow(TripPlanNotFoundException::new);
+
+        if (!tripPlan.getMember().getId().equals(principalDetails.getMember().getId())) {
+            throw new PermissionDeniedException();
+        }
+
+        tripPlanRepository.delete(tripPlan);
     }
 }
