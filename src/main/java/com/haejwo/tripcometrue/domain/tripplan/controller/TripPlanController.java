@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.tripplan.controller;
 
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.CopyTripPlanFromTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.sevice.TripPlanService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -71,6 +72,19 @@ public class TripPlanController {
 
         ResponseDTO<TripPlanDetailsResponseDto> responseBody = ResponseDTO.okWithData(
             tripPlanService.getTripPlanDetails(planId));
+
+        return ResponseEntity
+            .status(responseBody.getCode())
+            .body(responseBody);
+    }
+
+    @PostMapping("from-trip-record/{tripRecordId}")
+    public ResponseEntity<ResponseDTO<CopyTripPlanFromTripRecordResponseDto>> copyTripPlanFromTripRecord(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @PathVariable Long tripRecordId) {
+
+        ResponseDTO<CopyTripPlanFromTripRecordResponseDto> responseBody = ResponseDTO.okWithData(
+            tripPlanService.copyTripPlanFromTripRecord(tripRecordId, principalDetails));
 
         return ResponseEntity
             .status(responseBody.getCode())
