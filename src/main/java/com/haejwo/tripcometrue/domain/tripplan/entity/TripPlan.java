@@ -56,7 +56,7 @@ public class TripPlan extends BaseTimeEntity {
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
         this.averageRating = averageRating;
-        this.viewCount = viewCount;
+        this.viewCount = 0;
         this.tripPlanSchedules = tripRecordSchedules;
         this.member = member;
         this.referencedBy = referencedBy;
