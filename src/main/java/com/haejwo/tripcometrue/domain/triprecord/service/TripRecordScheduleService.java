@@ -1,8 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordImageListResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordSchedule.TripRecordScheduleRepository;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.TripRecordScheduleRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -14,12 +14,12 @@ public class TripRecordScheduleService {
 
     private final TripRecordScheduleRepository tripRecordScheduleRepository;
 
-    public List<TripRecordImageListResponseDto> findScheduleImages(
+    public List<TripRecordScheduleImageListResponseDto> findScheduleImages(
         Pageable pageable,
         TripRecordScheduleImageListRequestAttribute requestParam
     ) {
 
-        List<TripRecordImageListResponseDto> responseDtos = tripRecordScheduleRepository.findScheduleImagesWithFilter(pageable, requestParam);
+        List<TripRecordScheduleImageListResponseDto> responseDtos = tripRecordScheduleRepository.findScheduleImagesWithFilter(pageable, requestParam);
 
         return responseDtos;
 

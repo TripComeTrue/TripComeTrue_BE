@@ -1,19 +1,14 @@
-package com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordSchedule;
+package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordImageListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -29,7 +24,7 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
     }
 
     @Override
-    public List<TripRecordImageListResponseDto> findScheduleImagesWithFilter(
+    public List<TripRecordScheduleImageListResponseDto> findScheduleImagesWithFilter(
         Pageable pageable,
         TripRecordScheduleImageListRequestAttribute request
     ) {
@@ -38,8 +33,8 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
         QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
         QTripRecordScheduleImage qTripRecordScheduleImage = QTripRecordScheduleImage.tripRecordScheduleImage;
 
-        List<TripRecordImageListResponseDto> result = jpaQueryFactory
-            .select(Projections.constructor(TripRecordImageListResponseDto.class,
+        List<TripRecordScheduleImageListResponseDto> result = jpaQueryFactory
+            .select(Projections.constructor(TripRecordScheduleImageListResponseDto.class,
                 qTripRecordSchedule.tripRecord.id,
                 qTripRecordScheduleImage.imageUrl.min()))
             .from(qTripRecordSchedule)
