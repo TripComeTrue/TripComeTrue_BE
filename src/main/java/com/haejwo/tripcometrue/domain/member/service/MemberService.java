@@ -1,10 +1,24 @@
 package com.haejwo.tripcometrue.domain.member.service;
 
+import com.haejwo.tripcometrue.domain.member.dto.request.EmailCheckRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.IntroductionRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.NicknameRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.PasswordChangeRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.PasswordCheckRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.ProfileImageRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.IntroductionResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.NicknameResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.ProfileImageResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.exception.CurrentPasswordNotMatchException;
 import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
+import com.haejwo.tripcometrue.domain.member.exception.EmailNotMatchException;
+import com.haejwo.tripcometrue.domain.member.exception.NewPasswordSameAsOldException;
+import com.haejwo.tripcometrue.domain.member.exception.NicknameAlreadyExistsException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -50,5 +64,89 @@ public class MemberService {
         Collections.shuffle(first);
         Collections.shuffle(name);
         return first.get(0) + name.get(0);
+    }
+
+    @Transactional
+    public void changePassword(
+        PrincipalDetails principalDetails, PasswordChangeRequestDto passwordChangeRequestDto) {
+        Long memberId = principalDetails.getMember().getId();
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow();
+
+        String currentPassword = member.getMemberBase().getPassword();
+        String newPassword = passwordChangeRequestDto.newPassword();
+
+        if (passwordEncoder.matches(newPassword, currentPassword)) {
+            throw new NewPasswordSameAsOldException();
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        member.getMemberBase().changePassword(encodedNewPassword);
+        memberRepository.save(member);
+    }
+
+    public void checkPassword(
+        PrincipalDetails principalDetails, PasswordCheckRequestDto passwordCheckRequestDto) {
+        Member member = principalDetails.getMember();
+        String currentPassword = member.getMemberBase().getPassword();
+
+        if (!passwordEncoder.matches(passwordCheckRequestDto.currentPassword(), currentPassword)) {
+            throw new CurrentPasswordNotMatchException();
+        }
+    }
+
+    public void checkEmail(
+        PrincipalDetails principalDetails, EmailCheckRequestDto emailCheckRequestDto) {
+        Member member = principalDetails.getMember();
+        String currentEmail = member.getMemberBase().getEmail();
+
+        if (!emailCheckRequestDto.email().equals(currentEmail)) {
+            throw new EmailNotMatchException();
+        }
+    }
+
+    public ProfileImageResponseDto updateProfileImage(
+        PrincipalDetails principalDetails, ProfileImageRequestDto requestDto) {
+        Member member = memberRepository.findById(principalDetails.getMember().getId())
+            .orElseThrow();
+
+        member.updateProfileImage(requestDto.profile_image());
+        memberRepository.save(member);
+
+        return ProfileImageResponseDto.fromEntity(member);
+
+    }
+
+    public IntroductionResponseDto updateIntroduction(
+        PrincipalDetails principalDetails, IntroductionRequestDto requestDto) {
+        Member member = memberRepository.findById(principalDetails.getMember().getId())
+            .orElseThrow();
+
+        member.updateIntroduction(requestDto.introduction());
+        memberRepository.save(member);
+
+        return IntroductionResponseDto.fromEntity(member);
+    }
+
+    public NicknameResponseDto updateNickname(
+        PrincipalDetails principalDetails, NicknameRequestDto requestDto) {
+        memberRepository.findByMemberBaseNickname(requestDto.nickname())
+            .ifPresent(existingMember -> {throw new NicknameAlreadyExistsException();});
+
+        Member member = memberRepository.findById(principalDetails.getMember().getId())
+            .orElseThrow();
+
+        member.getMemberBase().changeNickname(requestDto.nickname());
+        memberRepository.save(member);
+
+        return NicknameResponseDto.fromEntity(member);
+    }
+
+    public void deleteAccount(PrincipalDetails principalDetails) {
+
+        Member member = memberRepository.findById(principalDetails.getMember().getId())
+            .orElseThrow();
+
+        memberRepository.delete(member);
     }
 }
