@@ -6,18 +6,18 @@ Content-Type: application/json
 {
   "tripRecordImages": [
     {
-      "imageUrl": "이미지링크1",
+      "imageUrl": "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg",
       "tagType": "FOOD_TOURISM_LOCATION",
-      "tagUrl": "태그주소1"
+      "tagUrl": "https://www.siksinhot.com/P/56310"
     },
     {
-      "imageUrl": "이미지링크2",
+      "imageUrl": "https://www.gangnam.go.kr/upload/editor/2020/12/29/b03f9390-fed9-41fc-874c-81f4d6b200f8.jpg",
       "tagType": "AIRLINE_TICKET_PURCHASE",
-      "tagUrl": "태그주소2"
+      "tagUrl": "https://www.skyscanner.co.kr/?&utm_source=google&utm_medium=cpc&utm_campaign=KR-Flights-Search-KO-Generics&utm_term=%ED%95%AD%EA%B3%B5%EA%B6%8C%EC%98%88%EC%95%BD&associateID=SEM_GGF_19370_00080&gclsrc=ds2"
     }
   ],
-  "title": "피드 제목",
-  "content": "여행의 전반적인 후기나 메모",
+  "title": "재밌는 강남 -> 일본 여행",
+  "content": "재밌게 강남을 다녀왔습니다. 강남역에서 맛있는 음식을 먹고, 쇼핑도 하고, 즐거운 시간을 보냈습니다. 도쿄 디즈니 랜드도 다녀왔어요",
   "expenseRangeType": "BELOW_50",
   "hashTags": [
     "연인끼리",
@@ -25,41 +25,67 @@ Content-Type: application/json
   ],
   "countries": "한국,일본",
   "tripStartDay": "2024-01-10",
-  "tripEndDay": "2024-01-20",
+  "tripEndDay": "2024-01-12",
   "tripRecordSchedules": [
     {
       "dayNumber": 1,
       "orderNumber": 1,
-      "placeId": 2,
-      "content": "방문한 장소에 대한 메모나 정보",
+      "placeId": 6,
+      "content": "1일차 첫번째 방문 장소 강남",
       "tripRecordScheduleImages": [
-        "스케줄 이미지 링크1",
-        "스케줄 이미지 링크2"
+        "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg",
+        "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg"
       ],
       "tripRecordScheduleVideos": [
-        "스케줄 비디오 링크1",
-        "스케줄 비디오 링크2",
-        "스케줄 비디오 링크3"
+        "https://www.youtube.com/shorts/EjwHIfhr-uE",
+        "https://www.youtube.com/shorts/EjwHIfhr-uE"
       ],
       "tagType": "AIRLINE_TICKET_PURCHASE",
-      "tagUrl": "스케줄 태그 링크1"
+      "tagUrl": "https://www.skyscanner.co.kr/?&utm_source=google&utm_medium=cpc&utm_campaign=KR-Flights-Search-KO-Generics&utm_term=%ED%95%AD%EA%B3%B5%EA%B6%8C%EC%98%88%EC%95%BD&associateID=SEM_GGF_19370_00080&gclsrc=ds2"
     },
     {
       "dayNumber": 1,
       "orderNumber": 2,
-      "placeId": 2,
-      "content": "내용",
+      "placeId": 6,
+      "content": "1일차 두번째 방문장소 강남 맛집",
       "tripRecordScheduleImages": [
-        "스케줄 이미지 링크3",
-        "스케줄 이미지 링크4"
       ],
       "tripRecordScheduleVideos": [
-        "스케줄 비디오 링크4",
-        "스케줄 비디오 링크5",
-        "스케줄 비디오 링크6"
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "orderNumber": 1,
+      "placeId": 7,
+      "content": "2번째 날 첫째 도쿄 디즈니 랜드 방문",
+      "tripRecordScheduleImages": [
+        "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg",
+        "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg"
+      ],
+      "tripRecordScheduleVideos": [
+        "https://www.youtube.com/shorts/EjwHIfhr-uE",
+        "https://www.youtube.com/shorts/EjwHIfhr-uE",
+        "https://www.youtube.com/shorts/EjwHIfhr-uE"
       ],
       "tagType": "AIRLINE_TICKET_PURCHASE",
-      "tagUrl": "스케줄 태그 링크2"
+      "tagUrl": "https://www.skyscanner.co.kr/?&utm_source=google&utm_medium=cpc&utm_campaign=KR-Flights-Search-KO-Generics&utm_term=%ED%95%AD%EA%B3%B5%EA%B6%8C%EC%98%88%EC%95%BD&associateID=SEM_GGF_19370_00080&gclsrc=ds2"
+    },
+    {
+      "dayNumber": 2,
+      "orderNumber": 2,
+      "placeId": 7,
+      "content": "2번째 날 둘째 도쿄 디즈니 랜드 방문",
+      "tripRecordScheduleImages": [
+        "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg",
+        "https://www.gangnam.go.kr/upload/editor/2022/10/07/af149235-ff84-420d-af5c-e652161de152.jpg"
+      ],
+      "tripRecordScheduleVideos": [
+        "https://www.youtube.com/shorts/EjwHIfhr-uE",
+        "https://www.youtube.com/shorts/EjwHIfhr-uE",
+        "https://www.youtube.com/shorts/EjwHIfhr-uE"
+      ],
+      "tagType": "AIRLINE_TICKET_PURCHASE",
+      "tagUrl": "https://www.skyscanner.co.kr/?&utm_source=google&utm_medium=cpc&utm_campaign=KR-Flights-Search-KO-Generics&utm_term=%ED%95%AD%EA%B3%B5%EA%B6%8C%EC%98%88%EC%95%BD&associateID=SEM_GGF_19370_00080&gclsrc=ds2"
     }
   ]
 }
