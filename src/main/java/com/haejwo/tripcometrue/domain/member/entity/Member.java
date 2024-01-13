@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.member.entity;
 
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,8 @@ public class Member extends BaseTimeEntity {
 
     private Double member_rating;
 
+    private String introduction;
+
     @Builder
     public Member(String email, String nickname, String password, String authority,
         String provider) {
@@ -37,6 +40,9 @@ public class Member extends BaseTimeEntity {
 
     public void updateProfileImage(String profileImage){
         this.profile_image = profileImage;
+    }
+    public void updateIntroduction(String introduction){
+        this.introduction = introduction;
     }
 
     public void earnPoint(int point) {
