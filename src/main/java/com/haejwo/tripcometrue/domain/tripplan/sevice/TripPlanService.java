@@ -5,12 +5,18 @@ import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanScheduleRequestDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.CopyTripPlanFromTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
 import com.haejwo.tripcometrue.domain.tripplan.exception.TripPlanNotFoundException;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanRepository;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanScheduleRepository;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordStore;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.TripRecordScheduleRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_store.TripRecordStoreRepository;
 import com.haejwo.tripcometrue.global.exception.PermissionDeniedException;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.List;
@@ -26,6 +32,9 @@ public class TripPlanService {
     private final TripPlanRepository tripPlanRepository;
     private final TripPlanScheduleRepository tripPlanScheduleRepository;
     private final PlaceRepository placeRepository;
+    private final TripRecordStoreRepository tripRecordStoreRepository;
+    private final TripRecordRepository tripRecordRepository;
+    private final TripRecordScheduleRepository tripRecordScheduleRepository;
 
     @Transactional
     public void addTripPlan(PrincipalDetails principalDetails, TripPlanRequestDto requestDto) {
@@ -96,5 +105,33 @@ public class TripPlanService {
             placeRepository.findById(tripPlanSchedule.placeId())
                 .orElseThrow(PlaceNotFoundException::new);
         }
+    }
+
+    public CopyTripPlanFromTripRecordResponseDto copyTripPlanFromTripRecord(
+        Long tripRecordId,
+        PrincipalDetails principalDetails) {
+
+        TripRecordStore tripRecordStore = TripRecordStore
+            .builder()
+            .member(principalDetails.getMember())
+            .tripRecord(tripRecordRepository.findById(tripRecordId)
+                .orElseThrow(TripRecordNotFoundException::new))
+            .build();
+
+        tripRecordStoreRepository.save(tripRecordStore);
+
+        List<TripPlanScheduleResponseDto> responseDtos = tripRecordScheduleRepository
+            .findAllByTripRecordId(tripRecordId)
+            .stream()
+            .map(tripRecordSchedule -> {
+                Place place = placeRepository.findById(tripRecordSchedule.getPlace().getId())
+                    .orElseThrow(PlaceNotFoundException::new);
+                return TripPlanScheduleResponseDto.fromEntity(tripRecordSchedule, place);
+            })
+            .toList();
+
+        return CopyTripPlanFromTripRecordResponseDto.fromEntity(
+            tripRecordStore.getTripRecord(),
+            responseDtos);
     }
 }
