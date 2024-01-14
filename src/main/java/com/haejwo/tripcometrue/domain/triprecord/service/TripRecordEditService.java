@@ -1,7 +1,10 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
+import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
-import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.place.entity.Place;
+import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.CreateSchedulePlaceRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
@@ -13,18 +16,22 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordTag;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordImageRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordScheduleImageRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordScheduleRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordScheduleVideoRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordTagRepository;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_image.TripRecordImageRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.TripRecordScheduleRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_tag.TripRecordTagRepository;
 import com.haejwo.tripcometrue.global.enums.Country;
+import com.haejwo.tripcometrue.global.exception.PermissionDeniedException;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +50,13 @@ public class TripRecordEditService {
 
     @Transactional
     public void addTripRecord(PrincipalDetails principalDetails, TripRecordRequestDto requestDto) {
+        validatePlaceId(requestDto.tripRecordSchedules());
         TripRecord requestTripRecord = requestDto.toEntity(principalDetails.getMember());
         tripRecordRepository.save(requestTripRecord);
 
         saveTripRecordImages(requestDto, requestTripRecord);
         saveHashTags(requestDto, requestTripRecord);
-        saveTripRecordSchedules(requestDto, requestTripRecord, principalDetails.getMember());
+        saveTripRecordSchedules(requestDto, requestTripRecord);
     }
 
     private void saveTripRecordImages(TripRecordRequestDto requestDto,
@@ -68,10 +76,13 @@ public class TripRecordEditService {
     }
 
     private void saveTripRecordSchedules(TripRecordRequestDto requestDto,
-        TripRecord requestTripRecord, Member member) {
+        TripRecord requestTripRecord) {
         requestDto.tripRecordSchedules().forEach(tripRecordScheduleRequestDto -> {
+            Place place = placeRepository.findById(tripRecordScheduleRequestDto.placeId())
+                .orElseThrow(PlaceNotFoundException::new);
+
             TripRecordSchedule tripRecordSchedule = tripRecordScheduleRequestDto.toEntity(
-                requestTripRecord, member);
+                requestTripRecord, place);
             tripRecordScheduleRepository.save(tripRecordSchedule);
 
             saveTripRecordScheduleImages(tripRecordScheduleRequestDto, tripRecordSchedule);
@@ -89,7 +100,7 @@ public class TripRecordEditService {
         });
     }
 
-    private void saveTripRecordScheduleVideos(TripRecordScheduleRequestDto requestDto,
+    private void saveTripRecordScheduleVideos(@NotNull TripRecordScheduleRequestDto requestDto,
         TripRecordSchedule tripRecordSchedule) {
         requestDto.tripRecordScheduleVideos().forEach(tripRecordScheduleVideoUrl -> {
             TripRecordScheduleVideo tripRecordScheduleVideo = TripRecordScheduleVideo.builder()
@@ -101,12 +112,73 @@ public class TripRecordEditService {
 
     public List<SearchScheduleTripResponseDto> searchSchedulePlace(Country country, String city) {
         return cityRepository.findByNameAndCountry(city, country).map(
-            foundCity -> placeRepository.findByCityId(foundCity.getId()) //TODO : 연관관계 추가되면 수정필요
+            foundCity -> placeRepository.findByCityId(foundCity.getId())
                 .stream().map(SearchScheduleTripResponseDto::fromEntity)
                 .collect(Collectors.toList())).orElseGet(() -> new ArrayList<>());
     }
 
     public Long createSchedulePlace(CreateSchedulePlaceRequestDto createSchedulePlaceRequestDto) {
-        return placeRepository.save(createSchedulePlaceRequestDto.toEntity()).getId();
+        City city = cityRepository.findByNameAndCountry(createSchedulePlaceRequestDto.cityname(),
+            createSchedulePlaceRequestDto.country()).orElseThrow(CityNotFoundException::new);
+
+        return placeRepository.save(createSchedulePlaceRequestDto.toEntity(city)).getId();
+    }
+
+    @Transactional
+    public void deleteTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
+
+        Optional<TripRecord> tripRecord = tripRecordRepository.findById(tripRecordId);
+
+        if (tripRecord.isPresent()) {
+            TripRecord foundTripRecord = tripRecord.get();
+            if (foundTripRecord.getMember().getId().equals(principalDetails.getMember().getId())) {
+                tripRecordRepository.delete(foundTripRecord);
+            } else {
+                throw new PermissionDeniedException();
+            }
+        } else {
+            throw new TripRecordNotFoundException();
+        }
+    }
+
+    @Transactional
+    public void modifyTripRecord(PrincipalDetails principalDetails,
+        TripRecordRequestDto requestDto, Long tripRecordId) {
+
+        validatePlaceId(requestDto.tripRecordSchedules());
+        Optional<TripRecord> tripRecord = tripRecordRepository.findById(tripRecordId);
+
+        if (tripRecord.isPresent()) {
+            TripRecord foundTripRecord = tripRecord.get();
+            if (foundTripRecord.getMember().getId().equals(principalDetails.getMember().getId())) {
+
+                foundTripRecord.update(requestDto);
+                tripRecordRepository.save(foundTripRecord);
+
+                deleteTripRecordAssociations(foundTripRecord);
+                saveTripRecordImages(requestDto, foundTripRecord);
+                saveHashTags(requestDto, foundTripRecord);
+                saveTripRecordSchedules(requestDto, foundTripRecord);
+
+            } else {
+                throw new PermissionDeniedException();
+            }
+        } else {
+            throw new TripRecordNotFoundException();
+        }
+    }
+
+    private void deleteTripRecordAssociations(TripRecord foundTripRecord) {
+        tripRecordImageRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+        tripRecordTagRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+        tripRecordScheduleRepository.deleteAllByTripRecordId(foundTripRecord.getId());
+    }
+
+    private void validatePlaceId(
+        List<TripRecordScheduleRequestDto> tripRecordScheduleRequestDtoList) {
+        for (TripRecordScheduleRequestDto tripRecordScheduleRequestDto : tripRecordScheduleRequestDtoList) {
+            placeRepository.findById(tripRecordScheduleRequestDto.placeId())
+                .orElseThrow(PlaceNotFoundException::new);
+        }
     }
 }

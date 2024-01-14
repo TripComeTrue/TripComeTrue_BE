@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordScheduleImageResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.schedule_media.TripRecordScheduleVideoResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
@@ -51,7 +51,7 @@ public record TripRecordScheduleDetailResponseDto(
             .dayNumber(entity.getDayNumber())
             .ordering(entity.getOrdering())
             .content(entity.getContent())
-            .placeId(entity.getPlaceId())
+            .placeId(entity.getPlace().getId())
             .tripRecordId(entity.getTripRecord() != null ? entity.getTripRecord().getId() : null)
             .images(imageDtos)
             .videos(videoDtos)

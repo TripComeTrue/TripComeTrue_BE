@@ -1,7 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
-
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
-import com.haejwo.tripcometrue.domain.triprecord.dto.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
@@ -9,14 +8,13 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRec
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordViewCountRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +42,6 @@ public class TripRecordService {
         return responseDto;
     }
 
-//    public List<TripRecordListResponseDto> findTripRecordList(String hashtag, String expenseRangeType, Long totalDays, Long placeId) {
-//    }
 
     @Transactional
     public List<TripRecordListResponseDto> findTripRecordList(
@@ -61,32 +57,6 @@ public class TripRecordService {
         return responseDtos;
     }
 
-    @Transactional
-    public TripRecordResponseDto modifyTripRecord(PrincipalDetails principalDetails, Long tripRecordId, TripRecordRequestDto requestDto) {
-
-        TripRecord findTripRecord =  findTripRecordById(tripRecordId);
-
-        if(principalDetails.getMember().getId() != findTripRecord.getMember().getId()) {
-            throw new UserInvalidAccessException();
-        }
-        
-        findTripRecord.update(requestDto);
-        TripRecordResponseDto responseDto = TripRecordResponseDto.fromEntity(findTripRecord);
-
-        return responseDto;
-    }
-
-    @Transactional
-    public void removeTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
-
-        TripRecord findTripRecord = findTripRecordById(tripRecordId);
-
-        if(principalDetails.getMember().getId() != findTripRecord.getMember().getId()) {
-            throw new UserInvalidAccessException();
-        }
-
-        tripRecordRepository.delete(findTripRecord);
-    }
 
     @Transactional
     public void incrementViewCount(TripRecord tripRecord) {

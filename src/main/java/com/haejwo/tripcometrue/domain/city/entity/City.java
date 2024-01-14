@@ -22,7 +22,7 @@ public class City extends BaseTimeEntity {
     private String timeDifference;
     private String voltage;
     private String visa;
-    private String currency;
+    private CurrencyUnit currency;
     private String weatherRecommendation;
     private String weatherDescription;
 
@@ -32,7 +32,7 @@ public class City extends BaseTimeEntity {
     @Builder
     private City(
         Long id, String name, String language, String timeDifference,
-        String voltage, String visa, String currency, String weatherRecommendation,
+        String voltage, String visa, CurrencyUnit currency, String weatherRecommendation,
         String weatherDescription, Country country
     ) {
         this.id = id;

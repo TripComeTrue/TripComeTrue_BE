@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.place.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import java.time.LocalTime;
 import lombok.Builder;
@@ -40,7 +41,7 @@ public record PlaceRequestDto(
         this.cityId = cityId;
     }
 
-    public Place toEntity() {
+    public Place toEntity(City city) {
         return Place.builder()
             .name(this.name)
             .address(this.address)
@@ -50,7 +51,7 @@ public record PlaceRequestDto(
             .weekendOpenTime(this.weekendOpenTime)
             .weekendCloseTime(this.weekendCloseTime)
             .storedCount(this.storedCount)
-            .cityId(this.cityId)
+            .city(city)
             .build();
     }
 

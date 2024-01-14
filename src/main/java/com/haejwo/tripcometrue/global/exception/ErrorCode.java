@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    // Permission
+    PERMISSION_DENIED(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 업습니다."),
+
     // EMAIL
     EMAIL_SENDING_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 전송에 실패했습니다."),
     EMAIL_TEMPLATE_LOAD_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 템플릿 로드에 실패했습니다."),
@@ -26,6 +29,7 @@ public enum ErrorCode {
 
     // CITY
     CITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 도시입니다."),
+    EXCHANGE_RATE_API_FAIL(HttpStatus.BAD_REQUEST, "환율 Open API 호출 실패했습니다."),
 
     // PLACE
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행지입니다."),
@@ -33,6 +37,13 @@ public enum ErrorCode {
     // TRIP_RECORD
     TRIP_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행후기입니다."),
     EXPENSE_RANGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 비용범위입니다."),
+
+    // STORE
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "보관 데이터가 존재하지 않습니다."),
+    STORE_ALREADY_EXIST(HttpStatus.CONFLICT, "보관 데이터가 이미 존재합니다."),
+
+    // TRIP_PLAN
+    TRIP_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행계획입니다."),
 
     // Likes
     LIKES_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 데이터가 존재하지 않습니다."),

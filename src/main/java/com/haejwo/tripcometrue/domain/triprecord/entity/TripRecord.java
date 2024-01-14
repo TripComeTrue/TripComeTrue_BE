@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.store.entity.TripRecordStore;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
@@ -62,6 +63,9 @@ public class TripRecord extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordImage> tripRecordImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<TripRecordStore> tripRecordStores = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "member_id")

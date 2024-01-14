@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.domain.tripplan.dto.request;
 
-import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlanSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExternalLinkTagType;
@@ -19,7 +18,7 @@ public record TripPlanScheduleRequestDto(
     String tagUrl
 ) {
 
-    public TripPlanSchedule toEntity(TripPlan tripPlan, Member member) {
+    public TripPlanSchedule toEntity(TripPlan tripPlan) {
         return TripPlanSchedule.builder()
             .dayNumber(this.dayNumber)
             .ordering(this.orderNumber)
@@ -28,7 +27,6 @@ public record TripPlanScheduleRequestDto(
             .tripPlan(tripPlan)
             .tagType(this.tagType)
             .tagUrl(this.tagUrl)
-            .member(member)
             .build();
     }
 }
