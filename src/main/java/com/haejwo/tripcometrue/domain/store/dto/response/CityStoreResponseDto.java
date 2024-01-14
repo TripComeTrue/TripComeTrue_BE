@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.store.dto.response;
 import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
 import com.haejwo.tripcometrue.domain.store.entity.CityStore;
 import com.haejwo.tripcometrue.global.enums.Country;
 
@@ -10,7 +11,7 @@ public record CityStoreResponseDto(
     String timeDifference,
     String voltage,
     String visa,
-    String currency,
+    CurrencyUnit currency,
     String weatherRecommendation,
     String weatherDescription,
     Country country

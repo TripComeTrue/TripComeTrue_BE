@@ -1,4 +1,5 @@
 package com.haejwo.tripcometrue.domain.store.dto.response;
+import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.store.entity.PlaceStore;
 import java.time.LocalTime;
@@ -12,7 +13,10 @@ public record PlaceStoreResponseDto(
     LocalTime weekdayCloseTime,
     LocalTime weekendOpenTime,
     LocalTime weekendCloseTime,
-    Integer storedCount, Long cityId
+    Integer storedCount,
+    Double latitude,
+    Double longtitude,
+    Long cityId
 ) {
 
   public static PlaceStoreResponseDto fromEntity(PlaceStore placeStore) {
@@ -27,7 +31,9 @@ public record PlaceStoreResponseDto(
         place.getWeekendOpenTime(),
         place.getWeekendCloseTime(),
         place.getStoredCount(),
-        place.getCityId()
+        place.getLatitude(),
+        place.getLongitude(),
+        place.getCity().getId()
     );
   }
 }
