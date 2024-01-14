@@ -1,4 +1,5 @@
 package com.haejwo.tripcometrue.domain.store.service;
+
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
@@ -21,7 +22,7 @@ import com.haejwo.tripcometrue.domain.store.repository.PlaceStoreRepository;
 import com.haejwo.tripcometrue.domain.store.repository.TripRecordStoreRepository;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.transaction.Transactional;
