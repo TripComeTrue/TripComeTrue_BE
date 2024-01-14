@@ -15,4 +15,7 @@ public interface TripRecordStoreRepository extends JpaRepository <TripRecordStor
   Optional<TripRecordStore> findByMemberIdAndTripRecordId(Long memberId, Long tripRecordId);
 
   Page<TripRecordStore> findByMember(Member member, Pageable pageable);
+
+  Long countByTripRecord(TripRecord tripRecord);
+
 }
