@@ -14,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +32,9 @@ public class PlaceReviewController {
 
         RegisterPlaceReviewResponseDto responseDto = placeReviewService
                 .savePlaceReview(principalDetails, placeId, requestDto);
-        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+        return ResponseEntity
+                .status(CREATED)
+                .body(ResponseDTO.successWithData(CREATED, responseDto));
     }
 
     @GetMapping("/reviews/{placeReviewId}")

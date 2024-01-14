@@ -81,8 +81,7 @@ public class PlaceReviewService {
     /*
     여행지에 대한 특정 리뷰 단건 조회
      */
-    //todo 관련 댓글 리스트로 보내기 추가,
-    //     댓글 갯수 추가
+    //todo 관련 댓글 리스트로 보내기 추가,댓글 갯수 추가
     //fixme fetch join이 적용 안되서 n+1 문제 고치기
     public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
 

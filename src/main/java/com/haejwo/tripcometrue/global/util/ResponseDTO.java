@@ -50,4 +50,12 @@ public class ResponseDTO<T> {
             .data(null)
             .build();
     }
+
+    public static <T> ResponseDTO<T> successWithData(HttpStatus httpStatus, T data) {
+        return ResponseDTO.<T>builder()
+                .code(httpStatus.value())
+                .data(data)
+                .errorMessage(null)
+                .build();
+    }
 }
