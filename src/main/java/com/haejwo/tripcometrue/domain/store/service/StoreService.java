@@ -122,4 +122,25 @@ public class StoreService{
         Page<TripRecordStore> storedTripRecords = tripRecordStoreRepository.findByMember(principalDetails.getMember(), pageable);
         return storedTripRecords.map(TripRecordStoreResponseDto::fromEntity);
     }
+
+    public Long getStoredCountForCity(Long cityId) {
+        City city = cityRepository.findById(cityId)
+            .orElseThrow(() -> new CityNotFoundException());
+
+        return cityStoreRepository.countByCity(city);
+    }
+
+    public Long getStoredCountForPlace(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+            .orElseThrow(() -> new PlaceNotFoundException());
+
+        return placeStoreRepository.countByPlace(place);
+    }
+
+    public Long getStoredCountForTripRecord(Long tripRecordId) {
+        TripRecord tripRecord = tripRecordRepository.findById(tripRecordId)
+            .orElseThrow(() -> new TripRecordNotFoundException());
+
+        return tripRecordStoreRepository.countByTripRecord(tripRecord);
+    }
 }

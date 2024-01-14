@@ -16,4 +16,7 @@ public interface PlaceStoreRepository extends JpaRepository<PlaceStore, Long> {
   Optional<PlaceStore> findByMemberIdAndPlaceId(Long memberId, Long placeId);
 
   Page<PlaceStore> findByMember(Member member, Pageable pageable);
+
+  Long countByPlace(Place place);
+
 }

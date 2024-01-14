@@ -1,4 +1,5 @@
 package com.haejwo.tripcometrue.domain.store.controller;
+
 import com.haejwo.tripcometrue.domain.store.dto.request.CityStoreRequestDto;
 import com.haejwo.tripcometrue.domain.store.dto.request.PlaceStoreRequestDto;
 import com.haejwo.tripcometrue.domain.store.dto.request.TripRecordStoreRequestDto;
@@ -18,18 +19,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/v1/stores")
 @RequiredArgsConstructor
 public class StoreController {
 
     private final StoreService storeService;
 
-    @PostMapping("/cities")
+    @PostMapping("/v1/cities/stores")
     public ResponseEntity<ResponseDTO<CityStoreResponseDto>> storeCity(
         @RequestBody CityStoreRequestDto request,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -37,7 +36,7 @@ public class StoreController {
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 
-    @PostMapping("/places")
+    @PostMapping("/v1/places/stores")
     public ResponseEntity<ResponseDTO<PlaceStoreResponseDto>> storePlace(
         @RequestBody PlaceStoreRequestDto request,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -45,7 +44,7 @@ public class StoreController {
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 
-    @PostMapping("/trip-records")
+    @PostMapping("/v1/trip-records/stores")
     public ResponseEntity<ResponseDTO<TripRecordStoreResponseDto>> storeTripRecord(
         @RequestBody TripRecordStoreRequestDto request,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -53,28 +52,28 @@ public class StoreController {
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 
-    @DeleteMapping("/cities/{cityId}")
+    @DeleteMapping("/v1/cities/{cityId}/stores")
     public ResponseEntity<ResponseDTO<Void>> unstoreCity(@PathVariable Long cityId,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         storeService.unstoreCity(principalDetails, cityId);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @DeleteMapping("/places/{placeId}")
+    @DeleteMapping("/v1/places/{placeId}/stores")
     public ResponseEntity<ResponseDTO<Void>> unstorePlace(@PathVariable Long placeId,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         storeService.unstorePlace(principalDetails, placeId);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @DeleteMapping("/trip-records/{tripRecordId}")
+    @DeleteMapping("/v1/trip-records/{tripRecordId}/stores")
     public ResponseEntity<ResponseDTO<Void>> unstoreTripRecord(@PathVariable Long tripRecordId,
         @AuthenticationPrincipal PrincipalDetails principalDetails) {
         storeService.unstoreTripRecord(principalDetails, tripRecordId);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @GetMapping("/cities")
+    @GetMapping("/v1/cities/stores")
     public ResponseEntity<ResponseDTO<Page<CityStoreResponseDto>>> getStoredCities(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable) {
@@ -82,7 +81,7 @@ public class StoreController {
         return ResponseEntity.ok(ResponseDTO.okWithData(storedCities));
     }
 
-    @GetMapping("/places")
+    @GetMapping("/v1/places/stores")
     public ResponseEntity<ResponseDTO<Page<PlaceStoreResponseDto>>> getStoredPlaces(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable) {
@@ -90,11 +89,29 @@ public class StoreController {
         return ResponseEntity.ok(ResponseDTO.okWithData(storedPlaces));
     }
 
-    @GetMapping("/trip-records")
+    @GetMapping("/v1/trip-records/stores")
     public ResponseEntity<ResponseDTO<Page<TripRecordStoreResponseDto>>> getStoredTripRecords(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable) {
         Page<TripRecordStoreResponseDto> storedTripRecords = storeService.getStoredTripRecords(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedTripRecords));
+    }
+
+    @GetMapping("/v1/cities/{cityId}/stores/count")
+    public ResponseEntity<ResponseDTO<Long>> getStoredCountForCity(@PathVariable Long cityId) {
+        Long count = storeService.getStoredCountForCity(cityId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(count));
+    }
+
+    @GetMapping("/v1/places/{placeId}/stores/count")
+    public ResponseEntity<ResponseDTO<Long>> getStoredCountForPlace(@PathVariable Long placeId) {
+        Long count = storeService.getStoredCountForPlace(placeId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(count));
+    }
+
+    @GetMapping("/v1/trip-records/{tripRecordId}/stores/count")
+    public ResponseEntity<ResponseDTO<Long>> getStoredCountForTripRecord(@PathVariable Long tripRecordId) {
+        Long count = storeService.getStoredCountForTripRecord(tripRecordId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(count));
     }
 }

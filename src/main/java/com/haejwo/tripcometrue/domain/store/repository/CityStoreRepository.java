@@ -16,4 +16,7 @@ public interface CityStoreRepository extends JpaRepository<CityStore, Long> {
   Optional<CityStore> findByMemberIdAndCityId(Long memberId, Long cityId);
 
   Page<CityStore> findByMember(Member member, Pageable pageable);
+
+  Long countByCity(City city);
+
 }
