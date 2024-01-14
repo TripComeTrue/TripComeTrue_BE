@@ -1,9 +1,10 @@
 package com.haejwo.tripcometrue.domain.triprecordViewHistory.service;
+
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewHistory;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
-import com.haejwo.tripcometrue.domain.triprecord.repository.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.domain.triprecordViewHistory.dto.response.TripRecordViewHistoryResponseDto;
 import com.haejwo.tripcometrue.domain.triprecordViewHistory.repository.TripRecordViewHistoryRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
