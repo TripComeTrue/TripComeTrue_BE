@@ -1,66 +1,73 @@
-# 도시 보관
-POST http://localhost:8080/v1/store/city
+### 도시 저장
+POST http://localhost:8080/v1/cities/stores
 Content-Type: application/json
 Authorization: 토큰 값 입력
 
 {
-  "cityId":
+  "cityId": "여기에 도시 ID 입력"
 }
 
 
-###
-
-# 여행지 보관
-POST http://localhost:8080/v1/store/place
+### 여행지 저장
+POST http://localhost:8080/v1/places/stores
 Content-Type: application/json
 Authorization: 토큰 값 입력
 
 {
-  "placeId":
+  "placeId": "여기에 여행지 ID 입력"
 }
-###
 
-# 여행 후기 보관
-POST http://localhost:8080/v1/store/tripRecord
+
+### 여행 후기 저장
+POST http://localhost:8080/v1/trip-records/stores
 Content-Type: application/json
 Authorization: 토큰 값 입력
 
-
 {
-  "tripRecordId":
+  "tripRecordId": "여행지 후기 ID 입력"
 }
 
-###
 
-# 도시 보관 삭제
-DELETE http://localhost:8080/v1/store/city/{cityId}
-
-###
-
-# 여행지 보관 삭제
-DELETE http://localhost:8080/v1/store/place/{placeId}
-
-###
-
-# 여행 후기 보관 삭제
-DELETE http://localhost:8080/v1/store/tripRecord/{tripRecordId}
-
-###
-
-# 도시 보관 조회
-GET http://localhost:8080/v1/store/cities
+### 도시 저장 취소
+DELETE http://localhost:8080/v1/cities/{cityId}/stores
 Authorization: 토큰 값 입력
 
 
-###
-
-# 여행지 보관 조회
-GET http://localhost:8080/v1/store/places
+### 여행지 저장 취소
+DELETE http://localhost:8080/v1/places/{placeId}/stores
 Authorization: 토큰 값 입력
 
 
-###
+### 여행 후기 저장 취소
+DELETE http://localhost:8080/v1/trip-records/2/stores
+Authorization: 토큰 값 입력
 
-# 여행 후기 보관 조회
-GET http://localhost:8080/v1/store/tripRecords
+
+### 저장된 도시 목록 조회
+GET http://localhost:8080/v1/cities/stores
+Authorization: 토큰 값 입력
+
+
+### 저장된 여행지 목록 조회
+GET http://localhost:8080/v1/places/stores
+Authorization: 토큰 값 입력
+
+
+### 저장된 여행 후기 목록 조회
+GET http://localhost:8080/v1/trip-records/stores
+Authorization: 토큰 값 입력
+
+
+### 특정 도시의 저장된 개수 조회
+GET http://localhost:8080/v1/cities/{cityId}/stores/count
+Authorization: 토큰 값 입력
+
+
+### 특정 여행지의 저장된 개수 조회
+GET http://localhost:8080/v1/places/{placeId}/stores/count
+Authorization: 토큰 값 입력
+
+
+### 특정 여행 후기의 저장된 개수 조회
+GET http://localhost:8080/v1/trip-records/{tripRecordId}/stores/count
 Authorization: 토큰 값 입력
