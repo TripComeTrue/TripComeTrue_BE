@@ -2,6 +2,8 @@ package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.DeletePlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.DeleteSomeFailurePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.service.PlaceReviewService;
@@ -15,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.MULTI_STATUS;
 
 @Slf4j
 @RestController
@@ -59,10 +62,17 @@ public class PlaceReviewController {
     }
 
     @DeleteMapping("/reviews")
-    public ResponseEntity<ResponseDTO<Void>> removePlaceReview(
+    public ResponseEntity<ResponseDTO<DeletePlaceReviewResponseDto>> removePlaceReview(
             @RequestBody DeletePlaceReviewRequestDto requestDto) {
 
-        placeReviewService.deletePlaceReview(requestDto);
-        return ResponseEntity.ok(ResponseDTO.ok());
+        DeletePlaceReviewResponseDto responseDto = placeReviewService.deletePlaceReview(requestDto);
+
+        if (responseDto instanceof DeleteSomeFailurePlaceReviewResponseDto) {
+            return ResponseEntity
+                    .status(MULTI_STATUS)
+                    .body(ResponseDTO.errorWithData(MULTI_STATUS, responseDto));
+        }
+
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 }

@@ -7,10 +7,10 @@ import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.*;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewAlreadyExistsException;
+import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewDeleteAllFailureException;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.CONTENT_WITH_IMAGE_POINT;
@@ -135,8 +136,30 @@ public class PlaceReviewService {
     }
 
     @Transactional
-    public void deletePlaceReview(DeletePlaceReviewRequestDto requestDto) {
-        requestDto.placeReviewIds()
-                .forEach(id -> placeReviewRepository.delete((getPlaceReviewById(id))));
+    public DeletePlaceReviewResponseDto deletePlaceReview(DeletePlaceReviewRequestDto requestDto) {
+
+        List<Long> placeReviewIds = requestDto.placeReviewIds();
+        List<Long> failedIds = new ArrayList<>();
+
+        placeReviewIds.forEach(placeReviewId -> {
+            if (placeReviewRepository.existsById(placeReviewId)) {
+                placeReviewRepository.deleteById(placeReviewId);
+            } else {
+                failedIds.add(placeReviewId);
+            }
+        });
+
+        if (isDeleteAllFail(placeReviewIds, failedIds)) {
+            throw new PlaceReviewDeleteAllFailureException();
+        }
+        if (!failedIds.isEmpty()) {
+            return new DeleteSomeFailurePlaceReviewResponseDto(failedIds);
+        }
+
+        return new DeleteAllSuccessPlaceReviewResponseDto();
+    }
+
+    private static boolean isDeleteAllFail(List<Long> placeReviewIds, List<Long> failedIds) {
+        return placeReviewIds.size() == failedIds.size();
     }
 }

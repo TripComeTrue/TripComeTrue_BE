@@ -58,4 +58,12 @@ public class ResponseDTO<T> {
                 .errorMessage(null)
                 .build();
     }
+
+    public static <T> ResponseDTO<T> errorWithData(HttpStatus httpStatus, T data) {
+        return ResponseDTO.<T>builder()
+                .code(httpStatus.value())
+                .errorMessage(null)
+                .data(data)
+                .build();
+    }
 }

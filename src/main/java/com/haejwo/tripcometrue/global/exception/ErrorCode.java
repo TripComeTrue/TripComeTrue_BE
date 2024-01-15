@@ -58,6 +58,7 @@ public enum ErrorCode {
     // PLACE_REVIEW
     PLACE_REVIEW_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 여행지 리뷰입니다."),
     PLACE_REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "여행지 리뷰를 중복 작성할 수 없습니다."),
+    PLACE_REVIEW_DELETE_ALL_FAILURE_EXCEPTION(HttpStatus.BAD_REQUEST, "요청한 여행지 리뷰가 모두 존재하지 않아서 삭제에 실패했습니다."),
 
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
