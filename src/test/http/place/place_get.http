@@ -1,0 +1,2 @@
+### 여행지 지도정보
+GET http://localhost:8080/v1/places/3/maplist
