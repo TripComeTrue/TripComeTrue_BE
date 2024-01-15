@@ -1,9 +1,11 @@
 package com.haejwo.tripcometrue.domain.place.controller;
 
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.service.PlaceService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +47,20 @@ public class PlaceController {
 
         PlaceResponseDto responseDto = placeService.findPlace(placeId);
         ResponseDTO<PlaceResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
+
+        return ResponseEntity
+            .status(responseBody.getCode())
+            .body(responseBody);
+    }
+
+    @GetMapping("/{placeId}/maplist")
+    public ResponseEntity<ResponseDTO<List<PlaceMapInfoResponseDto>>> placeMapInfoList(
+        @PathVariable Long placeId
+    ) {
+
+        List<PlaceMapInfoResponseDto> responseDtos = placeService.findPlaceMapInfos(placeId);
+
+        ResponseDTO<List<PlaceMapInfoResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
 
         return ResponseEntity
             .status(responseBody.getCode())

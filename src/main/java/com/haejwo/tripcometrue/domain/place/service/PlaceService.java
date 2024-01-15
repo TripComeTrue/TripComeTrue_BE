@@ -4,10 +4,12 @@ import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -54,6 +56,18 @@ public class PlaceService {
 
         return result;
 
+    }
+
+    public List<PlaceMapInfoResponseDto> findPlaceMapInfos(Long placeId) {
+
+        Long findCityId = placeRepository.findById(placeId).orElseThrow().getCity().getId();
+        List<Place> findPlaces = placeRepository.findByCityId(findCityId);
+
+        List<PlaceMapInfoResponseDto> responseDtos = findPlaces.stream()
+                                                        .map(PlaceMapInfoResponseDto::fromEntity)
+                                                        .toList();
+
+        return responseDtos;
     }
 
     @Transactional
