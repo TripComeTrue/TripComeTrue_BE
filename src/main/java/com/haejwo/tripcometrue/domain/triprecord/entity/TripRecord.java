@@ -53,6 +53,9 @@ public class TripRecord extends BaseTimeEntity {
     private Integer totalDays;
     private Integer averageRating;
     private Integer viewCount;
+    private Integer storeCount;
+    private Integer reviewCount;
+    private Integer commentCount;
 
 
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -74,8 +77,10 @@ public class TripRecord extends BaseTimeEntity {
     @Builder
     public TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
         String countries, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
-        Integer averageRating, Integer viewCount, List<TripRecordSchedule> tripRecordSchedules,
-        List<TripRecordTag> tripRecordTags, List<TripRecordImage> tripRecordImages, Member member) {
+        Integer averageRating, Integer viewCount, Integer storeCount, Integer reviewCount,
+        Integer commentCount, List<TripRecordSchedule> tripRecordSchedules,
+        List<TripRecordTag> tripRecordTags, List<TripRecordImage> tripRecordImages,
+        List<TripRecordStore> tripRecordStores, Member member) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -86,9 +91,13 @@ public class TripRecord extends BaseTimeEntity {
         this.totalDays = totalDays;
         this.averageRating = averageRating;
         this.viewCount = viewCount;
+        this.storeCount = storeCount;
+        this.reviewCount = reviewCount;
+        this.commentCount = commentCount;
         this.tripRecordSchedules = tripRecordSchedules;
         this.tripRecordTags = tripRecordTags;
         this.tripRecordImages = tripRecordImages;
+        this.tripRecordStores = tripRecordStores;
         this.member = member;
     }
 
@@ -109,10 +118,37 @@ public class TripRecord extends BaseTimeEntity {
         }
     }
 
+    public void incrementStoreCount() {
+        if(this.storeCount == null) {
+            this.storeCount = 1;
+        } else {
+            this.storeCount++;
+        }
+    }
+
+    public void incrementReviewCount() {
+        if(this.reviewCount == null) {
+            this.reviewCount = 1;
+        } else {
+            this.reviewCount++;
+        }
+    }
+
+    public void incrementCommentCount() {
+        if(this.commentCount == null) {
+            this.commentCount = 1;
+        } else {
+            this.commentCount++;
+        }
+    }
+    
     @PrePersist
     public void prePersist() {
         this.totalDays = calculateTotalDays();
         this.viewCount = 0;
+        this.storeCount = 0;
+        this.reviewCount = 0;
+        this.commentCount = 0;
     }
 
     @PreUpdate

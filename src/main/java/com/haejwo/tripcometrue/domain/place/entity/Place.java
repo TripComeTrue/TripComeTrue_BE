@@ -30,9 +30,12 @@ public class Place extends BaseTimeEntity {
     private LocalTime weekdayCloseTime;
     private LocalTime weekendOpenTime;
     private LocalTime weekendCloseTime;
-    private Integer storedCount;
     private Double latitude;
     private Double longitude;
+
+    private Integer storedCount;
+    private Integer reviewCount;
+    private Integer commentCount;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "city_id")
@@ -41,14 +44,16 @@ public class Place extends BaseTimeEntity {
     @PrePersist
     public void prePersist() {
         this.storedCount = this.storedCount == null ? 0 : storedCount;
+        this.reviewCount = 0;
+        this.commentCount = 0;
     }
 
     @Builder
-    public Place(
-        Long id, String name, String address, String description,
-        LocalTime weekdayOpenTime, LocalTime weekdayCloseTime,
-        LocalTime weekendOpenTime, LocalTime weekendCloseTime,
-        Integer storedCount, City city, Double latitude, Double longitude) {
+    public Place(Long id, String name, String address, String description,
+        LocalTime weekdayOpenTime,
+        LocalTime weekdayCloseTime, LocalTime weekendOpenTime, LocalTime weekendCloseTime,
+        Double latitude, Double longitude, Integer storedCount, Integer reviewCount,
+        Integer commentCount, City city) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -57,10 +62,12 @@ public class Place extends BaseTimeEntity {
         this.weekdayCloseTime = weekdayCloseTime;
         this.weekendOpenTime = weekendOpenTime;
         this.weekendCloseTime = weekendCloseTime;
-        this.storedCount = storedCount;
-        this.city = city;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.storedCount = storedCount;
+        this.reviewCount = reviewCount;
+        this.commentCount = commentCount;
+        this.city = city;
     }
 
     public void update(PlaceRequestDto requestDto) {
@@ -73,4 +80,29 @@ public class Place extends BaseTimeEntity {
         this.weekendCloseTime = requestDto.weekendCloseTime();
         this.storedCount = requestDto.storedCount();
     }
+
+    public void incrementStoreCount() {
+        if(this.storedCount == null) {
+            this.storedCount = 1;
+        } else {
+            this.storedCount++;
+        }
+    }
+
+    public void incrementReviewCount() {
+        if(this.reviewCount == null) {
+            this.reviewCount = 1;
+        } else {
+            this.reviewCount++;
+        }
+    }
+
+    public void incrementCommentCount() {
+        if(this.commentCount == null) {
+            this.commentCount = 1;
+        } else {
+            this.commentCount++;
+        }
+    }
+
 }
