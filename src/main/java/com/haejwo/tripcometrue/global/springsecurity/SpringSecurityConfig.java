@@ -75,13 +75,15 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/cities/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/images/**")).permitAll()
+
+            .requestMatchers(new AntPathRequestMatcher("/v1/likes/**")).permitAll()
+
             .requestMatchers(new AntPathRequestMatcher("/v1/store/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-records/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/search-schedule-places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/schedule-place/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-plan/{planId}")).permitAll()
-
 
             .anyRequest().authenticated());
 
