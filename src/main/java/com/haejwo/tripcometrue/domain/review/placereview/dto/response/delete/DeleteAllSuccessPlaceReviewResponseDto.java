@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.review.placereview.dto.response;
+package com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete;
 
 import lombok.Getter;
 
