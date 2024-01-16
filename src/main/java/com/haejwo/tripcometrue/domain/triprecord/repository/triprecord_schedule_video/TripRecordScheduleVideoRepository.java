@@ -4,6 +4,6 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TripRecordScheduleVideoRepository extends
-    JpaRepository<TripRecordScheduleVideo, Long> {
+    JpaRepository<TripRecordScheduleVideo, Long>, TripRecordScheduleVideoRepositoryCustom {
 
 }
