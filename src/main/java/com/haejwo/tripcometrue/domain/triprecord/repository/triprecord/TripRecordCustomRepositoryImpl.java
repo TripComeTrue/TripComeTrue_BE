@@ -18,7 +18,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
     }
 
     @Override
-    public List<TripRecord> finTripRecordWithFilter(
+    public List<TripRecord> findTripRecordWithFilter(
         Pageable pageable,
         TripRecordListRequestAttribute request
     ) {
