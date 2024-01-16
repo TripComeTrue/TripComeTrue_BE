@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewListResponseDto;
+import java.awt.print.Pageable;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.MULTI_STATUS;
