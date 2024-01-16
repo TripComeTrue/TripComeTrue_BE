@@ -12,6 +12,14 @@ Content-Type: application/json
 GET http://localhost:8080/v1/places/reviews/1
 
 
+### 여행지 리뷰 리스트 조회 (기본)
+GET http://localhost:8080/v1/places/1/reviews
+
+
+### 여행지 리뷰 리스트 조회 (정렬 및 필터)
+GET http://localhost:8080/v1/places/1/reviews?page=0&size=10&sort=likeCount,desc&onlyImage=true
+
+
 ### 여행지 리뷰 수정
 PUT http://localhost:8080/v1/places/reviews/1
 Content-Type: application/json
