@@ -7,7 +7,11 @@ import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.*;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeleteAllSuccessPlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeletePlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeleteSomeFailurePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewAlreadyExistsException;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewDeleteAllFailureException;
@@ -81,10 +85,6 @@ public class PlaceReviewService {
         return placeReview.getImageUrl() != null;
     }
 
-    /*
-    여행지에 대한 특정 리뷰 단건 조회
-     */
-    //todo 관련 댓글 리스트로 보내기 추가,댓글 갯수 추가
     //fixme fetch join이 적용 안되서 n+1 문제 고치기
     public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
 
@@ -115,19 +115,13 @@ public class PlaceReviewService {
         return memberIds.contains(principalDetails.getMember().getId());
     }
 
-    //todo 총 개수를 포함한 페이징 및 정렬 적용 (최신순, 추천순, 사진 필터)
-    //댓글은 갯수만 포함
     public Page<PlaceReviewResponseDto> getPlaceReviews(PrincipalDetails principalDetails, Long placeId, boolean onlyImage, Pageable pageable) {
 
-        Page<PlaceReview> placeReviews = placeReviewRepository.findByPlaceId(placeId, pageable);
-        if (placeReviews.isEmpty()) {
-            throw new PlaceNotFoundException();
-        }
+        Place place = getPlaceById(placeId);
+        Page<PlaceReview> placeReviews = placeReviewRepository.findByPlace(place, onlyImage, pageable);
 
         return placeReviews.map(placeReview ->
-                PlaceReviewResponseDto.fromEntity(
-                        placeReview,
-                        hasLikedPlaceReview(principalDetails, placeReview))
+                PlaceReviewResponseDto.fromEntity(placeReview, hasLikedPlaceReview(principalDetails, placeReview))
         );
     }
 

@@ -2,8 +2,6 @@ package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.DeletePlaceReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.DeleteSomeFailurePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeletePlaceReviewResponseDto;
@@ -65,9 +63,7 @@ public class PlaceReviewController {
     ) {
 
         Page<PlaceReviewResponseDto> responseDtos = placeReviewService.getPlaceReviews(principalDetails, placeId, onlyImage, pageable);
-
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDtos));
-
     }
 
     @PutMapping("/reviews/{placeReviewId}")
