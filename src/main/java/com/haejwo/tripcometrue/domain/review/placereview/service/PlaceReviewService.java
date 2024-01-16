@@ -17,6 +17,8 @@ import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,13 +115,20 @@ public class PlaceReviewService {
         return memberIds.contains(principalDetails.getMember().getId());
     }
 
-    /*
-    특정 여행지에 대한 다수의 리뷰 조회
-     */
     //todo 총 개수를 포함한 페이징 및 정렬 적용 (최신순, 추천순, 사진 필터)
     //댓글은 갯수만 포함
-    public void getPlaceReviews(Long placeId) {
+    public Page<PlaceReviewResponseDto> getPlaceReviews(PrincipalDetails principalDetails, Long placeId, boolean onlyImage, Pageable pageable) {
 
+        Page<PlaceReview> placeReviews = placeReviewRepository.findByPlaceId(placeId, pageable);
+        if (placeReviews.isEmpty()) {
+            throw new PlaceNotFoundException();
+        }
+
+        return placeReviews.map(placeReview ->
+                PlaceReviewResponseDto.fromEntity(
+                        placeReview,
+                        hasLikedPlaceReview(principalDetails, placeReview))
+        );
     }
 
     @Transactional

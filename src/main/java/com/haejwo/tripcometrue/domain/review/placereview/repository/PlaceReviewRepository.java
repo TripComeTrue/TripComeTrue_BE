@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PlaceReviewRepository extends JpaRepository<PlaceReview, Long> {
+public interface PlaceReviewRepository extends JpaRepository<PlaceReview, Long>, PlaceReviewRepositoryCustom {
 
     boolean existsByMemberAndPlace(Member member, Place place);
+
 }

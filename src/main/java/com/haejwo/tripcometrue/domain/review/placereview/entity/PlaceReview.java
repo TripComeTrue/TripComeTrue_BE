@@ -42,6 +42,7 @@ public class PlaceReview extends BaseTimeEntity {
 
     private String imageUrl;
     private Integer likeCount;
+    private Integer commentCount;
 
     @Builder
     public PlaceReview(Member member, Place place, String content, String imageUrl) {
@@ -64,8 +65,17 @@ public class PlaceReview extends BaseTimeEntity {
         likeCount -= 1;
     }
 
+    public void increaseCommentCount() {
+        commentCount += 1;
+    }
+
+    public void decreaseCommentCount() {
+        commentCount -= 1;
+    }
+
     @PrePersist
     private void init() {
         likeCount = 0;
+        commentCount = 0;
     }
 }

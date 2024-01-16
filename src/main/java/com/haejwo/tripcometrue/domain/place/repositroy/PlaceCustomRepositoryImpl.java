@@ -36,8 +36,8 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
                                 .offset(pageable.getOffset())
                                 .limit(pageable.getPageSize())
                                 .fetch();
-        
-        // 프론트의 Page 정보 필요 유무에 따라 응답 객체 List, Page 나뉨 
+
+        // 프론트의 Page 정보 필요 유무에 따라 응답 객체 List, Page 나뉨
         long total = from(place).where(booleanBuilder).fetchCount();
 
         return new PageImpl<>(result, pageable, total);
