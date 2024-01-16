@@ -6,11 +6,15 @@ import com.haejwo.tripcometrue.domain.review.placereview.dto.response.DeletePlac
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.DeleteSomeFailurePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeletePlaceReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeleteSomeFailurePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.service.PlaceReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +35,8 @@ public class PlaceReviewController {
     public ResponseEntity<ResponseDTO<RegisterPlaceReviewResponseDto>> registerPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeId,
-            @RequestBody @Validated PlaceReviewRequestDto requestDto) {
+            @RequestBody @Validated PlaceReviewRequestDto requestDto
+    ) {
 
         RegisterPlaceReviewResponseDto responseDto = placeReviewService
                 .savePlaceReview(principalDetails, placeId, requestDto);
@@ -43,11 +48,26 @@ public class PlaceReviewController {
     @GetMapping("/reviews/{placeReviewId}")
     public ResponseEntity<ResponseDTO<PlaceReviewResponseDto>> getOnePlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long placeReviewId) {
+            @PathVariable Long placeReviewId
+    ) {
 
         PlaceReviewResponseDto responseDto = placeReviewService
                 .getPlaceReview(principalDetails, placeReviewId);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @GetMapping("/{placeId}/reviews")
+    public ResponseEntity<ResponseDTO<Page<PlaceReviewResponseDto>>> getPlaceReviewList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long placeId,
+            @RequestParam(defaultValue = "false") boolean onlyImage,
+            Pageable pageable
+    ) {
+
+        Page<PlaceReviewResponseDto> responseDtos = placeReviewService.getPlaceReviews(principalDetails, placeId, onlyImage, pageable);
+
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDtos));
+
     }
 
     @PutMapping("/reviews/{placeReviewId}")

@@ -6,6 +6,7 @@ import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import java.time.LocalDateTime;
 
 public record PlaceReviewResponseDto(
+
         Long placeReviewId,
         Long memberId,
         String nickname,
@@ -13,9 +14,12 @@ public record PlaceReviewResponseDto(
         String imageUrl,
         String content,
         Integer likeCount,
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH-mm-ss")
         LocalDateTime createdAt,
-        boolean amILike
+
+        boolean amILike,
+        Integer commentCount
 
 ) {
         public static PlaceReviewResponseDto fromEntity(PlaceReview placeReview, boolean amILike) {
@@ -28,7 +32,8 @@ public record PlaceReviewResponseDto(
                         placeReview.getContent(),
                         placeReview.getLikeCount(),
                         placeReview.getCreatedAt(),
-                        amILike
+                        amILike,
+                        placeReview.getCommentCount()
                 );
         }
 }
