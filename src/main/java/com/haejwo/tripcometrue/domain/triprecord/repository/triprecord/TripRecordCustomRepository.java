@@ -7,6 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface TripRecordCustomRepository {
 
-    List<TripRecord> finTripRecordWithFilter(Pageable pageable, TripRecordListRequestAttribute request);
-
+    List<TripRecord> findTripRecordWithFilter(Pageable pageable, TripRecordListRequestAttribute request);
 }
