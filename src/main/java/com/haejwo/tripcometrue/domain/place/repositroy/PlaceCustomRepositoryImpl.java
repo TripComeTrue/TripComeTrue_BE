@@ -1,15 +1,14 @@
 package com.haejwo.tripcometrue.domain.place.repositroy;
 
 import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.city.entity.QCity;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
 import com.querydsl.core.BooleanBuilder;
 import java.util.List;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport implements PlaceCustomRepository {
@@ -42,6 +41,30 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return new PageImpl<>(result, pageable, total);
 
+    }
+
+    @Override
+    public Slice<Place> findPlacesByCityId(Long cityId, Pageable pageable) {
+        QPlace place = QPlace.place;
+        QCity city = QCity.city;
+
+        int pageSize = pageable.getPageSize();
+        List<Place> content = queryFactory
+            .selectFrom(place)
+            .join(place.city, city)
+            .where(city.id.eq(cityId))
+            .offset(pageable.getOffset())
+            .limit(pageSize + 1)
+            .orderBy(place.storedCount.desc()) // TODO: 리뷰순 정렬 추가
+            .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageSize) {
+            content.remove(pageSize);
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
     }
 
     @Override

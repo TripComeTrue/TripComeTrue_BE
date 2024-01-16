@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceRepository extends
-    JpaRepository<Place, Long>,
-    PlaceCustomRepository
+    JpaRepository<Place, Long>, PlaceCustomRepository
 {
     List<Place> findByCityId(Long cityId);
 }
