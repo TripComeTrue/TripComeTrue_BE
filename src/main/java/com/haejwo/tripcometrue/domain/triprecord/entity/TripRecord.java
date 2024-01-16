@@ -141,7 +141,7 @@ public class TripRecord extends BaseTimeEntity {
             this.commentCount++;
         }
     }
-    
+
     @PrePersist
     public void prePersist() {
         this.totalDays = calculateTotalDays();
