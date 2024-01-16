@@ -123,16 +123,13 @@ public class MemberService {
         memberRepository.save(member);
 
         return ProfileImageResponseDto.fromEntity(member);
-
     }
 
     public IntroductionResponseDto updateIntroduction(
         PrincipalDetails principalDetails, IntroductionRequestDto requestDto) {
         Member member = getLoginMember(principalDetails);
 
-
         member.updateIntroduction(requestDto.introduction());
-//        memberRepository.save(member);
 
         return IntroductionResponseDto.fromEntity(member);
     }
@@ -142,9 +139,8 @@ public class MemberService {
         memberRepository.findByMemberBaseNickname(requestDto.nickname())
             .ifPresent(existingMember -> {throw new NicknameAlreadyExistsException();});
         Member member = getLoginMember(principalDetails);
-
         member.getMemberBase().changeNickname(requestDto.nickname());
-//        memberRepository.save(member);
+        member.updateNickNameChangeCount();
 
         return NicknameResponseDto.fromEntity(member);
     }
