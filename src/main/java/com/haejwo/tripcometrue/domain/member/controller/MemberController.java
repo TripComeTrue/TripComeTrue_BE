@@ -1,10 +1,8 @@
 package com.haejwo.tripcometrue.domain.member.controller;
 
-import com.haejwo.tripcometrue.domain.member.dto.request.EmailCheckRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.IntroductionRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.NicknameRequestDto;
-import com.haejwo.tripcometrue.domain.member.dto.request.PasswordChangeRequestDto;
-import com.haejwo.tripcometrue.domain.member.dto.request.PasswordCheckRequestDto;
+import com.haejwo.tripcometrue.domain.member.dto.request.PasswordRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.ProfileImageRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.IntroductionResponseDto;
@@ -84,9 +82,9 @@ public class MemberController {
     @PatchMapping("/change-password")
     public ResponseEntity<ResponseDTO<Void>> changePassword(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @Valid @RequestBody PasswordChangeRequestDto passwordChangeRequestDto) {
+        @Valid @RequestBody PasswordRequestDto passwordRequestDto) {
 
-        memberService.changePassword(principalDetails, passwordChangeRequestDto);
+        memberService.changePassword(principalDetails, passwordRequestDto);
         ResponseDTO<Void> response = ResponseDTO.ok();
         return ResponseEntity
             .status(response.getCode())
@@ -96,21 +94,9 @@ public class MemberController {
     @PostMapping("/check-password")
     public ResponseEntity<ResponseDTO<Void>> checkPassword(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @Valid @RequestBody PasswordCheckRequestDto passwordCheckRequestDto) {
+        @Valid @RequestBody PasswordRequestDto passwordRequestDto) {
 
-        memberService.checkPassword(principalDetails, passwordCheckRequestDto);
-        ResponseDTO<Void> response = ResponseDTO.ok();
-        return ResponseEntity
-            .status(response.getCode())
-            .body(response);
-    }
-
-    @PostMapping("/check-email")
-    public ResponseEntity<ResponseDTO<Void>> checkEmail(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
-        @Valid @RequestBody EmailCheckRequestDto emailCheckRequestDto) {
-
-        memberService.checkEmail(principalDetails, emailCheckRequestDto);
+        memberService.checkPassword(principalDetails, passwordRequestDto);
         ResponseDTO<Void> response = ResponseDTO.ok();
         return ResponseEntity
             .status(response.getCode())

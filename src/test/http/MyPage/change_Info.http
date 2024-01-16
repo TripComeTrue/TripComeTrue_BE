@@ -11,7 +11,7 @@ Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MTIzQG5hdm
 ### 자기소개 업데이트
 PATCH http://localhost:8080/v1/member/introduction
 Content-Type: application/json
-Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MTIzQG5hdmVyLmNvbSIsImlhdCI6MTcwNTE2NzkwMiwiZXhwIjoxNzA1MzExOTAyfQ.OjH2Ex0y_xGq6tIq_qYT8kjLPtBsIDtBxOcCXz5NLRc
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MTIzQG5hdmVyLmNvbSIsImlhdCI6MTcwNTM5Mzg2OSwiZXhwIjoxNzA1NTM3ODY5fQ.al9Ft2IAOfSf-UMZtWLw4wZ5z2vsXKpj8x33cp5UIa0
 
 {
   "introduction": "안녕하세요, 새로 등록한 소개글입니다."
@@ -20,7 +20,7 @@ Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MTIzQG5hdm
 ### 닉네임 변경
 PATCH http://localhost:8080/v1/member/nickname
 Content-Type: application/json
-Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MTIzQG5hdmVyLmNvbSIsImlhdCI6MTcwNTE2NzkwMiwiZXhwIjoxNzA1MzExOTAyfQ.OjH2Ex0y_xGq6tIq_qYT8kjLPtBsIDtBxOcCXz5NLRc
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MTIzQG5hdmVyLmNvbSIsImlhdCI6MTcwNTM5Mzg2OSwiZXhwIjoxNzA1NTM3ODY5fQ.al9Ft2IAOfSf-UMZtWLw4wZ5z2vsXKpj8x33cp5UIa0
 
 {
   "nickname": "변경된 닉네임"

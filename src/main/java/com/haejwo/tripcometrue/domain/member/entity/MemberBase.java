@@ -20,5 +20,6 @@ public class MemberBase {
   public void changePassword(String encodedNewPassword) {
     this.password = encodedNewPassword;
   }
+
   public void changeNickname(String nickname){this.nickname = nickname;}
 }

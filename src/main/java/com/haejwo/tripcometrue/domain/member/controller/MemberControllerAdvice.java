@@ -3,6 +3,7 @@ package com.haejwo.tripcometrue.domain.member.controller;
 import com.haejwo.tripcometrue.domain.member.exception.CurrentPasswordNotMatchException;
 import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
 import com.haejwo.tripcometrue.domain.member.exception.EmailNotMatchException;
+import com.haejwo.tripcometrue.domain.member.exception.NewPasswordNotMatchException;
 import com.haejwo.tripcometrue.domain.member.exception.NewPasswordSameAsOldException;
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.global.exception.ApplicationException;
@@ -40,7 +41,7 @@ public class MemberControllerAdvice {
             .body(ResponseDTO.errorWithMessage(status, e.getMessage()));
     }
 
-    @ExceptionHandler({CurrentPasswordNotMatchException.class, NewPasswordSameAsOldException.class,
+    @ExceptionHandler({CurrentPasswordNotMatchException.class, NewPasswordSameAsOldException.class, NewPasswordNotMatchException.class,
         EmailNotMatchException.class})
     public ResponseEntity<ResponseDTO<Void>> handleApplicationException(ApplicationException exception) {
         HttpStatus status = exception.getErrorCode().getHttpStatus();
