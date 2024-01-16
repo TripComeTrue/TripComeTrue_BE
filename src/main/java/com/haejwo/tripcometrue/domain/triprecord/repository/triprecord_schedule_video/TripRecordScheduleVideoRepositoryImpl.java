@@ -76,7 +76,7 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
                     case "createdAt":
                         return new OrderSpecifier[] {new OrderSpecifier<>(direction, tripRecordScheduleVideo.createdAt)};
                     case "storedCount":
-                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, tripRecordSchedule.tripRecord.storedCount), newest};
+                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, tripRecordSchedule.tripRecord.storeCount), newest};
                 }
             }
         }

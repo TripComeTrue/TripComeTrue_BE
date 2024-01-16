@@ -24,7 +24,7 @@ public record CityVideoContentResponseDto(
             .tripRecordId(tripRecord.getId())
             .tripRecordTitle(tripRecord.getTitle())
             .videoUrl(entity.getVideoUrl())
-            .storedCount(tripRecord.getStoredCount())
+            .storedCount(tripRecord.getStoreCount())
             .build();
     }
 }
