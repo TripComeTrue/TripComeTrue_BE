@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecord.dto.response;
+package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordMemberResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
