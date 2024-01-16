@@ -1,14 +1,14 @@
 package com.haejwo.tripcometrue.domain.city.service;
 
-import com.haejwo.tripcometrue.domain.city.dto.request.AddCityRequestDto;
-import com.haejwo.tripcometrue.domain.city.dto.response.*;
+import com.haejwo.tripcometrue.domain.city.dto.response.CityInfoResponseDto;
+import com.haejwo.tripcometrue.domain.city.dto.response.ExchangeRateResponseDto;
+import com.haejwo.tripcometrue.domain.city.dto.response.WeatherResponseDto;
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
 import com.haejwo.tripcometrue.domain.city.entity.Weather;
 import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.city.repository.WeatherRepository;
-import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -23,35 +23,13 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class CityService {
+public class CityInfoReadService {
 
     private final CityRepository cityRepository;
-    private final PlaceRepository placeRepository;
     private final WeatherRepository weatherRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final int WEATHER_MONTH_GAP = 3;
-    private static final int CITY_HOT_PLACES_SIZE = 10;
-
-    @Transactional
-    public CityResponseDto addCity(AddCityRequestDto request) {
-        return CityResponseDto.fromEntity(
-            cityRepository.save(request.toEntity())
-        );
-    }
-
-    @Transactional(readOnly = true)
-    public List<HotPlaceResponseDto> getHotPlaces(Long id) {
-        City city = getCityEntity(id);
-
-        return placeRepository
-            .findPlacesByCityAndOrderByStoredCountLimitSize(city, CITY_HOT_PLACES_SIZE)
-            .stream()
-            .map(place -> {
-                // TODO : 핫플 대표 이미지 조회해서 응답 보내기
-                return HotPlaceResponseDto.fromEntity(place, null);
-            }).toList();
-    }
 
     @Transactional(readOnly = true)
     public CityInfoResponseDto getCityInfo(Long id) {
@@ -92,13 +70,6 @@ public class CityService {
             .map(
                 w -> WeatherResponseDto.fromEntity(w, convertToTempF(w.getMaxAvgTemp()), convertToTempF(w.getMinAvgTemp()))
             ).toList();
-    }
-
-    @Transactional
-    public void deleteCity(Long id) {
-        City city = getCityEntity(id);
-
-        cityRepository.delete(city);
     }
 
     private City getCityEntity(Long id) {
