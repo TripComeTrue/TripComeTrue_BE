@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.city.dto;
+package com.haejwo.tripcometrue.domain.city.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
