@@ -19,17 +19,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
-class CityServiceTest extends AbstractContainersSupport {
+class CityInfoReadServiceTest extends AbstractContainersSupport {
 
     @Autowired
-    private CityService cityService;
+    private CityInfoReadService cityInfoReadService;
 
     @Autowired
     private CityRepository cityRepository;
@@ -88,7 +87,7 @@ class CityServiceTest extends AbstractContainersSupport {
         long cityId = city.getId();
 
         // when
-        CityInfoResponseDto cityInfo = cityService.getCityInfo(cityId);
+        CityInfoResponseDto cityInfo = cityInfoReadService.getCityInfo(cityId);
 
         // then
         assertThat(cityInfo.name()).isEqualTo("방콕");
@@ -102,7 +101,7 @@ class CityServiceTest extends AbstractContainersSupport {
         long cityId = city.getId();
 
         // when
-        List<WeatherResponseDto> weatherInfos = cityService.getWeatherInfo(cityId);
+        List<WeatherResponseDto> weatherInfos = cityInfoReadService.getWeatherInfo(cityId);
 
         // then
         assertThat(weatherInfos).hasSize(4);
@@ -114,7 +113,7 @@ class CityServiceTest extends AbstractContainersSupport {
         long cityId = 10000;
 
         // when & then
-        assertThatThrownBy(() -> cityService.getCityInfo(cityId))
+        assertThatThrownBy(() -> cityInfoReadService.getCityInfo(cityId))
             .isInstanceOf(CityNotFoundException.class);
     }
 
@@ -124,7 +123,7 @@ class CityServiceTest extends AbstractContainersSupport {
         long cityId = 10000;
 
         // when & then
-        assertThatThrownBy(() -> cityService.getWeatherInfo(cityId))
+        assertThatThrownBy(() -> cityInfoReadService.getWeatherInfo(cityId))
             .isInstanceOf(CityNotFoundException.class);
     }
 
