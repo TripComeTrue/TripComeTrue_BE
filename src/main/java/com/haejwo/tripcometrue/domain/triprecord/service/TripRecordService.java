@@ -1,8 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
@@ -10,14 +10,15 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecor
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordViewHistoryService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,6 @@ public class TripRecordService {
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordViewCountRepository tripRecordViewCountRepository;
     private final TripRecordViewHistoryService tripRecordViewHistoryService;
-
 
     @Transactional
     public TripRecordDetailResponseDto findTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
@@ -58,7 +58,6 @@ public class TripRecordService {
         return responseDtos;
     }
 
-
     @Transactional
     public void incrementViewCount(TripRecord tripRecord) {
 
@@ -72,23 +71,6 @@ public class TripRecordService {
 
     }
 
-    private TripRecordViewCount createNewViewCount(TripRecord tripRecord, LocalDate today) {
-        return TripRecordViewCount.builder()
-            .date(today)
-            .tripRecord(tripRecord)
-            .viewCount(0)
-            .build();
-    }
-
-
-
-    private TripRecord findTripRecordById(Long tripRecordId) {
-        TripRecord findTripRecord = tripRecordRepository.findById(tripRecordId)
-            .orElseThrow(TripRecordNotFoundException::new);
-        return findTripRecord;
-    }
-
-
     @Transactional(readOnly = true)
     public List<TripRecordListResponseDto> getMyTripRecordsList(
         PrincipalDetails principalDetails, Pageable pageable) {
@@ -98,6 +80,20 @@ public class TripRecordService {
         return tripRecords.stream()
             .map(TripRecordListResponseDto::fromEntity)
             .collect(Collectors.toList());
+    }
+
+    private TripRecordViewCount createNewViewCount(TripRecord tripRecord, LocalDate today) {
+        return TripRecordViewCount.builder()
+            .date(today)
+            .tripRecord(tripRecord)
+            .viewCount(0)
+            .build();
+    }
+
+    private TripRecord findTripRecordById(Long tripRecordId) {
+        TripRecord findTripRecord = tripRecordRepository.findById(tripRecordId)
+            .orElseThrow(TripRecordNotFoundException::new);
+        return findTripRecord;
     }
 
 }
