@@ -98,7 +98,7 @@ public class TripRecordScheduleImageRepositoryImpl implements TripRecordSchedule
                     case "createdAt":
                         return new OrderSpecifier[]{new OrderSpecifier<>(direction, tripRecordScheduleImage.createdAt)};
                     case "storedCount":
-                        return new OrderSpecifier[]{new OrderSpecifier<>(direction, tripRecordSchedule.tripRecord.storedCount), newest};
+                        return new OrderSpecifier[]{new OrderSpecifier<>(direction, tripRecordSchedule.tripRecord.storeCount), newest};
                 }
             }
         }

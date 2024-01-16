@@ -19,7 +19,7 @@ public record CityImageContentResponseDto(
         return CityImageContentResponseDto.builder()
             .id(image.getId())
             .tripRecordId(entity.getTripRecord().getId())
-            .storedCount(entity.getTripRecord().getStoredCount())
+            .storedCount(entity.getTripRecord().getStoreCount())
             .imageUrl(image.getImageUrl())
             .build();
     }
@@ -29,7 +29,7 @@ public record CityImageContentResponseDto(
         return CityImageContentResponseDto.builder()
             .id(entity.getId())
             .tripRecordId(tripRecord.getId())
-            .storedCount(tripRecord.getStoredCount())
+            .storedCount(tripRecord.getStoreCount())
             .imageUrl(entity.getImageUrl())
             .build();
     }

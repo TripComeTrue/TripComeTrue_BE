@@ -152,7 +152,7 @@ class TripRecordScheduleImageRepositoryTest {
                 .title("여행 후기 제목")
                 .content("여행 후기")
                 .countries("프랑스,영국")
-                .storedCount(100)
+                .storeCount(100)
                 .expenseRangeType(ExpenseRangeType.ABOVE_300)
                 .member(memberRepository.save(
                     Member.builder()
@@ -171,7 +171,7 @@ class TripRecordScheduleImageRepositoryTest {
                 .title("여행 후기 제목")
                 .content("여행 후기")
                 .countries("일본")
-                .storedCount(200)
+                .storeCount(200)
                 .expenseRangeType(ExpenseRangeType.BELOW_100)
                 .member(memberRepository.save(
                     Member.builder()
@@ -190,7 +190,7 @@ class TripRecordScheduleImageRepositoryTest {
                 .title("여행 후기 제목")
                 .content("여행 후기")
                 .countries("태국")
-                .storedCount(150)
+                .storeCount(150)
                 .expenseRangeType(ExpenseRangeType.BELOW_100)
                 .member(memberRepository.save(
                     Member.builder()
@@ -331,8 +331,8 @@ class TripRecordScheduleImageRepositoryTest {
 
         //then
         assertThat(result.getNumberOfElements()).isEqualTo(size);
-        assertThat(result.getContent().get(1).getTripRecordSchedule().getTripRecord().getStoredCount())
-            .isGreaterThanOrEqualTo(result.getContent().get(0).getTripRecordSchedule().getTripRecord().getStoredCount());
+        assertThat(result.getContent().get(1).getTripRecordSchedule().getTripRecord().getStoreCount())
+            .isGreaterThanOrEqualTo(result.getContent().get(0).getTripRecordSchedule().getTripRecord().getStoreCount());
     }
 
 
