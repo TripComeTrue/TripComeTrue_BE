@@ -39,7 +39,7 @@ public class TripRecordReviewController {
                 .body(responseBody);
     }
 
-    @GetMapping("/my-trip-record-reviews-list")
+    @GetMapping("/v1/trip-records/reviews/my")
     public ResponseEntity<ResponseDTO<List<TripRecordReviewListResponseDto>>> getMyTripRecordReviews(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable

@@ -52,7 +52,6 @@ public class TripRecordController {
 
         ResponseDTO<List<TripRecordListResponseDto>> responseBody = ResponseDTO.okWithData(
             responseDtos);
-        ResponseDTO<List<TripRecordListResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
 
         return  ResponseEntity
                     .status(responseBody.getCode())
@@ -60,7 +59,7 @@ public class TripRecordController {
 
     }
 
-    @GetMapping("/my-trip-records-list")
+    @GetMapping("/my")
     public ResponseEntity<ResponseDTO<List<TripRecordListResponseDto>>> getMyTripRecords(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable
