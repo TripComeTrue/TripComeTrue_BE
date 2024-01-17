@@ -1,18 +1,15 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewAlreadyExistsException;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +29,8 @@ public class TripRecordReviewService {
     public EvaluateTripRecordReviewResponseDto saveTripRecordReview(
             PrincipalDetails principalDetails,
             Long tripRecordId,
-            EvaluateTripRecordReviewRequestDto request) {
+            EvaluateTripRecordReviewRequestDto requestDto
+    ) {
 
         Member member = principalDetails.getMember();
         TripRecord tripRecord = getTripRecordById(tripRecordId);
@@ -40,7 +38,7 @@ public class TripRecordReviewService {
         isTripRecordReviewExists(member, tripRecord);
 
         return EvaluateTripRecordReviewResponseDto
-                .fromEntity(tripRecordReviewRepository.save(request.toEntity(member, tripRecord)));
+                .fromEntity(tripRecordReviewRepository.save(requestDto.toEntity(member, tripRecord)));
     }
 
     private void isTripRecordReviewExists(Member member, TripRecord tripRecord) {
@@ -52,6 +50,21 @@ public class TripRecordReviewService {
     private TripRecord getTripRecordById(Long tripRecordId) {
         return tripRecordRepository.findById(tripRecordId)
                 .orElseThrow(TripRecordNotFoundException::new);
+    }
+
+    @Transactional
+    public void modifyTripRecordReview(
+            Long tripRecordReviewId,
+            ModifyTripRecordReviewRequestDto requestDto
+    ) {
+
+        TripRecordReview tripRecordReview = getTripRecordReview(tripRecordReviewId);
+        tripRecordReview.update(requestDto);
+    }
+
+    private TripRecordReview getTripRecordReview(Long tripRecordReviewId) {
+        return tripRecordReviewRepository.findById(tripRecordReviewId)
+                .orElseThrow(TripRecordReviewNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
