@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -45,5 +46,11 @@ public class TripRecordReview extends BaseTimeEntity {
         this.ratingScore = ratingScore;
         this.likeCount = likeCount;
         this.imageUrl = imageUrl;
+    }
+
+    public void update(ModifyTripRecordReviewRequestDto requestDto) {
+        this.ratingScore = requestDto.ratingScore();
+        this.content = requestDto.content();
+        this.imageUrl = requestDto.imageUrl();
     }
 }
