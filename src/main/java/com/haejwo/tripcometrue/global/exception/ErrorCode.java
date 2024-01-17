@@ -34,7 +34,6 @@ public enum ErrorCode {
     EMAIL_NOT_MATCH(HttpStatus.BAD_REQUEST, "이메일이 일치하지 않습니다"),
     NICKNAME_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"중복된 닉네임입니다."),
 
-
     // CITY
     CITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 도시입니다."),
     EXCHANGE_RATE_API_FAIL(HttpStatus.BAD_REQUEST, "환율 Open API 호출 실패했습니다."),
@@ -64,9 +63,12 @@ public enum ErrorCode {
     MAX_SIZE_EXCEEDED(HttpStatus.PAYLOAD_TOO_LARGE, "허용 용량을 초과한 파일입니다."),
 
     // PLACE_REVIEW
-    PLACE_REVIEW_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 여행지 리뷰입니다."),
+    PLACE_REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행지 리뷰입니다."),
     PLACE_REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "여행지 리뷰를 중복 작성할 수 없습니다."),
-    PLACE_REVIEW_DELETE_ALL_FAILURE_EXCEPTION(HttpStatus.BAD_REQUEST, "요청한 여행지 리뷰가 모두 존재하지 않아서 삭제에 실패했습니다."),
+    PLACE_REVIEW_DELETE_ALL_FAILURE(HttpStatus.BAD_REQUEST, "요청한 여행지 리뷰가 모두 존재하지 않아서 삭제에 실패했습니다."),
+
+    // TRIP_RECORD_REVIEW
+    TRIP_RECORD_REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "중복해서 여행 후기 별점을 매길 수 없습니다."),
 
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
