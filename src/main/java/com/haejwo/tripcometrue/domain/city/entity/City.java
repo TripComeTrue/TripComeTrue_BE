@@ -25,6 +25,8 @@ public class City extends BaseTimeEntity {
     private CurrencyUnit currency;
     private String weatherRecommendation;
     private String weatherDescription;
+    private Integer storeCount;
+    private String imageUrl;
 
     @Enumerated(EnumType.STRING)
     private Country country;
@@ -33,7 +35,7 @@ public class City extends BaseTimeEntity {
     private City(
         Long id, String name, String language, String timeDifference,
         String voltage, String visa, CurrencyUnit currency, String weatherRecommendation,
-        String weatherDescription, Country country
+        String weatherDescription, Integer storeCount, Country country, String imageUrl
     ) {
         this.id = id;
         this.name = name;
@@ -44,7 +46,14 @@ public class City extends BaseTimeEntity {
         this.currency = currency;
         this.weatherRecommendation = weatherRecommendation;
         this.weatherDescription = weatherDescription;
+        this.storeCount = storeCount;
         this.country = country;
+        this.imageUrl = imageUrl;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.storeCount = 0;
     }
 }
 
