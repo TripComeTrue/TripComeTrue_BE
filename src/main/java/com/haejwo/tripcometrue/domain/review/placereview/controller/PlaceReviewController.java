@@ -1,10 +1,12 @@
 package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.MULTI_STATUS;
+
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.request.RegisterPlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewListResponseDto;
+import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeletePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeleteSomeFailurePlaceReviewResponseDto;
@@ -16,25 +18,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewListResponseDto;
-import java.util.List;
-
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.MULTI_STATUS;
 
 @Slf4j
 @RestController
@@ -107,7 +103,7 @@ public class PlaceReviewController {
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
-    @GetMapping("/my-place-reviews-list")
+    @GetMapping("/reviews/my")
     public ResponseEntity<ResponseDTO<List<PlaceReviewListResponseDto>>> getMyPlaceReviews(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable

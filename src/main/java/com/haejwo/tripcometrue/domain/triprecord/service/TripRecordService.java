@@ -1,9 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
