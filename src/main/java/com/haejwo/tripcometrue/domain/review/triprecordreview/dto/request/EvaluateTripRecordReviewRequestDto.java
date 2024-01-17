@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.review.triprecordreview.request;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
