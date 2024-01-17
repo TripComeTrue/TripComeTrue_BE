@@ -65,7 +65,7 @@ public class TripRecordController {
         Pageable pageable
     ) {
         List<TripRecordListResponseDto> responseDtos
-            = tripRecordService.findMyTripRecordsList(principalDetails, pageable);
+            = tripRecordService.getMyTripRecordsList(principalDetails, pageable);
         ResponseDTO<List<TripRecordListResponseDto>> responseBody
             = ResponseDTO.okWithData(responseDtos);
 

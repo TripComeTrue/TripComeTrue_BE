@@ -109,7 +109,7 @@ public class PlaceReviewController {
         Pageable pageable
     ) {
         List<PlaceReviewListResponseDto> responseDtos
-            = placeReviewService.findMyPlaceReviewsList(principalDetails, pageable);
+            = placeReviewService.getMyPlaceReviewsList(principalDetails, pageable);
         ResponseDTO<List<PlaceReviewListResponseDto>> responseBody
             = ResponseDTO.okWithData(responseDtos);
 
