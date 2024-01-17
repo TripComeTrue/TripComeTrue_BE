@@ -3,9 +3,8 @@ package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.request.EvaluateTripRecordReviewRequestDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.response.EvaluateTripRecordReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.response.TripRecordReviewListResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
@@ -36,14 +35,23 @@ public class TripRecordReviewService {
             EvaluateTripRecordReviewRequestDto request) {
 
         Member member = principalDetails.getMember();
-        TripRecord tripRecord = tripRecordRepository.findById(tripRecordId)
-                .orElseThrow(TripRecordNotFoundException::new);
+        TripRecord tripRecord = getTripRecordById(tripRecordId);
 
-        TripRecordReview tripRecordReview = request.toEntity(member, tripRecord);
-        TripRecordReview savedTripRecordReview = tripRecordReviewRepository.save(tripRecordReview);
+        isTripRecordReviewExists(member, tripRecord);
 
         return EvaluateTripRecordReviewResponseDto
-                .fromEntity(savedTripRecordReview);
+                .fromEntity(tripRecordReviewRepository.save(request.toEntity(member, tripRecord)));
+    }
+
+    private void isTripRecordReviewExists(Member member, TripRecord tripRecord) {
+        if (tripRecordReviewRepository.existsByMemberAndTripRecord(member, tripRecord)) {
+            throw new TripRecordReviewAlreadyExistsException();
+        }
+    }
+
+    private TripRecord getTripRecordById(Long tripRecordId) {
+        return tripRecordRepository.findById(tripRecordId)
+                .orElseThrow(TripRecordNotFoundException::new);
     }
 
     @Transactional(readOnly = true)

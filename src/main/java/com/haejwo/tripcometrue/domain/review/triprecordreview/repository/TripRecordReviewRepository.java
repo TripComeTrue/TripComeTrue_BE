@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.repository;
 
+import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
