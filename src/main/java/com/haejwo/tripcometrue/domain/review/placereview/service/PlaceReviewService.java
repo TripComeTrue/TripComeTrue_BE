@@ -171,7 +171,7 @@ public class PlaceReviewService {
      */
 
     @Transactional(readOnly = true)
-    public List<PlaceReviewListResponseDto> findMyPlaceReviewsList(
+    public List<PlaceReviewListResponseDto> getMyPlaceReviewsList(
         PrincipalDetails principalDetails, Pageable pageable) {
         Long memberId = principalDetails.getMember().getId();
         List<PlaceReview> reviews = placeReviewRepository.findByMemberId(memberId, pageable);

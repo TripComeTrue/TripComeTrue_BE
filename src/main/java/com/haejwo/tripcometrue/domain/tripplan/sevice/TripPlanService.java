@@ -138,7 +138,7 @@ public class TripPlanService {
     }
 
     @Transactional(readOnly = true)
-    public List<TripPlanListReponseDto> findMyTripPlansList(
+    public List<TripPlanListReponseDto> getMyTripPlansList(
         PrincipalDetails principalDetails, Pageable pageable) {
         Long memberId = principalDetails.getMember().getId();
         List<TripPlan> tripPlans = tripPlanRepository.findByMemberId(memberId, pageable);

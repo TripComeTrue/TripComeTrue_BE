@@ -90,7 +90,7 @@ public class TripRecordService {
 
 
     @Transactional(readOnly = true)
-    public List<TripRecordListResponseDto> findMyTripRecordsList(
+    public List<TripRecordListResponseDto> getMyTripRecordsList(
         PrincipalDetails principalDetails, Pageable pageable) {
         Long memberId = principalDetails.getMember().getId();
         List<TripRecord> tripRecords = tripRecordRepository.findByMemberId(memberId, pageable);

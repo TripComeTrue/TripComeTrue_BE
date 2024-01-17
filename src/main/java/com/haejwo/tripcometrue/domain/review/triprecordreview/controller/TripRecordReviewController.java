@@ -45,7 +45,7 @@ public class TripRecordReviewController {
         Pageable pageable
     ) {
         List<TripRecordReviewListResponseDto> responseDtos
-            = tripRecordReviewService.findMyTripRecordReviewsList(principalDetails, pageable);
+            = tripRecordReviewService.getMyTripRecordReviewsList(principalDetails, pageable);
         ResponseDTO<List<TripRecordReviewListResponseDto>> responseBody
             = ResponseDTO.okWithData(responseDtos);
 

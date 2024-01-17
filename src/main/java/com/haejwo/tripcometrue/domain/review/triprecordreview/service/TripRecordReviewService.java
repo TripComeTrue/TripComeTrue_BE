@@ -47,7 +47,7 @@ public class TripRecordReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<TripRecordReviewListResponseDto> findMyTripRecordReviewsList(
+    public List<TripRecordReviewListResponseDto> getMyTripRecordReviewsList(
         PrincipalDetails principalDetails, Pageable pageable) {
         Long memberId = principalDetails.getMember().getId();
         List<TripRecordReview> reviews
