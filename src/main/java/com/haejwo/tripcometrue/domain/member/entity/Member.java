@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.member.entity;
 
-import com.haejwo.tripcometrue.domain.member.entity.rating.MilkLevel;
+import com.haejwo.tripcometrue.domain.member.entity.rating.TripLevel;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -38,7 +38,7 @@ public class Member extends BaseTimeEntity {
     private Integer totalPoint;
 
     @Enumerated(EnumType.STRING)
-    private MilkLevel milkLevel;
+    private TripLevel trip_level;
 
     private String introduction;
 
@@ -66,19 +66,19 @@ public class Member extends BaseTimeEntity {
         this.nickNameChangeCount = (this.nickNameChangeCount == null) ? 1 : this.nickNameChangeCount + 1;
     }
 
-    public void updateMilkLevel(){
-        this.milkLevel = MilkLevel.getLevelByPoint(this.totalPoint);
+    public void updateTripLevel(){
+        this.trip_level = TripLevel.getLevelByPoint(this.totalPoint);
     }
 
     public void earnPoint(int point) {
         this.totalPoint += point;
-        updateMilkLevel();
+        updateTripLevel();
     }
 
     @PrePersist
     private void init(){
         totalPoint = (totalPoint == null) ? 0 : totalPoint;
         nickNameChangeCount = (nickNameChangeCount == null) ? 0 : nickNameChangeCount;
-        updateMilkLevel();
+        updateTripLevel();
     }
 }
