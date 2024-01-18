@@ -6,15 +6,21 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
+import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.BooleanBuilder;
 import java.util.List;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport implements TripRecordCustomRepository {
 
-    public TripRecordCustomRepositoryImpl() {
+    private final JPAQueryFactory queryFactory;
+
+    public TripRecordCustomRepositoryImpl(JPAQueryFactory queryFactory) {
         super(TripRecord.class);
+        this.queryFactory = queryFactory;
     }
 
     @Override
@@ -56,5 +62,29 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
             .fetch();
 
         return result;
+    }
+
+    @Override
+    public List<TripRecord> findTopTripRecordListDomestic(int size) {
+        QTripRecord tripRecord = QTripRecord.tripRecord;
+
+        return queryFactory
+            .selectFrom(tripRecord)
+            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()))
+            .orderBy(tripRecord.averageRating.desc(), tripRecord.storeCount.desc())
+            .limit(size)
+            .fetch();
+    }
+
+    @Override
+    public List<TripRecord> findTopTripRecordListOverseas(int size) {
+        QTripRecord tripRecord = QTripRecord.tripRecord;
+
+        return queryFactory
+            .selectFrom(tripRecord)
+            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()).not())
+            .orderBy(tripRecord.averageRating.desc(), tripRecord.storeCount.desc())
+            .limit(size)
+            .fetch();
     }
 }
