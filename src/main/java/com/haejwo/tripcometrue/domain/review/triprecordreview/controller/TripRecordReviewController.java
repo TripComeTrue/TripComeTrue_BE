@@ -2,8 +2,10 @@ package com.haejwo.tripcometrue.domain.review.triprecordreview.controller;
 
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.service.TripRecordReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,24 +31,36 @@ public class TripRecordReviewController {
             @PathVariable Long tripRecordId,
             @RequestBody @Valid EvaluateTripRecordReviewRequestDto requestDto
     ) {
-        EvaluateTripRecordReviewResponseDto responseDto = tripRecordReviewService
-                .saveTripRecordReview(principalDetails, tripRecordId, requestDto);
-        ResponseDTO<EvaluateTripRecordReviewResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
+        EvaluateTripRecordReviewResponseDto responseDto = tripRecordReviewService
+                .saveRatingScore(principalDetails, tripRecordId, requestDto);
         return ResponseEntity
-                .status(responseBody.getCode())
-                .body(responseBody);
+                .status(CREATED)
+                .body(ResponseDTO.successWithData(CREATED, responseDto));
     }
 
-    //todo 로그인한 멤버가 작성한 사람인지 확인하는 로직 추가하기
     @PutMapping("/reviews/{tripRecordReviewId}")
-    public ResponseEntity<ResponseDTO<Void>> modifyTripRecordReview(
+    public ResponseEntity<ResponseDTO<Void>> modifyReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordReviewId,
             @RequestBody @Valid ModifyTripRecordReviewRequestDto requestDto
     ) {
+
         tripRecordReviewService.modifyTripRecordReview(principalDetails, tripRecordReviewId, requestDto);
         return ResponseEntity.ok().body(ResponseDTO.ok());
+    }
+
+    //todo 반환값이 그냥 200 코드일수도..
+    @PutMapping("/reviews/{tripRecordReviewId}/contents")
+    public ResponseEntity<ResponseDTO<TripRecordReviewResponseDto>> registerReviewContent(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordReviewId,
+            @RequestBody @Valid RegisterTripRecordReviewRequestDto requestDto
+    ) {
+
+        TripRecordReviewResponseDto responseDto = tripRecordReviewService
+                .registerContent(principalDetails, tripRecordReviewId, requestDto);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
 //    //단건 조회일 시 좋아요 정보 x
@@ -56,17 +72,17 @@ public class TripRecordReviewController {
 //            @PathVariable Long tripRecordReviewId
 //    ) {
 //
-//
 //    }
 
+    //todo 별점만 있는 경우 목록에서 제외시키기
     @GetMapping("/reviews/my")
     public ResponseEntity<ResponseDTO<TripRecordReviewListResponseDto>> getMyTripRecordReviews(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             Pageable pageable
     ) {
+
         TripRecordReviewListResponseDto responseDtos = tripRecordReviewService.getMyTripRecordReviewList(
                 principalDetails, pageable);
-
         return ResponseEntity.ok().body(ResponseDTO.okWithData(responseDtos));
     }
 

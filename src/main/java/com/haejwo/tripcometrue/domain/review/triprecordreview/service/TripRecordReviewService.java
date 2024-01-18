@@ -7,10 +7,12 @@ import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.DuplicateTripRecordReviewException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewAlreadyExistsException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
@@ -38,22 +40,27 @@ public class TripRecordReviewService {
 
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
     @Transactional
-    public EvaluateTripRecordReviewResponseDto saveTripRecordReview(
+    public EvaluateTripRecordReviewResponseDto saveRatingScore(
             PrincipalDetails principalDetails,
             Long tripRecordId,
             EvaluateTripRecordReviewRequestDto requestDto
     ) {
 
-        Member member = principalDetails.getMember();
+        Member loginMember = getMember(principalDetails);
         TripRecord tripRecord = getTripRecordById(tripRecordId);
 
-        isTripRecordReviewExists(member, tripRecord);
+        isAlreadyTripRecordReviewExists(loginMember, tripRecord);
 
         return EvaluateTripRecordReviewResponseDto
-                .fromEntity(tripRecordReviewRepository.save(requestDto.toEntity(member, tripRecord)));
+                .fromEntity(tripRecordReviewRepository.save(requestDto.toEntity(loginMember, tripRecord)));
     }
 
-    private void isTripRecordReviewExists(Member member, TripRecord tripRecord) {
+    private Member getMember(PrincipalDetails principalDetails) {
+        return memberRepository.findById(principalDetails.getMember().getId())
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    private void isAlreadyTripRecordReviewExists(Member member, TripRecord tripRecord) {
         if (tripRecordReviewRepository.existsByMemberAndTripRecord(member, tripRecord)) {
             throw new TripRecordReviewAlreadyExistsException();
         }
@@ -72,19 +79,21 @@ public class TripRecordReviewService {
             ModifyTripRecordReviewRequestDto requestDto
     ) {
 
-        TripRecordReview tripRecordReview = getTripRecordReview(tripRecordReviewId);
-        validateRightMemberAccess(principalDetails, tripRecordReview);
+        Member loginMember = getMember(principalDetails);
+        TripRecordReview tripRecordReview = getTripRecordReviewById(tripRecordReviewId);
+
+        validateRightMemberAccess(loginMember, tripRecordReview);
 
         tripRecordReview.update(requestDto);
     }
 
-    private static void validateRightMemberAccess(PrincipalDetails principalDetails, TripRecordReview tripRecordReview) {
-        if (!Objects.equals(tripRecordReview.getMember().getId(), principalDetails.getMember().getId())) {
+    private static void validateRightMemberAccess(Member member, TripRecordReview tripRecordReview) {
+        if (!Objects.equals(tripRecordReview.getMember().getId(), member.getId())) {
             throw new UserInvalidAccessException();
         }
     }
 
-    private TripRecordReview getTripRecordReview(Long tripRecordReviewId) {
+    private TripRecordReview getTripRecordReviewById(Long tripRecordReviewId) {
         return tripRecordReviewRepository.findById(tripRecordReviewId)
                 .orElseThrow(TripRecordReviewNotFoundException::new);
     }
@@ -94,8 +103,8 @@ public class TripRecordReviewService {
             Pageable pageable
     ) {
 
-        Page<TripRecordReview> reviews = tripRecordReviewRepository.findByMember(
-                getMember(principalDetails), pageable);
+        Page<TripRecordReview> reviews = tripRecordReviewRepository
+                .findByMember(getMember(principalDetails), pageable);
 
         List<TripRecordReviewResponseDto> responseDtos = reviews.stream()
                 .map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
@@ -106,16 +115,33 @@ public class TripRecordReviewService {
         return TripRecordReviewListResponseDto.fromResponseDtos(reviews.getTotalElements(), responseDtos);
     }
 
-    private Member getMember(PrincipalDetails principalDetails) {
-        return memberRepository.findById(principalDetails.getMember().getId())
-                .orElseThrow(UserNotFoundException::new);
-    }
-
     private boolean hasLikedTripRecordReview(PrincipalDetails principalDetails, TripRecordReview tripRecordReview) {
         List<Long> memberIds = tripRecordReview.getTripRecordReviewLikeses().stream()
                 .map(TripRecordReviewLikes::getMember)
                 .map(Member::getId)
                 .toList();
         return memberIds.contains(principalDetails.getMember().getId());
+    }
+
+    @Transactional
+    public TripRecordReviewResponseDto registerContent(
+            PrincipalDetails principalDetails,
+            Long tripRecordReviewId,
+            RegisterTripRecordReviewRequestDto requestDto) {
+
+        Member loginMember = getMember(principalDetails);
+        TripRecordReview tripRecordReview = getTripRecordReviewById(tripRecordReviewId);
+
+        validateRightMemberAccess(loginMember, tripRecordReview);
+        isReviewAlreadyRegister(tripRecordReview);
+
+        tripRecordReview.registerContent(requestDto);
+        return TripRecordReviewResponseDto.fromEntity(tripRecordReview, false);
+    }
+
+    private void isReviewAlreadyRegister(TripRecordReview tripRecordReview) {
+        if (tripRecordReview.getContent() != null) {
+            throw new DuplicateTripRecordReviewException();
+        }
     }
 }
