@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
@@ -28,6 +29,7 @@ public class TripRecordService {
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordViewCountRepository tripRecordViewCountRepository;
     private final TripRecordViewHistoryService tripRecordViewHistoryService;
+    private static final int HOME_CONTENT_SIZE = 5;
 
     @Transactional
     public TripRecordDetailResponseDto findTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
@@ -49,13 +51,30 @@ public class TripRecordService {
         Pageable pageable, TripRecordListRequestAttribute request
     ) {
 
-        List<TripRecord> result = tripRecordRepository.finTripRecordWithFilter(pageable, request);
+        List<TripRecord> result = tripRecordRepository.findTripRecordWithFilter(pageable, request);
 
         List<TripRecordListResponseDto> responseDtos = result.stream()
                                     .map(TripRecordListResponseDto::fromEntity)
                                     .toList();
 
         return responseDtos;
+    }
+
+    @Transactional(readOnly = true)
+    public List<TopTripRecordResponseDto> findTopTripRecordList(String type) {
+        if (type.equalsIgnoreCase("domestic")) {
+            return tripRecordRepository
+                .findTopTripRecordListDomestic(HOME_CONTENT_SIZE)
+                .stream()
+                .map(TopTripRecordResponseDto::fromEntity)
+                .toList();
+        } else {
+            return tripRecordRepository
+                .findTopTripRecordListOverseas(HOME_CONTENT_SIZE)
+                .stream()
+                .map(TopTripRecordResponseDto::fromEntity)
+                .toList();
+        }
     }
 
     @Transactional
