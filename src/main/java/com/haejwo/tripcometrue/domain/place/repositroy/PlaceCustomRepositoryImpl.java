@@ -2,16 +2,25 @@ package com.haejwo.tripcometrue.domain.place.repositroy;
 
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.city.entity.QCity;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.*;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport implements PlaceCustomRepository {
 
@@ -78,9 +87,66 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
             .selectFrom(place)
             .join(place.city)
             .where(place.city.eq(city))
-            .orderBy(place.storedCount.desc(), place.commentCount.desc())
+            .orderBy(place.storedCount.desc(), place.createdAt.desc())
             .limit(size)
             .fetch();
+    }
+
+    @Override
+    public List<PlaceMapInfoResponseDto> findPlaceMapInfoListByPlaceId(Long placeId) {
+
+        QPlace qPlace = QPlace.place;
+        QCity qCity = QCity.city;
+        QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
+        QTripRecordScheduleImage qTripRecordScheduleImage = QTripRecordScheduleImage.tripRecordScheduleImage;
+
+        List<Place> places = queryFactory
+            .selectFrom(qPlace)
+            .join(qPlace.city, qCity)
+            .where(qCity.id.eq(
+                queryFactory
+                    .select(qCity.id)
+                    .from(qPlace)
+                    .where(qPlace.id.eq(placeId))
+                    .fetchOne()
+            ))
+            .fetch();
+
+        List<Long> placeIds = places.stream().map(Place::getId).collect(Collectors.toList());
+
+        List<Tuple> images = queryFactory
+            .select(qTripRecordSchedule.place.id, qTripRecordScheduleImage.imageUrl.min())
+            .from(qTripRecordSchedule)
+            .join(qTripRecordSchedule.tripRecordScheduleImages, qTripRecordScheduleImage)
+            .where(qTripRecordSchedule.place.id.in(placeIds))
+            .groupBy(qTripRecordSchedule.place.id)
+            .fetch();
+
+        List<PlaceMapInfoResponseDto> result = placeIds.stream()
+            .map(id -> { // placeId를 id로 변경
+                String imageUrl = images.stream()
+                    .filter(tuple -> tuple.get(0, Long.class).equals(id))
+                    .map(tuple -> tuple.get(1, String.class))
+                    .findFirst()
+                    .orElse(null);
+                Place place = places.stream()
+                    .filter(p -> p.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow();
+                return PlaceMapInfoResponseDto.builder()
+                    .placeId(place.getId())
+                    .placeName(place.getName())
+                    .latitude(place.getLatitude())
+                    .longitude(place.getLongitude())
+                    .storeCount(place.getStoredCount())
+                    .commentCount(place.getCommentCount())
+                    .imageUrl(imageUrl)
+                    .build();
+            })
+            .collect(Collectors.toList());
+
+        return result;
+
     }
 
     private OrderSpecifier<?>[] getSort(Pageable pageable) {

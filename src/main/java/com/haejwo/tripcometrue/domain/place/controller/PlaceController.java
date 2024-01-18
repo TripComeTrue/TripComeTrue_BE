@@ -58,7 +58,7 @@ public class PlaceController {
         @PathVariable Long placeId
     ) {
 
-        List<PlaceMapInfoResponseDto> responseDtos = placeService.findPlaceMapInfos(placeId);
+        List<PlaceMapInfoResponseDto> responseDtos = placeService.findPlaceMapInfoList(placeId);
 
         ResponseDTO<List<PlaceMapInfoResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
 
