@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.controller;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordScheduleService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
