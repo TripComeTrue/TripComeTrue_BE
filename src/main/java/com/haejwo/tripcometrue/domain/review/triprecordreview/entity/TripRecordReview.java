@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.entity;
 
+import com.haejwo.tripcometrue.domain.likes.entity.TripRecordReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -10,6 +11,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,6 +32,9 @@ public class TripRecordReview extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
+
+    @OneToMany(mappedBy = "tripRecordReview")
+    private List<TripRecordReviewLikes> tripRecordReviewLikeses = new ArrayList<>();
 
     @NotNull
     private Float ratingScore;

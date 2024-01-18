@@ -1,11 +1,6 @@
 package com.haejwo.tripcometrue.domain.member.controller;
 
-import com.haejwo.tripcometrue.domain.member.exception.CurrentPasswordNotMatchException;
-import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
-import com.haejwo.tripcometrue.domain.member.exception.EmailNotMatchException;
-import com.haejwo.tripcometrue.domain.member.exception.NewPasswordNotMatchException;
-import com.haejwo.tripcometrue.domain.member.exception.NewPasswordSameAsOldException;
-import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
+import com.haejwo.tripcometrue.domain.member.exception.*;
 import com.haejwo.tripcometrue.global.exception.ApplicationException;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import org.springframework.http.HttpStatus;
@@ -51,5 +46,13 @@ public class MemberControllerAdvice {
             .body(ResponseDTO.errorWithMessage(status, exception.getMessage()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ResponseDTO<Void>> handleUserNotFoundException(UserNotFoundException exception) {
+        HttpStatus status = exception.getErrorCode().getHttpStatus();
+
+        return ResponseEntity
+            .status(status)
+            .body(ResponseDTO.errorWithMessage(status, exception.getMessage()));
+    }
 }
 
