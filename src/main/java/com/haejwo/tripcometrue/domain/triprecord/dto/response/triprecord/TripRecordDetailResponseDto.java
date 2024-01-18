@@ -28,7 +28,7 @@ public record TripRecordDetailResponseDto(
     @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
     Integer totalDays,
     Integer average_rating,
-    Integer viewCount,
+    Integer storeCount,
     TripRecordMemberResponseDto member,
     List<TripRecordImageResponseDto> images,
     List<TripRecordTagResponseDto> tags,
@@ -41,7 +41,7 @@ public record TripRecordDetailResponseDto(
         ExpenseRangeType expenseRangeType, String countries,
         @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripStartDay,
         @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
-        Integer totalDays, Integer average_rating, Integer viewCount,
+        Integer totalDays, Integer average_rating, Integer storeCount,
         TripRecordMemberResponseDto member, List<TripRecordImageResponseDto> images,
         List<TripRecordTagResponseDto> tags,
         Map<Integer, List<TripRecordScheduleDetailResponseDto>> schedules) {
@@ -54,12 +54,13 @@ public record TripRecordDetailResponseDto(
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
         this.average_rating = average_rating;
-        this.viewCount = viewCount;
+        this.storeCount = storeCount;
         this.member = member;
         this.images = images;
         this.tags = tags;
         this.schedules = schedules;
     }
+
 
 
     public static TripRecordDetailResponseDto fromEntity(TripRecord entity) {
@@ -91,7 +92,7 @@ public record TripRecordDetailResponseDto(
             .tripStartDay(entity.getTripStartDay())
             .tripEndDay(entity.getTripEndDay())
             .totalDays(entity.getTotalDays())
-            .viewCount(entity.getViewCount())
+            .storeCount(entity.getStoreCount())
             .average_rating(entity.getAverageRating())
             .member(member)
             .images(imageDtos)

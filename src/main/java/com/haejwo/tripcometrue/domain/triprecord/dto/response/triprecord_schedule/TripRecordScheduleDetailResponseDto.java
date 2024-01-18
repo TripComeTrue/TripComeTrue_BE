@@ -14,6 +14,9 @@ public record TripRecordScheduleDetailResponseDto(
     Integer ordering,
     String content,
     Long placeId,
+    String placeName,
+    Double latitude,
+    Double longitude,
     Long tripRecordId,
     List<TripRecordScheduleImageResponseDto> images,
     List<TripRecordScheduleVideoResponseDto> videos
@@ -21,18 +24,22 @@ public record TripRecordScheduleDetailResponseDto(
 
     @Builder
     public TripRecordScheduleDetailResponseDto(Long id, Integer dayNumber, Integer ordering,
-        String content, Long placeId, Long tripRecordId,
-        List<TripRecordScheduleImageResponseDto> images,
+        String content, Long placeId, String placeName, Double latitude, Double longitude,
+        Long tripRecordId, List<TripRecordScheduleImageResponseDto> images,
         List<TripRecordScheduleVideoResponseDto> videos) {
         this.id = id;
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
         this.placeId = placeId;
+        this.placeName = placeName;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.tripRecordId = tripRecordId;
         this.images = images;
         this.videos = videos;
     }
+
 
     public static TripRecordScheduleDetailResponseDto fromEntity(TripRecordSchedule entity) {
 
@@ -46,12 +53,16 @@ public record TripRecordScheduleDetailResponseDto(
                                     .map(TripRecordScheduleVideoResponseDto::fromEntity)
                                     .toList();
 
+
         return TripRecordScheduleDetailResponseDto.builder()
             .id(entity.getId())
             .dayNumber(entity.getDayNumber())
             .ordering(entity.getOrdering())
             .content(entity.getContent())
             .placeId(entity.getPlace().getId())
+            .placeName(entity.getPlace().getName())
+            .latitude(entity.getPlace().getLatitude())
+            .longitude(entity.getPlace().getLongitude())
             .tripRecordId(entity.getTripRecord() != null ? entity.getTripRecord().getId() : null)
             .images(imageDtos)
             .videos(videoDtos)

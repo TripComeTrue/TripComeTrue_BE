@@ -5,30 +5,34 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import lombok.Builder;
 
 public record TripRecordListResponseDto(
-    Long id,
+    Long tripRecordId,
     String title,
     String countries,
     Integer totalDays,
-    Integer commentNumber,
-    Integer storeNumber,
+    Integer commentCount,
+    Integer storeCount,
+    String imageUrl,
     TripRecordMemberResponseDto member
 ) {
 
     @Builder
-    public TripRecordListResponseDto(Long id, String title, String countries, Integer totalDays,
-        Integer commentNumber, Integer storeNumber, TripRecordMemberResponseDto member) {
-        this.id = id;
+    public TripRecordListResponseDto(Long tripRecordId, String title, String countries, Integer totalDays,
+        Integer commentCount, Integer storeCount, String imageUrl,
+        TripRecordMemberResponseDto member) {
+        this.tripRecordId = tripRecordId;
         this.title = title;
         this.countries = countries;
         this.totalDays = totalDays;
-        this.commentNumber = commentNumber;
-        this.storeNumber = storeNumber;
+        this.commentCount = commentCount;
+        this.storeCount = storeCount;
+        this.imageUrl = imageUrl;
         this.member = member;
     }
 
+
     public static TripRecordListResponseDto fromEntity(TripRecord entity) {
         return TripRecordListResponseDto.builder()
-            .id(entity.getId())
+            .tripRecordId(entity.getId())
             .title(entity.getTitle())
             .countries(entity.getCountries())
             .totalDays(entity.getTotalDays())
