@@ -2,8 +2,8 @@ package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord;
 
 import com.haejwo.tripcometrue.domain.member.entity.QMember;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordMemberResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
@@ -16,9 +16,8 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
-import java.util.List;
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
