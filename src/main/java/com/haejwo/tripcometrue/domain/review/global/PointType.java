@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.review.placereview.entity;
+package com.haejwo.tripcometrue.domain.review.global;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

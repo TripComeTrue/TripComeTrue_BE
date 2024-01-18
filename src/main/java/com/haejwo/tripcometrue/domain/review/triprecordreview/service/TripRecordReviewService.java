@@ -29,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static com.haejwo.tripcometrue.domain.review.global.PointType.CONTENT_WITH_IMAGE_POINT;
+import static com.haejwo.tripcometrue.domain.review.global.PointType.ONLY_CONTENT_POINT;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -72,6 +75,8 @@ public class TripRecordReviewService {
     }
 
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
+    // TODO: 사진만 처음 저장하는 경우 포인트 +1 추가 로직
+    // TODO: 본문이 등록되어 있지 않은 경우 수정 불가능 처리
     @Transactional
     public void modifyTripRecordReview(
             PrincipalDetails principalDetails,
@@ -87,7 +92,7 @@ public class TripRecordReviewService {
         tripRecordReview.update(requestDto);
     }
 
-    private static void validateRightMemberAccess(Member member, TripRecordReview tripRecordReview) {
+    private void validateRightMemberAccess(Member member, TripRecordReview tripRecordReview) {
         if (!Objects.equals(tripRecordReview.getMember().getId(), member.getId())) {
             throw new UserInvalidAccessException();
         }
@@ -96,23 +101,6 @@ public class TripRecordReviewService {
     private TripRecordReview getTripRecordReviewById(Long tripRecordReviewId) {
         return tripRecordReviewRepository.findById(tripRecordReviewId)
                 .orElseThrow(TripRecordReviewNotFoundException::new);
-    }
-
-    public TripRecordReviewListResponseDto getMyTripRecordReviewList(
-            PrincipalDetails principalDetails,
-            Pageable pageable
-    ) {
-
-        Page<TripRecordReview> reviews = tripRecordReviewRepository
-                .findByMember(getMember(principalDetails), pageable);
-
-        List<TripRecordReviewResponseDto> responseDtos = reviews.stream()
-                .map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
-                                tripRecordReview,
-                                hasLikedTripRecordReview(principalDetails, tripRecordReview))
-                ).toList();
-
-        return TripRecordReviewListResponseDto.fromResponseDtos(reviews.getTotalElements(), responseDtos);
     }
 
     private boolean hasLikedTripRecordReview(PrincipalDetails principalDetails, TripRecordReview tripRecordReview) {
@@ -127,7 +115,8 @@ public class TripRecordReviewService {
     public TripRecordReviewResponseDto registerContent(
             PrincipalDetails principalDetails,
             Long tripRecordReviewId,
-            RegisterTripRecordReviewRequestDto requestDto) {
+            RegisterTripRecordReviewRequestDto requestDto
+    ) {
 
         Member loginMember = getMember(principalDetails);
         TripRecordReview tripRecordReview = getTripRecordReviewById(tripRecordReviewId);
@@ -136,6 +125,8 @@ public class TripRecordReviewService {
         isReviewAlreadyRegister(tripRecordReview);
 
         tripRecordReview.registerContent(requestDto);
+        calculateAndSavePoints(tripRecordReview, loginMember);
+
         return TripRecordReviewResponseDto.fromEntity(tripRecordReview, false);
     }
 
@@ -143,5 +134,31 @@ public class TripRecordReviewService {
         if (tripRecordReview.getContent() != null) {
             throw new DuplicateTripRecordReviewException();
         }
+    }
+
+    private void calculateAndSavePoints(TripRecordReview tripRecordReview, Member member) {
+        int point = isImageIncluded(tripRecordReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
+        member.earnPoint(point);
+    }
+
+    private boolean isImageIncluded(TripRecordReview tripRecordReview) {
+        return tripRecordReview.getImageUrl() != null;
+    }
+
+    public TripRecordReviewListResponseDto getMyTripRecordReviewList(
+            PrincipalDetails principalDetails,
+            Pageable pageable
+    ) {
+
+        Page<TripRecordReview> reviews = tripRecordReviewRepository
+                .findByMember(getMember(principalDetails), pageable);
+
+        List<TripRecordReviewResponseDto> responseDtos = reviews.stream()
+                .map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
+                        tripRecordReview,
+                        hasLikedTripRecordReview(principalDetails, tripRecordReview))
+                ).toList();
+
+        return TripRecordReviewListResponseDto.fromResponseDtos(reviews.getTotalElements(), responseDtos);
     }
 }
