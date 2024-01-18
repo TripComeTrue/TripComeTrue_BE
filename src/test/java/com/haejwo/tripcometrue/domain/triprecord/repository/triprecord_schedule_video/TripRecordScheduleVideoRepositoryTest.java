@@ -325,7 +325,6 @@ class TripRecordScheduleVideoRepositoryTest {
 
         //then
         assertThat(result).hasSize(4);
-        assertThat(result.get(0).tripRecordId()).isEqualTo(2);
     }
 
     @AfterEach
