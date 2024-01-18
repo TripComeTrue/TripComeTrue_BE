@@ -8,4 +8,8 @@ import org.springframework.data.domain.Pageable;
 public interface TripRecordCustomRepository {
 
     List<TripRecord> findTripRecordWithFilter(Pageable pageable, TripRecordListRequestAttribute request);
+
+    List<TripRecord> findTopTripRecordListDomestic(int size);
+
+    List<TripRecord> findTopTripRecordListOverseas(int size);
 }
