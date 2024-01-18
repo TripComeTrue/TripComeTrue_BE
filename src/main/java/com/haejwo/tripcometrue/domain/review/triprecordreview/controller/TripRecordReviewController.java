@@ -31,7 +31,8 @@ public class TripRecordReviewController {
             @RequestBody @Valid EvaluateTripRecordReviewRequestDto requestDto
     ) {
 
-        EvaluateTripRecordReviewResponseDto responseDto = tripRecordReviewService.saveTripRecordReview(principalDetails, tripRecordId, requestDto);
+        EvaluateTripRecordReviewResponseDto responseDto = tripRecordReviewService
+                .saveTripRecordReview(principalDetails, tripRecordId, requestDto);
         ResponseDTO<EvaluateTripRecordReviewResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity
@@ -45,11 +46,12 @@ public class TripRecordReviewController {
     // 2. 수정된 여행 후기 리뷰 id를 따로 안보내줘도 되는가?
     @PutMapping("/reviews/{tripRecordReviewId}")
     public ResponseEntity<ResponseDTO<Void>> modifyTripRecordReview(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordReviewId,
             @RequestBody @Valid ModifyTripRecordReviewRequestDto requestDto
     ) {
 
-        tripRecordReviewService.modifyTripRecordReview(tripRecordReviewId, requestDto);
+        tripRecordReviewService.modifyTripRecordReview(principalDetails, tripRecordReviewId, requestDto);
 
         return ResponseEntity
                 .status(HttpStatus.MOVED_PERMANENTLY)

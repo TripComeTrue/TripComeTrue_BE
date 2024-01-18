@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 
 import com.haejwo.tripcometrue.domain.likes.entity.TripRecordReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -65,12 +67,21 @@ public class TripRecordReviewService {
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
     @Transactional
     public void modifyTripRecordReview(
+            PrincipalDetails principalDetails,
             Long tripRecordReviewId,
             ModifyTripRecordReviewRequestDto requestDto
     ) {
 
         TripRecordReview tripRecordReview = getTripRecordReview(tripRecordReviewId);
+        validateRightMemberAccess(principalDetails, tripRecordReview);
+
         tripRecordReview.update(requestDto);
+    }
+
+    private static void validateRightMemberAccess(PrincipalDetails principalDetails, TripRecordReview tripRecordReview) {
+        if (!Objects.equals(tripRecordReview.getMember().getId(), principalDetails.getMember().getId())) {
+            throw new UserInvalidAccessException();
+        }
     }
 
     private TripRecordReview getTripRecordReview(Long tripRecordReviewId) {
