@@ -22,7 +22,9 @@ public class City extends BaseTimeEntity {
     private String timeDifference;
     private String voltage;
     private String visa;
+    @Column(length = 1000)
     private String weatherRecommendation;
+    @Column(length = 2500)
     private String weatherDescription;
     private Integer storeCount;
     private String imageUrl;
