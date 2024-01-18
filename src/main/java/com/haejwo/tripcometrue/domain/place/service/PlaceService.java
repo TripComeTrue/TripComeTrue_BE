@@ -58,14 +58,9 @@ public class PlaceService {
 
     }
 
-    public List<PlaceMapInfoResponseDto> findPlaceMapInfos(Long placeId) {
+    public List<PlaceMapInfoResponseDto> findPlaceMapInfoList(Long placeId) {
 
-        Long findCityId = placeRepository.findById(placeId).orElseThrow().getCity().getId();
-        List<Place> findPlaces = placeRepository.findByCityId(findCityId);
-
-        List<PlaceMapInfoResponseDto> responseDtos = findPlaces.stream()
-                                                        .map(PlaceMapInfoResponseDto::fromEntity)
-                                                        .toList();
+        List<PlaceMapInfoResponseDto> responseDtos = placeRepository.findPlaceMapInfoListByPlaceId(placeId);
 
         return responseDtos;
     }
