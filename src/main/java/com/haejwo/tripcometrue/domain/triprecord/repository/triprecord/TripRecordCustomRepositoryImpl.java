@@ -1,13 +1,21 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.member.entity.QMember;
+import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordMemberResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import java.util.List;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,7 +32,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
     }
 
     @Override
-    public List<TripRecord> findTripRecordWithFilter(
+    public List<TripRecordListResponseDto> finTripRecordWithFilter(
         Pageable pageable,
         TripRecordListRequestAttribute request
     ) {
@@ -32,6 +40,8 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         QTripRecord qTripRecord = QTripRecord.tripRecord;
         QTripRecordTag qTripRecordTag = QTripRecordTag.tripRecordTag;
         QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
+        QTripRecordImage qTripRecordImage = QTripRecordImage.tripRecordImage;
+        QMember qMember = QMember.member;
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
@@ -55,10 +65,53 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
             booleanBuilder.and(qTripRecord.totalDays.eq(request.totalDays()));
         }
 
-        List<TripRecord> result = from(qTripRecord)
+        OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(Order.ASC, qTripRecord.id);
+
+        if (request.orderBy() != null) {
+            switch (request.orderBy()) {
+                case "averageRating":
+                    orderSpecifier = new OrderSpecifier<>(request.order(), qTripRecord.averageRating);
+                    break;
+                case "viewCount":
+                    orderSpecifier = new OrderSpecifier<>(request.order(), qTripRecord.viewCount);
+                    break;
+                case "storeCount":
+                    orderSpecifier = new OrderSpecifier<>(request.order(), qTripRecord.storeCount);
+                    break;
+                case "reviewCount":
+                    orderSpecifier = new OrderSpecifier<>(request.order(), qTripRecord.reviewCount);
+                    break;
+                case "commentCount":
+                    orderSpecifier = new OrderSpecifier<>(request.order(), qTripRecord.commentCount);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid orderBy parameter: " + request.orderBy()); // TODO: 예외처리 만들기
+            }
+        }
+
+        List<TripRecordListResponseDto> result = from(qTripRecord)
             .leftJoin(qTripRecord.tripRecordTags, qTripRecordTag)
             .leftJoin(qTripRecord.tripRecordSchedules, qTripRecordSchedule)
+            .leftJoin(qTripRecord.tripRecordImages, qTripRecordImage)
+            .join(qTripRecord.member, qMember)
             .where(booleanBuilder)
+            .groupBy(qTripRecord)
+            .orderBy(orderSpecifier)
+            .select(Projections.constructor(TripRecordListResponseDto.class,
+                qTripRecord.id,
+                qTripRecord.title,
+                qTripRecord.countries,
+                qTripRecord.totalDays,
+                qTripRecord.commentCount,
+                qTripRecord.storeCount,
+                JPAExpressions
+                    .select(qTripRecordImage.imageUrl.min())
+                    .from(qTripRecordImage)
+                    .where(qTripRecordImage.tripRecord.id.eq(qTripRecord.id)),
+                Projections.constructor(TripRecordMemberResponseDto.class, qMember.memberBase.nickname, qMember.profile_image)
+            ))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
 
         return result;

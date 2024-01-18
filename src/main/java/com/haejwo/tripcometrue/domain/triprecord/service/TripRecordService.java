@@ -2,6 +2,8 @@ package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -35,8 +37,13 @@ public class TripRecordService {
     @Transactional
     public TripRecordDetailResponseDto findTripRecord(PrincipalDetails principalDetails, Long tripRecordId) {
 
-        Long memberId = principalDetails.getMember().getId();
         TripRecord findTripRecord = findTripRecordById(tripRecordId);
+
+        Long memberId = null;
+
+        if(principalDetails != null){
+            memberId = principalDetails.getMember().getId();
+        }
 
         if(memberId != findTripRecord.getMember().getId()) { findTripRecord.incrementViewCount(); }
         incrementViewCount(findTripRecord);
@@ -52,13 +59,10 @@ public class TripRecordService {
         Pageable pageable, TripRecordListRequestAttribute request
     ) {
 
-        List<TripRecord> result = tripRecordRepository.findTripRecordWithFilter(pageable, request);
+        List<TripRecordListResponseDto> result = tripRecordRepository.finTripRecordWithFilter(pageable, request);
 
-        List<TripRecordListResponseDto> responseDtos = result.stream()
-                                    .map(TripRecordListResponseDto::fromEntity)
-                                    .toList();
 
-        return responseDtos;
+        return result;
     }
 
     @Transactional(readOnly = true)
