@@ -20,7 +20,7 @@ public record CityPlaceResponseDto(
             .placeId(entity.getId())
             .placeName(entity.getName())
             .storedCount(entity.getStoredCount())
-            .commentTotal(0) // TODO: 추후 댓글 수 로직 작성
+            .commentTotal(entity.getCommentCount())
             .imageUrl(imageUrl)
             .build();
     }
