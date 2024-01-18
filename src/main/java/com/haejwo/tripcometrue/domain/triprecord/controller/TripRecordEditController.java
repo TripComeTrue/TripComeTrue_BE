@@ -2,8 +2,10 @@ package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.CreateSchedulePlaceRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.GetCountryResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule.SearchScheduleTripResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordEditService;
+import com.haejwo.tripcometrue.global.enums.Continent;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -89,6 +91,19 @@ public class TripRecordEditController {
         ResponseDTO<Long> responseBody
             = ResponseDTO.okWithData(
             tripRecordEditService.createSchedulePlace(createSchedulePlaceRequestDto));
+
+        return ResponseEntity
+            .status(responseBody.getCode())
+            .body(responseBody);
+    }
+
+    @GetMapping("/v1/country-city")
+    public ResponseEntity<ResponseDTO<List<GetCountryResponseDto>>> getCountryCity(
+        @RequestParam(required = false) Continent continent
+    ) {
+        ResponseDTO<List<GetCountryResponseDto>> responseBody
+            = ResponseDTO.okWithData(
+            tripRecordEditService.getCountryCity(continent));
 
         return ResponseEntity
             .status(responseBody.getCode())

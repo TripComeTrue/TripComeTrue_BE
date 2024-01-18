@@ -9,6 +9,8 @@ import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.CreateSchedulePlaceRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordScheduleRequestDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.GetCountryCityResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.GetCountryResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule.SearchScheduleTripResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordImage;
@@ -23,6 +25,7 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_tag.TripRecordTagRepository;
+import com.haejwo.tripcometrue.global.enums.Continent;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.haejwo.tripcometrue.global.exception.PermissionDeniedException;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -180,5 +183,30 @@ public class TripRecordEditService {
             placeRepository.findById(tripRecordScheduleRequestDto.placeId())
                 .orElseThrow(PlaceNotFoundException::new);
         }
+    }
+
+    public List<GetCountryResponseDto> getCountryCity(Continent continent) {
+
+        List<GetCountryResponseDto> responseDtoList = new ArrayList<>();
+
+        for (Country country : Country.values()) {
+
+            if (continent == null || country.getContinent().equals(continent)) {
+                List<GetCountryCityResponseDto> cityList = new ArrayList<>();
+                cityRepository.findAllByCountry(country).forEach(city -> {
+                    cityList.add(GetCountryCityResponseDto.fromEntity(city));
+                });
+
+                responseDtoList.add(new GetCountryResponseDto(
+                    country.getContinent(),
+                    country,
+                    country.getDescription(),
+                    country.getImageUrl(),
+                    cityList
+                ));
+            }
+        }
+
+        return responseDtoList;
     }
 }
