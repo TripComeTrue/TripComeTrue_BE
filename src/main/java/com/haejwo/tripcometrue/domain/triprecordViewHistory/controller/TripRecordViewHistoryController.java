@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("v1/trip-record")
+@RequestMapping("v1/trip-records")
 @RequiredArgsConstructor
 public class TripRecordViewHistoryController {
 
@@ -24,7 +24,7 @@ public class TripRecordViewHistoryController {
   @GetMapping("/view-history")
   public ResponseEntity<ResponseDTO<Page<TripRecordViewHistoryResponseDto>>> getViewHistory(
       @AuthenticationPrincipal PrincipalDetails principalDetails,
-      @PageableDefault(size = 10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+      @PageableDefault(size = 3, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
     Page<TripRecordViewHistoryResponseDto> historyPage = tripRecordViewHistoryService.getViewHistory(principalDetails, pageable);
     ResponseDTO<Page<TripRecordViewHistoryResponseDto>> responseBody = ResponseDTO.okWithData(historyPage);
