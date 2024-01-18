@@ -2,7 +2,8 @@ package com.haejwo.tripcometrue.domain.review.triprecordreview.repository;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
-import java.util.List;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,5 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TripRecordReviewRepository extends JpaRepository<TripRecordReview, Long> {
 
-  List<TripRecordReview> findByMemberId(Long memberId, Pageable pageable);
+  Page<TripRecordReview> findByMember(Member member, Pageable pageable);
+
+  boolean existsByMemberAndTripRecord(Member member, TripRecord tripRecord);
 }
