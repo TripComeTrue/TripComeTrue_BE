@@ -1,28 +1,18 @@
-package com.haejwo.tripcometrue.domain.review.triprecordreview.response;
+package com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response;
 
-import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public record TripRecordReviewListResponseDto(
-    Long id,
-    String content,
-    Short rating,
-    Integer likeCount,
-    String imageUrl,
-    Long memberId,
-    Long tripRecordId,
-    LocalDateTime createdAt
+
+        Long totalCount,
+
+        List<TripRecordReviewResponseDto> myTripRecordReviews
+
 ) {
-  public static TripRecordReviewListResponseDto fromEntity(TripRecordReview entity) {
-    return new TripRecordReviewListResponseDto(
-        entity.getId(),
-        entity.getContent(),
-        entity.getRating(),
-        entity.getLikeCount(),
-        entity.getImageUrl(),
-        entity.getMember().getId(),
-        entity.getTripRecord().getId(),
-        entity.getCreatedAt()
-    );
-  }
+    public static TripRecordReviewListResponseDto fromResponseDtos(
+            Long totalCount,
+            List<TripRecordReviewResponseDto> tripRecordReviews
+    ) {
+        return new TripRecordReviewListResponseDto(totalCount, tripRecordReviews);
+    }
 }
