@@ -2,10 +2,12 @@ package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,19 @@ public class TripRecordController {
                     .status(responseBody.getCode())
                     .body(responseBody);
 
+    }
+
+    @GetMapping("/top-list")
+    public ResponseEntity<ResponseDTO<List<TopTripRecordResponseDto>>> tripRecordTopList(
+        @RequestParam("type") @HomeTopListQueryType String type
+    ) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    tripRecordService.findTopTripRecordList(type)
+                )
+            );
     }
 
     @GetMapping("/my")
