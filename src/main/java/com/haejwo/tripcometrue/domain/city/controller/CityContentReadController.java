@@ -3,6 +3,7 @@ package com.haejwo.tripcometrue.domain.city.controller;
 import com.haejwo.tripcometrue.domain.city.dto.response.*;
 import com.haejwo.tripcometrue.domain.city.service.CityContentReadService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,20 @@ import java.util.List;
 public class CityContentReadController {
 
     private final CityContentReadService cityContentReadService;
+
+    // 홈피드 TOP 인기 도시 리스트 조회
+    @GetMapping("/top-list")
+    public ResponseEntity<ResponseDTO<List<TopCityResponseDto>>> getTopCityList(
+        @RequestParam @HomeTopListQueryType String type
+    ) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    cityContentReadService.getTopCityList(type)
+                )
+            );
+    }
 
     // 도시 관련 여행 후기 조회
     @GetMapping("/{cityId}/trip-records")
