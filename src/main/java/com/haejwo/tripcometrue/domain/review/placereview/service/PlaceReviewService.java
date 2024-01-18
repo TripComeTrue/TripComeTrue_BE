@@ -1,8 +1,5 @@
 package com.haejwo.tripcometrue.domain.review.placereview.service;
 
-import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.CONTENT_WITH_IMAGE_POINT;
-import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.ONLY_CONTENT_POINT;
-
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
@@ -23,15 +20,19 @@ import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNo
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.CONTENT_WITH_IMAGE_POINT;
+import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.ONLY_CONTENT_POINT;
 
 @Slf4j
 @Service
