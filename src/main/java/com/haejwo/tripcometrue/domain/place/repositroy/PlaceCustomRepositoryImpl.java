@@ -5,11 +5,13 @@ import com.haejwo.tripcometrue.domain.city.entity.QCity;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
 import com.querydsl.core.BooleanBuilder;
-import java.util.List;
-
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.util.List;
 
 public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport implements PlaceCustomRepository {
 
@@ -55,7 +57,7 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
             .where(city.id.eq(cityId))
             .offset(pageable.getOffset())
             .limit(pageSize + 1)
-            .orderBy(place.storedCount.desc()) // TODO: 리뷰순 정렬 추가
+            .orderBy(getSort(pageable))
             .fetch();
 
         boolean hasNext = false;
@@ -76,8 +78,38 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
             .selectFrom(place)
             .join(place.city)
             .where(place.city.eq(city))
-            .orderBy(place.storedCount.desc(), place.createdAt.desc())
+            .orderBy(place.storedCount.desc(), place.commentCount.desc())
             .limit(size)
             .fetch();
+    }
+
+    private OrderSpecifier<?>[] getSort(Pageable pageable) {
+        QPlace place = QPlace.place;
+
+        OrderSpecifier<?> byStoredCount = new OrderSpecifier<>(Order.DESC, place.storedCount);
+        OrderSpecifier<?> byCommentCount = new OrderSpecifier<>(Order.DESC, place.commentCount);
+
+        //서비스에서 보내준 Pageable 객체에 정렬조건 null 값 체크
+        if (!pageable.getSort().isEmpty()) {
+            //정렬값이 들어 있으면 for 사용하여 값을 가져온다
+            for (Sort.Order sortOrder : pageable.getSort()) {
+                // 서비스에서 넣어준 DESC or ASC 를 가져온다.
+                com.querydsl.core.types.Order direction = sortOrder.getDirection().isAscending() ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC;
+                // 서비스에서 넣어준 정렬 조건을 스위치 케이스 문을 활용하여 셋팅하여 준다.
+                String property = sortOrder.getProperty();
+                switch (property) {
+                    case "id":
+                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, place.id)};
+                    case "createdAt":
+                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, place.createdAt)};
+                    case "storedCount":
+                        return new OrderSpecifier[] {byStoredCount, byCommentCount};
+                    case "commentCount":
+                        return new OrderSpecifier[] {byCommentCount, byStoredCount};
+                }
+            }
+        }
+
+        return new OrderSpecifier[] {byStoredCount, byCommentCount}; // 보관순
     }
 }
