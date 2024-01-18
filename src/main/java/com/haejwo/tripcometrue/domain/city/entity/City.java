@@ -22,11 +22,13 @@ public class City extends BaseTimeEntity {
     private String timeDifference;
     private String voltage;
     private String visa;
-    private CurrencyUnit currency;
     private String weatherRecommendation;
     private String weatherDescription;
     private Integer storeCount;
     private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private CurrencyUnit currency;
 
     @Enumerated(EnumType.STRING)
     private Country country;
