@@ -1,9 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -47,7 +45,10 @@ public class TripRecordService {
 
         if(memberId != findTripRecord.getMember().getId()) { findTripRecord.incrementViewCount(); }
         incrementViewCount(findTripRecord);
-        tripRecordViewHistoryService.addViewHistory(principalDetails, tripRecordId);
+
+        if(principalDetails != null) {
+            tripRecordViewHistoryService.addViewHistory(principalDetails, tripRecordId);
+        }
 
         TripRecordDetailResponseDto responseDto = TripRecordDetailResponseDto.fromEntity(findTripRecord);
 
