@@ -84,7 +84,8 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/search-schedule-places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/schedule-place/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-plan/{planId}")).permitAll()
-
+            .requestMatchers(new AntPathRequestMatcher("/v1/country-city")).permitAll()
+            
             .anyRequest().authenticated());
 
         /**
