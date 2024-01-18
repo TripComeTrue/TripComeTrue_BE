@@ -22,7 +22,7 @@ public record CityPlaceWithLatLongResponseDto(
             .placeId(entity.getId())
             .placeName(entity.getName())
             .storedCount(entity.getStoredCount())
-            .commentTotal(0) // TODO: 댓글 수 적용
+            .commentTotal(entity.getCommentCount())
             .imageUrl(imageUrl)
             .latitude(entity.getLatitude())
             .longitude(entity.getLongitude())
