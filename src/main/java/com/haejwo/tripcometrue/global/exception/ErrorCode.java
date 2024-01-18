@@ -70,6 +70,7 @@ public enum ErrorCode {
     // TRIP_RECORD_REVIEW
     TRIP_RECORD_REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "중복해서 여행 후기 별점을 매길 수 없습니다."),
     TRIP_RECORD_REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행 후기 리뷰입니다."),
+    REGISTERING_DUPLICATE_TRIP_RECORD_REVIEW(HttpStatus.BAD_REQUEST, "본문과 이미지 등록은 한 번만 가능합니다."),
 
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
