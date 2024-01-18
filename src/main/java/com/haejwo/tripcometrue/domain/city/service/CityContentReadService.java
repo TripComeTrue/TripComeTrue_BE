@@ -30,6 +30,24 @@ public class CityContentReadService {
 
     private static final int CITY_HOT_PLACES_SIZE = 10;
     private static final int CITY_MEDIA_CONTENT_SIZE = 10;
+    private static final int HOME_CONTENT_SIZE = 5;
+
+    // 홈피드 인기 도시 리스트 조회
+    public List<TopCityResponseDto> getTopCityList(String type) {
+        if (type.equalsIgnoreCase("domestic")) {
+            return cityRepository
+                .findTopCityListDomestic(HOME_CONTENT_SIZE)
+                .stream()
+                .map(TopCityResponseDto::fromEntity)
+                .toList();
+        } else {
+            return cityRepository
+                .findTopCityListOverseas(HOME_CONTENT_SIZE)
+                .stream()
+                .map(TopCityResponseDto::fromEntity)
+                .toList();
+        }
+    }
 
     // 도시 핫플레이스 리스트 조회
     @Transactional(readOnly = true)
