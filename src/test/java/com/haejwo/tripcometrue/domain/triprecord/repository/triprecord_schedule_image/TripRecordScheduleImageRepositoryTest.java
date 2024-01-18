@@ -18,6 +18,7 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecor
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.TripRecordScheduleRepository;
 import com.haejwo.tripcometrue.global.enums.Country;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -360,5 +361,15 @@ class TripRecordScheduleImageRepositoryTest {
 
         // then
         assertThat(result).hasSize(7);
+    }
+
+    @AfterEach
+    void cleanUp() {
+        tripRecordScheduleImageRepository.deleteAll();
+        tripRecordScheduleRepository.deleteAll();
+        tripRecordRepository.deleteAll();
+        memberRepository.deleteAll();
+        placeRepository.deleteAll();
+        cityRepository.deleteAll();
     }
 }
