@@ -1,9 +1,11 @@
 package com.haejwo.tripcometrue.domain.review.placereview.dto.response;
 
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
+
 import java.time.LocalDateTime;
 
 public record PlaceReviewListResponseDto(
+
     Long id,
     String content,
     String imageUrl,
@@ -11,6 +13,7 @@ public record PlaceReviewListResponseDto(
     Long memberId,
     Long placeId,
     LocalDateTime createdAt
+
 ) {
   public static PlaceReviewListResponseDto fromEntity(PlaceReview placeReview) {
     return new PlaceReviewListResponseDto(
