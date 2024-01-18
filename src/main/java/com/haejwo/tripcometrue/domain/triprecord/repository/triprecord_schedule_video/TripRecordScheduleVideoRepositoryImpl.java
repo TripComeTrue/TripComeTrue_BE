@@ -1,8 +1,11 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video;
 
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.NewestTripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
+import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +16,9 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.haejwo.tripcometrue.domain.member.entity.QMember.member;
 import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripRecord;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleVideo.tripRecordScheduleVideo;
 
@@ -55,6 +60,83 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
             .where(
                 place.city.id.eq(cityId)
             )
+            .orderBy(tripRecordScheduleVideo.createdAt.desc())
+            .limit(size)
+            .fetch();
+    }
+
+    @Override
+    public List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoList(int size) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    NewestTripRecordScheduleVideoQueryDto.class,
+                    tripRecordScheduleVideo.id,
+                    tripRecord.id,
+                    tripRecord.title,
+                    tripRecordScheduleVideo.videoUrl,
+                    tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecord.storeCount,
+                    member.id,
+                    member.memberBase.nickname
+                )
+            )
+            .from(tripRecordScheduleVideo)
+            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecord.member, member)
+            .orderBy(tripRecordScheduleVideo.createdAt.desc())
+            .limit(size)
+            .fetch();
+    }
+
+    @Override
+    public List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoListDomestic(int size) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    NewestTripRecordScheduleVideoQueryDto.class,
+                    tripRecordScheduleVideo.id,
+                    tripRecord.id,
+                    tripRecord.title,
+                    tripRecordScheduleVideo.videoUrl,
+                    tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecord.storeCount,
+                    member.id,
+                    member.memberBase.nickname
+                )
+            )
+            .from(tripRecordScheduleVideo)
+            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecord.member, member)
+            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()))
+            .orderBy(tripRecordScheduleVideo.createdAt.desc())
+            .limit(size)
+            .fetch();
+    }
+
+    @Override
+    public List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoListOverseas(int size) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    NewestTripRecordScheduleVideoQueryDto.class,
+                    tripRecordScheduleVideo.id,
+                    tripRecord.id,
+                    tripRecord.title,
+                    tripRecordScheduleVideo.videoUrl,
+                    tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecord.storeCount,
+                    member.id,
+                    member.memberBase.nickname
+                )
+            )
+            .from(tripRecordScheduleVideo)
+            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecord.member, member)
+            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()).not())
             .orderBy(tripRecordScheduleVideo.createdAt.desc())
             .limit(size)
             .fetch();
