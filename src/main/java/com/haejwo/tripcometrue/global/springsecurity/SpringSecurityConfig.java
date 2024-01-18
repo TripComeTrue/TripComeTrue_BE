@@ -72,13 +72,17 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/member/check-duplicated-email")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/oauth2/info/**")).permitAll()
 
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/check-password")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/change-password")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/profile-image")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/introduction")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/nickname")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/nickname")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/view-history")).permitAll()
+
             .requestMatchers(new AntPathRequestMatcher("/v1/cities/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/images/**")).permitAll()
-
-            .requestMatchers(new AntPathRequestMatcher("/v1/likes/**")).permitAll()
-
-            .requestMatchers(new AntPathRequestMatcher("/v1/store/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-places/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-records/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-records-schedules/**")).permitAll()
