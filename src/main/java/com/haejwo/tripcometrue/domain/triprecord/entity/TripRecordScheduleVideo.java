@@ -25,15 +25,17 @@ public class TripRecordScheduleVideo extends BaseTimeEntity {
     private Long id;
 
     private String videoUrl;
+    private String thumbnailUrl;
 
     @ManyToOne
     @JoinColumn(name = "trip_schedule_id")
     private TripRecordSchedule tripRecordSchedule;
 
     @Builder
-    public TripRecordScheduleVideo(String videoUrl,
+    public TripRecordScheduleVideo(String videoUrl, String thumbnailUrl,
         TripRecordSchedule tripRecordSchedule) {
         this.videoUrl = videoUrl;
+        this.thumbnailUrl = thumbnailUrl;
         this.tripRecordSchedule = tripRecordSchedule;
     }
 }
