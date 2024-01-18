@@ -108,7 +108,7 @@ public class CityContentReadController {
     }
 
     // 도시 핫플레이스 조회
-    @GetMapping("/v1/cities/{cityId}/hot-places")
+    @GetMapping("/{cityId}/hot-places")
     public ResponseEntity<ResponseDTO<List<CityPlaceResponseDto>>> getHotPlaces(
         @PathVariable("cityId") Long cityId
     ) {
@@ -120,7 +120,7 @@ public class CityContentReadController {
     }
 
     // 도시 여행지 더보기 조회
-    @GetMapping("/v1/cities/{cityId}/places")
+    @GetMapping("/{cityId}/places")
     public ResponseEntity<ResponseDTO<SliceResponse<CityPlaceResponseDto>>> getPlacesByCityIdPagination(
         @PathVariable("cityId") Long cityId,
         @PageableDefault(sort = "storedCount", direction = Sort.Direction.DESC) Pageable pageable
@@ -133,7 +133,7 @@ public class CityContentReadController {
     }
 
     // 위/경도 정보 포함 도시 여행지 리스트 조회
-    @GetMapping("/v1/cities/{cityId}/places/list")
+    @GetMapping("/{cityId}/places/list")
     public ResponseEntity<ResponseDTO<List<CityPlaceWithLatLongResponseDto>>> getPlacesWithLatLongByCityId(
         @PathVariable("cityId") Long cityId
     ) {
