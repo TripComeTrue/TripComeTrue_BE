@@ -1,10 +1,11 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordScheduleImageListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleImageListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -33,15 +34,23 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
         QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
         QTripRecordScheduleImage qTripRecordScheduleImage = QTripRecordScheduleImage.tripRecordScheduleImage;
 
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        if(request.placeId() != null) {
+            booleanBuilder.and(qTripRecordSchedule.place.id.eq(request.placeId()));
+        }
+
         List<TripRecordScheduleImageListResponseDto> result = jpaQueryFactory
             .select(Projections.constructor(TripRecordScheduleImageListResponseDto.class,
-                qTripRecordSchedule.tripRecord.id,
-                qTripRecordScheduleImage.imageUrl.min()))
+                qTripRecord.id,
+                qTripRecordScheduleImage.imageUrl.min(),
+                qTripRecord.storeCount))
             .from(qTripRecordSchedule)
             .leftJoin(qTripRecordSchedule.tripRecord, qTripRecord)
             .leftJoin(qTripRecordSchedule.tripRecordScheduleImages, qTripRecordScheduleImage)
-            .where(qTripRecordSchedule.place.id.eq(request.placeId()))
+            .where(booleanBuilder)
             .groupBy(qTripRecordSchedule.tripRecord.id)
+            .orderBy(qTripRecord.storeCount.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
