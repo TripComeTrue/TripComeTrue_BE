@@ -29,7 +29,9 @@ public enum CurrencyUnit {
     SEK("스웨덴 크로나", 1),
     SGD("싱가포르 달러", 1),
     THB("태국 바트", 1),
-    USD("미국 달러", 1);
+    USD("미국 달러", 1),
+    ZAR("남아프라카공화국 랜드", 1),
+    EGP("이집트 파운드", 1);
 
     private final String currencyName;
     private final Integer standard;

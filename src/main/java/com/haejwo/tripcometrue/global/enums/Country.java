@@ -37,7 +37,12 @@ public enum Country {
     NEW_ZEALAND("뉴질랜드", Continent.OCEANIA,
         "https://media.gq.com/photos/5ba1680236b2d004cdd843cd/16:9/w_2560%2Cc_limit/new-zealand-queenstown-travel-guide-gq.jpg"),
     AUSTRALIA("호주", Continent.OCEANIA,
-        "https://i.natgeofe.com/k/b76526f3-bb84-489d-b229-56bcc08aa915/australia-sydney-opera-house.jpg?w=1084.125&h=611.625");
+        "https://i.natgeofe.com/k/b76526f3-bb84-489d-b229-56bcc08aa915/australia-sydney-opera-house.jpg?w=1084.125&h=611.625"),
+
+    SOUTH_AFRICA("남아프리카 공화국", Continent.AFRICA,
+        "https://media.istockphoto.com/id/620737858/de/foto/kapstadt-und-die-12-apostel-von-oben.jpg?s=612x612&w=0&k=20&c=GiUof-9yNuxdoPx_u1Yc9v8mwlaIFIvLbPFMVpMNMFE="),
+    EGYPT("이집트", Continent.AFRICA,
+        "https://e0.pxfuel.com/wallpapers/692/206/desktop-wallpaper-egypt-background-cool-for-me-egyptian.jpg");
 
     private final String description;
     private final Continent continent;
