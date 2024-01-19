@@ -1,5 +1,11 @@
 ### 여행후기 조회
-GET http://localhost:8080/v1/trip-record/1
+GET http://localhost:8080/v1/trip-records/1
+
+### 여행후기 Lsit 조회
+GET http://localhost:8080/v1/trip-records
+
+### 여행후기 Lsit 조회 (필터링 추가)
+GET http://localhost:8080/v1/trip-records?orderBy=commentCount&size=2&page=0
 
 ### 여행후기 수정
 PUT http://localhost:8080/v1/trip-record/1
