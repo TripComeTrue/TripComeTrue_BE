@@ -77,7 +77,6 @@ public class TripRecordReviewController {
 //
 //    }
 
-    //todo 별점만 있는 경우 목록에서 제외시키기
     @GetMapping("/reviews/my")
     public ResponseEntity<ResponseDTO<TripRecordReviewListResponseDto>> getMyTripRecordReviews(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
