@@ -5,17 +5,18 @@ import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.DeleteTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteAllSuccessTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteSomeFailureTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.ContentNotInitializedException;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.DuplicateTripRecordReviewException;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewAlreadyExistsException;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewNotFoundException;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.*;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -160,5 +162,35 @@ public class TripRecordReviewService {
                 ).toList();
 
         return TripRecordReviewListResponseDto.fromResponseDtos(reviews.getTotalElements(), responseDtos);
+    }
+
+    @Transactional
+    public DeleteTripRecordReviewResponseDto deleteTripRecordReviews(
+            DeleteTripRecordReviewRequestDto requestDto
+    ) {
+
+        List<Long> tripRecordReviewIds = requestDto.tripRecordReviewIds();
+        List<Long> failedIds = new ArrayList<>();
+
+        tripRecordReviewIds.forEach(tripRecordReviewId -> {
+            if (tripRecordReviewRepository.existsById(tripRecordReviewId)) {
+                tripRecordReviewRepository.deleteById(tripRecordReviewId);
+            } else {
+                failedIds.add(tripRecordReviewId);
+            }
+        });
+
+        if (isDeleteAllFail(tripRecordReviewIds, failedIds)) {
+            throw new TripRecordReviewDeleteAllFailureException();
+        }
+        if (!failedIds.isEmpty()) {
+            return new DeleteSomeFailureTripRecordReviewResponseDto(failedIds);
+        }
+
+        return new DeleteAllSuccessTripRecordReviewResponseDto();
+    }
+
+    private boolean isDeleteAllFail(List<Long> tripRecordReviewIds, List<Long> failedIds) {
+        return tripRecordReviewIds.size() == failedIds.size();
     }
 }

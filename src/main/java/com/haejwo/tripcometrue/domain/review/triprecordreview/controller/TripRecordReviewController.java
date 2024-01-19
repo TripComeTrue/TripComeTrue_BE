@@ -1,10 +1,12 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.controller;
 
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.DeleteTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.service.TripRecordReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -66,6 +68,9 @@ public class TripRecordReviewController {
     //todo: 단건 조회
 
 
+    //todo: 목록 조회
+
+
 //    //단건 조회일 시 좋아요 정보 x
 //    //리뷰 수정시 필요한 API
 //    //todo 로그인한 사람이 글 주인인지 확인하는 로직 추가하기
@@ -77,6 +82,16 @@ public class TripRecordReviewController {
 //
 //    }
 
+    @DeleteMapping("/reviews")
+    public ResponseEntity<ResponseDTO<DeleteTripRecordReviewResponseDto>> removeTripRecordReviews(
+            @RequestBody DeleteTripRecordReviewRequestDto requestDto
+    ) {
+
+        DeleteTripRecordReviewResponseDto responseDto =
+                tripRecordReviewService.deleteTripRecordReviews(requestDto);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
     @GetMapping("/reviews/my")
     public ResponseEntity<ResponseDTO<TripRecordReviewListResponseDto>> getMyTripRecordReviews(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
@@ -87,7 +102,4 @@ public class TripRecordReviewController {
                 tripRecordReviewService.getMyTripRecordReviewList(principalDetails, pageable);
         return ResponseEntity.ok().body(ResponseDTO.okWithData(responseDtos));
     }
-
-//    @DeleteMapping("/reviews")
-//    public ResponseEntity<ResponseDTO<Void>>
 }
