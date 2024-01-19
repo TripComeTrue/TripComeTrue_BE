@@ -12,6 +12,7 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.Evalu
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.ContentNotInitializedException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.DuplicateTripRecordReviewException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewAlreadyExistsException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewNotFoundException;
@@ -75,8 +76,7 @@ public class TripRecordReviewService {
     }
 
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
-    // TODO: 사진만 처음 저장하는 경우 포인트 +1 추가 로직
-    // TODO: 본문이 등록되어 있지 않은 경우 수정 불가능 처리
+    // TODO: 사진만 처음 저장하는 경우 포인트 +1 추가 로직. 대신 중복 포인트 적립 막기
     @Transactional
     public void modifyTripRecordReview(
             PrincipalDetails principalDetails,
@@ -88,8 +88,14 @@ public class TripRecordReviewService {
         TripRecordReview tripRecordReview = getTripRecordReviewById(tripRecordReviewId);
 
         validateRightMemberAccess(loginMember, tripRecordReview);
+        isContentAlreadyRegistered(tripRecordReview);
 
         tripRecordReview.update(requestDto);
+    }
+
+    private TripRecordReview getTripRecordReviewById(Long tripRecordReviewId) {
+        return tripRecordReviewRepository.findById(tripRecordReviewId)
+                .orElseThrow(TripRecordReviewNotFoundException::new);
     }
 
     private void validateRightMemberAccess(Member member, TripRecordReview tripRecordReview) {
@@ -98,9 +104,10 @@ public class TripRecordReviewService {
         }
     }
 
-    private TripRecordReview getTripRecordReviewById(Long tripRecordReviewId) {
-        return tripRecordReviewRepository.findById(tripRecordReviewId)
-                .orElseThrow(TripRecordReviewNotFoundException::new);
+    private void isContentAlreadyRegistered(TripRecordReview tripRecordReview) {
+        if (tripRecordReview.getContent() == null) {
+            throw new ContentNotInitializedException();
+        }
     }
 
     private boolean hasLikedTripRecordReview(PrincipalDetails principalDetails, TripRecordReview tripRecordReview) {
@@ -148,8 +155,8 @@ public class TripRecordReviewService {
             Pageable pageable
     ) {
 
-        Page<TripRecordReview> reviews = tripRecordReviewRepository
-                .findByMember(getMember(principalDetails), pageable);
+        Page<TripRecordReview> reviews =
+                tripRecordReviewRepository.findByMember(getMember(principalDetails), pageable);
 
         List<TripRecordReviewResponseDto> responseDtos = reviews.stream()
                 .map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
