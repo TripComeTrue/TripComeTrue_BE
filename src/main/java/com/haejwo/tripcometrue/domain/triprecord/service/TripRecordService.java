@@ -1,25 +1,29 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoDetailDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordScheduleVideoNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount.TripRecordViewCountRepository;
 import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordViewHistoryService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +33,7 @@ public class TripRecordService {
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordViewCountRepository tripRecordViewCountRepository;
     private final TripRecordViewHistoryService tripRecordViewHistoryService;
+    private final TripRecordScheduleVideoRepository tripRecordScheduleVideoRepository;
 
     private static final int HOME_CONTENT_SIZE = 5;
 
@@ -105,6 +110,23 @@ public class TripRecordService {
         return tripRecords.stream()
             .map(TripRecordListResponseDto::fromEntity)
             .collect(Collectors.toList());
+    }
+
+    public List<TripRecordHotShortsListResponseDto> findTripRecordHotShortsList(Pageable pageable) {
+
+        List<TripRecordHotShortsListResponseDto> responseDtos = tripRecordRepository.findTripRecordHotShortsList(pageable);
+
+        return responseDtos;
+    }
+
+    public TripRecordScheduleVideoDetailDto findTripRecordShortsDetail(Long videoId) {
+
+        TripRecordScheduleVideo video = tripRecordScheduleVideoRepository.findById(videoId)
+            .orElseThrow(TripRecordScheduleVideoNotFoundException::new);
+
+        TripRecordScheduleVideoDetailDto responseDto = TripRecordScheduleVideoDetailDto.fromEntity(video);
+
+        return responseDto;
     }
 
     private TripRecordViewCount createNewViewCount(TripRecord tripRecord, LocalDate today) {
