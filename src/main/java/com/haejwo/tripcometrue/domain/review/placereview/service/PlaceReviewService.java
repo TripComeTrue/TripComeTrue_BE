@@ -31,9 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.CONTENT_WITH_IMAGE_POINT;
-import static com.haejwo.tripcometrue.domain.review.placereview.entity.PointType.ONLY_CONTENT_POINT;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -57,7 +54,7 @@ public class PlaceReviewService {
 
         PlaceReview placeReview = PlaceReviewRequestDto.toEntity(member, place, requestDto);
 
-        calculateAndSavePoints(placeReview, member);
+//        calculateAndSavePoints(placeReview, member);
 
         return RegisterPlaceReviewResponseDto
                 .fromEntity(placeReviewRepository.save(placeReview));
@@ -78,16 +75,15 @@ public class PlaceReviewService {
         }
     }
 
-    private static void calculateAndSavePoints(PlaceReview placeReview, Member member) {
-        int point = isImageIncluded(placeReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
-        member.earnPoint(point);
-    }
+//    private void calculateAndSavePoints(PlaceReview placeReview, Member member) {
+//        int point = isImageIncluded(placeReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
+//        member.earnPoint(point);
+//    }
+//
+//    private boolean isImageIncluded(PlaceReview placeReview) {
+//        return placeReview.getImageUrl() != null;
+//    }
 
-    private static boolean isImageIncluded(PlaceReview placeReview) {
-        return placeReview.getImageUrl() != null;
-    }
-
-    //fixme fetch join이 적용 안되서 n+1 문제 고치기
     public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
 
         PlaceReview placeReview = getPlaceReviewById(placeReviewId);
@@ -164,12 +160,9 @@ public class PlaceReviewService {
         return new DeleteAllSuccessPlaceReviewResponseDto();
     }
 
-    private static boolean isDeleteAllFail(List<Long> placeReviewIds, List<Long> failedIds) {
+    private boolean isDeleteAllFail(List<Long> placeReviewIds, List<Long> failedIds) {
         return placeReviewIds.size() == failedIds.size();
     }
-    /*
-    여행지에 대한 특정 리뷰 삭제
-     */
 
     @Transactional(readOnly = true)
     public List<PlaceReviewListResponseDto> getMyPlaceReviewsList(
