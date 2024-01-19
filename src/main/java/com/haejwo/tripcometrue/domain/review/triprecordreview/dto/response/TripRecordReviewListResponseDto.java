@@ -5,7 +5,6 @@ import java.util.List;
 public record TripRecordReviewListResponseDto(
 
         Long totalCount,
-
         List<TripRecordReviewResponseDto> myTripRecordReviews
 
 ) {

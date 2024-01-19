@@ -9,7 +9,7 @@ public record TripRecordReviewResponseDto(
 
         Long tripRecordId,
         String tripRecordTitle,
-        Long TripRecordReviewId,
+        Long tripRecordReviewId,
         String imageUrl,
         Long memberId,
         String nickname,

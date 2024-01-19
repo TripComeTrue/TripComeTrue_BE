@@ -7,6 +7,7 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.Regist
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.latest.LatestReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.service.TripRecordReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -62,7 +63,16 @@ public class TripRecordReviewController {
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    //todo: 최신 조회(좋아요 없음) + 내 평점
+    @GetMapping("/{tripRecordId}/reviews/latest")
+    public ResponseEntity<ResponseDTO<LatestReviewResponseDto>> getLatestReviewAndMyScore(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordId
+    ) {
+
+        LatestReviewResponseDto responseDto =
+                tripRecordReviewService.getLatestReview(principalDetails, tripRecordId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
 
 
     //todo: 단건 조회
