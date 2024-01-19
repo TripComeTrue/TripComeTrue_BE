@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TripRecordReviewRepository extends JpaRepository<TripRecordReview, Long> {
 
-  @Query("select trr from TripRecordReview trr join fetch trr.member m where trr.member = :member and trr.content is not null")
+  @Query("select trr from TripRecordReview trr join fetch trr.member m where trr.member = :member and trr.content is not null order by trr.createdAt desc")
   Page<TripRecordReview> findByMember(@Param("member") Member member, Pageable pageable);
 
   boolean existsByMemberAndTripRecord(Member member, TripRecord tripRecord);
