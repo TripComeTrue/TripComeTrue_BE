@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PointType {
 
-    ONLY_CONTENT_POINT(1),
-    CONTENT_WITH_IMAGE_POINT(2);
+    ONLY_ONE_POINT(1),
+    TWO_POINTS(2);
 
     private final int point;
 }
