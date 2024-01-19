@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.haejwo.tripcometrue.domain.review.global.PointType.ONLY_ONE_POINT;
+import static com.haejwo.tripcometrue.domain.review.global.PointType.TWO_POINTS;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,25 +48,49 @@ public class TripRecordReview extends BaseTimeEntity {
 
     private Integer likeCount;
     private String imageUrl;
+    private boolean hasAnyRegisteredPhotoUrl;
 
     @Builder
-    public TripRecordReview(Member member, TripRecord tripRecord, String content, Float ratingScore, Integer likeCount, String imageUrl) {
+    public TripRecordReview(
+            Member member, TripRecord tripRecord, String content,
+            Float ratingScore, Integer likeCount, String imageUrl,
+            boolean hasAnyRegisteredPhotoUrl
+    ) {
         this.member = member;
         this.tripRecord = tripRecord;
         this.content = content;
         this.ratingScore = ratingScore;
         this.likeCount = likeCount;
         this.imageUrl = imageUrl;
+        this.hasAnyRegisteredPhotoUrl = hasAnyRegisteredPhotoUrl;
     }
 
-    public void registerContent(RegisterTripRecordReviewRequestDto requestDto) {
+    public void registerContent(RegisterTripRecordReviewRequestDto requestDto, Member member) {
         this.content = requestDto.content();
-        this.imageUrl = requestDto.imageUrl();
+
+        if (requestDto.imageUrl() != null) {
+            this.imageUrl = requestDto.imageUrl();
+            member.earnPoint(TWO_POINTS.getPoint());
+            hasAnyRegisteredPhotoUrl = true;
+            return;
+        }
+
+        member.earnPoint(ONLY_ONE_POINT.getPoint());
     }
 
-    public void update(ModifyTripRecordReviewRequestDto requestDto) {
+    public void update(ModifyTripRecordReviewRequestDto requestDto, Member member) {
         this.ratingScore = requestDto.ratingScore();
         this.content = requestDto.content();
+
+        if (!hasAnyRegisteredPhotoUrl && requestDto.imageUrl() != null) {
+            member.earnPoint(ONLY_ONE_POINT.getPoint());
+            hasAnyRegisteredPhotoUrl = true;
+        }
         this.imageUrl = requestDto.imageUrl();
+    }
+
+    @PrePersist
+    private void init() {
+        likeCount = 0;
     }
 }

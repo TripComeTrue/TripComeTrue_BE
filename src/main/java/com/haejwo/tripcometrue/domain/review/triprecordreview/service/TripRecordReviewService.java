@@ -30,9 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static com.haejwo.tripcometrue.domain.review.global.PointType.CONTENT_WITH_IMAGE_POINT;
-import static com.haejwo.tripcometrue.domain.review.global.PointType.ONLY_CONTENT_POINT;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -76,7 +73,6 @@ public class TripRecordReviewService {
     }
 
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
-    // TODO: 사진만 처음 저장하는 경우 포인트 +1 추가 로직. 대신 중복 포인트 적립 막기
     @Transactional
     public void modifyTripRecordReview(
             PrincipalDetails principalDetails,
@@ -90,7 +86,7 @@ public class TripRecordReviewService {
         validateRightMemberAccess(loginMember, tripRecordReview);
         isContentAlreadyRegistered(tripRecordReview);
 
-        tripRecordReview.update(requestDto);
+        tripRecordReview.update(requestDto, loginMember);
     }
 
     private TripRecordReview getTripRecordReviewById(Long tripRecordReviewId) {
@@ -131,8 +127,7 @@ public class TripRecordReviewService {
         validateRightMemberAccess(loginMember, tripRecordReview);
         isReviewAlreadyRegister(tripRecordReview);
 
-        tripRecordReview.registerContent(requestDto);
-        calculateAndSavePoints(tripRecordReview, loginMember);
+        tripRecordReview.registerContent(requestDto, loginMember);
     }
 
     private void isReviewAlreadyRegister(TripRecordReview tripRecordReview) {
@@ -141,14 +136,14 @@ public class TripRecordReviewService {
         }
     }
 
-    private void calculateAndSavePoints(TripRecordReview tripRecordReview, Member member) {
-        int point = isImageIncluded(tripRecordReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
-        member.earnPoint(point);
-    }
-
-    private boolean isImageIncluded(TripRecordReview tripRecordReview) {
-        return tripRecordReview.getImageUrl() != null;
-    }
+//    private void calculateAndSavePoints(TripRecordReview tripRecordReview, Member member) {
+//        int point = isImageIncluded(tripRecordReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
+//        member.earnPoint(point);
+//    }
+//
+//    private boolean isImageIncluded(TripRecordReview tripRecordReview) {
+//        return tripRecordReview.getImageUrl() != null;
+//    }
 
     public TripRecordReviewListResponseDto getMyTripRecordReviewList(
             PrincipalDetails principalDetails,
