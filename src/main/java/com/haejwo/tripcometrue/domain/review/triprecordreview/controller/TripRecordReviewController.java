@@ -5,7 +5,6 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.Modify
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.service.TripRecordReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -32,8 +31,8 @@ public class TripRecordReviewController {
             @RequestBody @Valid EvaluateTripRecordReviewRequestDto requestDto
     ) {
 
-        EvaluateTripRecordReviewResponseDto responseDto = tripRecordReviewService
-                .saveRatingScore(principalDetails, tripRecordId, requestDto);
+        EvaluateTripRecordReviewResponseDto responseDto =
+                tripRecordReviewService.saveRatingScore(principalDetails, tripRecordId, requestDto);
         return ResponseEntity
                 .status(CREATED)
                 .body(ResponseDTO.successWithData(CREATED, responseDto));
@@ -50,18 +49,22 @@ public class TripRecordReviewController {
         return ResponseEntity.ok().body(ResponseDTO.ok());
     }
 
-    //todo 반환값이 그냥 200 코드일수도..
     @PutMapping("/reviews/{tripRecordReviewId}/contents")
-    public ResponseEntity<ResponseDTO<TripRecordReviewResponseDto>> registerReviewContent(
+    public ResponseEntity<ResponseDTO<Void>> registerReviewContent(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordReviewId,
             @RequestBody @Valid RegisterTripRecordReviewRequestDto requestDto
     ) {
 
-        TripRecordReviewResponseDto responseDto = tripRecordReviewService
-                .registerContent(principalDetails, tripRecordReviewId, requestDto);
-        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+        tripRecordReviewService.registerContent(principalDetails, tripRecordReviewId, requestDto);
+        return ResponseEntity.ok(ResponseDTO.ok());
     }
+
+    //todo: 최신 조회(좋아요 없음) + 내 평점
+
+
+    //todo: 단건 조회
+
 
 //    //단건 조회일 시 좋아요 정보 x
 //    //리뷰 수정시 필요한 API
@@ -81,8 +84,8 @@ public class TripRecordReviewController {
             Pageable pageable
     ) {
 
-        TripRecordReviewListResponseDto responseDtos = tripRecordReviewService.getMyTripRecordReviewList(
-                principalDetails, pageable);
+        TripRecordReviewListResponseDto responseDtos =
+                tripRecordReviewService.getMyTripRecordReviewList(principalDetails, pageable);
         return ResponseEntity.ok().body(ResponseDTO.okWithData(responseDtos));
     }
 

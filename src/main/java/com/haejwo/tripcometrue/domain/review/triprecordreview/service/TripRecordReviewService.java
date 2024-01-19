@@ -112,7 +112,7 @@ public class TripRecordReviewService {
     }
 
     @Transactional
-    public TripRecordReviewResponseDto registerContent(
+    public void registerContent(
             PrincipalDetails principalDetails,
             Long tripRecordReviewId,
             RegisterTripRecordReviewRequestDto requestDto
@@ -126,8 +126,6 @@ public class TripRecordReviewService {
 
         tripRecordReview.registerContent(requestDto);
         calculateAndSavePoints(tripRecordReview, loginMember);
-
-        return TripRecordReviewResponseDto.fromEntity(tripRecordReview, false);
     }
 
     private void isReviewAlreadyRegister(TripRecordReview tripRecordReview) {
