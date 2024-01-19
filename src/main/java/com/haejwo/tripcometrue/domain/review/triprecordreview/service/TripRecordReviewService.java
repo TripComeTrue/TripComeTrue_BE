@@ -10,6 +10,7 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.Evalua
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.SimpleTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteAllSuccessTripRecordReviewResponseDto;
@@ -142,15 +143,6 @@ public class TripRecordReviewService {
         }
     }
 
-//    private void calculateAndSavePoints(TripRecordReview tripRecordReview, Member member) {
-//        int point = isImageIncluded(tripRecordReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
-//        member.earnPoint(point);
-//    }
-//
-//    private boolean isImageIncluded(TripRecordReview tripRecordReview) {
-//        return tripRecordReview.getImageUrl() != null;
-//    }
-
     public TripRecordReviewListResponseDto getMyTripRecordReviewList(
             PrincipalDetails principalDetails,
             Pageable pageable
@@ -214,5 +206,18 @@ public class TripRecordReviewService {
             return EmptyTripRecordReviewResponseDto.fromData(totalCount, myScore);
         }
         return LatestTripRecordReviewResponseDto.fromEntity(totalCount, latestReview.get(), myScore);
+    }
+
+    public SimpleTripRecordResponseDto getTripRecordReview(PrincipalDetails principalDetails, Long tripRecordReviewId) {
+
+        Member loginMember = getMember(principalDetails);
+        TripRecordReview tripRecordReview = tripRecordReviewRepository.findById(tripRecordReviewId)
+                .orElseThrow(TripRecordReviewNotFoundException::new);
+
+        validateRightMemberAccess(loginMember, tripRecordReview);
+        isContentAlreadyRegistered(tripRecordReview);
+
+        String title = tripRecordReview.getTripRecord().getTitle();
+        return SimpleTripRecordResponseDto.fromEntity(title, tripRecordReview);
     }
 }
