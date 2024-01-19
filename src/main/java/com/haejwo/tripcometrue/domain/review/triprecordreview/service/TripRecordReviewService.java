@@ -9,12 +9,15 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.Delete
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.EvaluateTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteAllSuccessTripRecordReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteSomeFailureTripRecordReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteAllSuccessTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteSomeFailureTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.latest.EmptyTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.latest.LatestReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.latest.LatestTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.*;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
@@ -31,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -192,5 +196,23 @@ public class TripRecordReviewService {
 
     private boolean isDeleteAllFail(List<Long> tripRecordReviewIds, List<Long> failedIds) {
         return tripRecordReviewIds.size() == failedIds.size();
+    }
+
+    public LatestReviewResponseDto getLatestReview(PrincipalDetails principalDetails, Long tripRecordId) {
+
+        getTripRecordById(tripRecordId);
+        Member loginMember = getMember(principalDetails);
+
+        Long totalCount = tripRecordReviewRepository.countByTripRecordId(tripRecordId);
+        Float myScore = tripRecordReviewRepository
+                .findMyScoreByMemberAndTripRecordId(loginMember, tripRecordId).orElse(0f);
+
+        Optional<TripRecordReview> latestReview = tripRecordReviewRepository
+                .findTopByTripRecordIdOrderByCreatedAtDesc(tripRecordId);
+
+        if (latestReview.isEmpty()) {
+            return EmptyTripRecordReviewResponseDto.fromData(totalCount, myScore);
+        }
+        return LatestTripRecordReviewResponseDto.fromEntity(totalCount, latestReview.get(), myScore);
     }
 }
