@@ -4,9 +4,11 @@ import com.haejwo.tripcometrue.domain.member.entity.QMember;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordMemberResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleVideo;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
@@ -139,4 +141,45 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
             .limit(size)
             .fetch();
     }
+
+    @Override
+    public List<TripRecordHotShortsListResponseDto> findTripRecordHotShortsList(Pageable pageable) {
+
+        QTripRecord qTripRecord = QTripRecord.tripRecord;
+        QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
+        QTripRecordScheduleVideo qTripRecordScheduleVideo = QTripRecordScheduleVideo.tripRecordScheduleVideo;
+        QMember qMember = QMember.member;
+
+        List<TripRecordHotShortsListResponseDto> result = queryFactory
+            .select(Projections.constructor(TripRecordHotShortsListResponseDto.class,
+                qTripRecord.id,
+                JPAExpressions
+                    .select(qTripRecordScheduleVideo.id.min())
+                    .from(qTripRecordScheduleVideo)
+                    .where(qTripRecordScheduleVideo.tripRecordSchedule.id.eq(
+                        JPAExpressions
+                            .select(qTripRecordSchedule.id.min())
+                            .from(qTripRecordSchedule)
+                            .where(qTripRecordSchedule.tripRecord.id.eq(qTripRecord.id)))),
+                JPAExpressions
+                    .select(qTripRecordScheduleVideo.thumbnailUrl.min())
+                    .from(qTripRecordScheduleVideo)
+                    .where(qTripRecordScheduleVideo.tripRecordSchedule.tripRecord.id.eq(qTripRecord.id)),
+                Projections.constructor(TripRecordMemberResponseDto.class,
+                    qMember.memberBase.nickname,
+                    qMember.profile_image)))
+            .from(qTripRecord)
+            .leftJoin(qTripRecord.tripRecordSchedules, qTripRecordSchedule)
+            .leftJoin(qTripRecordSchedule.tripRecordScheduleVideos, qTripRecordScheduleVideo)
+            .leftJoin(qTripRecord.member, qMember)
+            .where(qTripRecordScheduleVideo.thumbnailUrl.isNotNull())
+            .groupBy(qTripRecord.id)
+            .orderBy(qTripRecord.storeCount.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        return result;
+    }
+
 }
