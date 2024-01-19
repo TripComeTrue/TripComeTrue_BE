@@ -1,13 +1,13 @@
-package com.haejwo.tripcometrue.domain.city.dto.response;
+package com.haejwo.tripcometrue.global.util;
 
 import lombok.Builder;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
-public record SliceResponse<T>(
+public record SliceResponseDto<T>(
     List<T> content,
-    SortResponse sort,
+    SortResponseDto sort,
     Integer totalCount,
     Integer currentPageNum,
     Integer pageSize,
@@ -16,13 +16,13 @@ public record SliceResponse<T>(
 ) {
 
     @Builder
-    public SliceResponse {
+    public SliceResponseDto {
     }
 
-    public static <T> SliceResponse<T> of(Slice<T> slice) {
-        return SliceResponse.<T>builder()
+    public static <T> SliceResponseDto<T> of(Slice<T> slice) {
+        return SliceResponseDto.<T>builder()
             .content(slice.getContent())
-            .sort(SortResponse.of(slice.getSort()))
+            .sort(SortResponseDto.of(slice.getSort()))
             .totalCount(slice.getNumberOfElements())
             .currentPageNum(slice.getNumber())
             .pageSize(slice.getSize())

@@ -3,6 +3,7 @@ package com.haejwo.tripcometrue.domain.city.controller;
 import com.haejwo.tripcometrue.domain.city.dto.response.*;
 import com.haejwo.tripcometrue.domain.city.service.CityContentReadService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -51,7 +52,7 @@ public class CityContentReadController {
 
     // 도시 갤러리 더보기 조회
     @GetMapping("/{cityId}/images")
-    public ResponseEntity<ResponseDTO<SliceResponse<CityImageContentResponseDto>>> getImagesByCityIdPagination(
+    public ResponseEntity<ResponseDTO<SliceResponseDto<CityImageContentResponseDto>>> getImagesByCityIdPagination(
         @PathVariable("cityId") Long cityId,
         @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
         ) {
@@ -80,7 +81,7 @@ public class CityContentReadController {
 
     // 도시 쇼츠 더보기 조회
     @GetMapping("/{cityId}/videos")
-    public ResponseEntity<ResponseDTO<SliceResponse<CityVideoContentResponseDto>>> getVideosByCityIdPagination(
+    public ResponseEntity<ResponseDTO<SliceResponseDto<CityVideoContentResponseDto>>> getVideosByCityIdPagination(
         @PathVariable("cityId") Long cityId,
         @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -121,7 +122,7 @@ public class CityContentReadController {
 
     // 도시 여행지 더보기 조회
     @GetMapping("/{cityId}/places")
-    public ResponseEntity<ResponseDTO<SliceResponse<CityPlaceResponseDto>>> getPlacesByCityIdPagination(
+    public ResponseEntity<ResponseDTO<SliceResponseDto<CityPlaceResponseDto>>> getPlacesByCityIdPagination(
         @PathVariable("cityId") Long cityId,
         @PageableDefault(sort = "storedCount", direction = Sort.Direction.DESC) Pageable pageable
     ) {

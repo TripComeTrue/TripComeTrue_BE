@@ -9,6 +9,7 @@ import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleImageWithPlaceIdQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
+import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -86,12 +87,12 @@ public class CityContentReadService {
 
     // 도시 여행지 전체 조회 (스크롤 페이징)
     @Transactional(readOnly = true)
-    public SliceResponse<CityPlaceResponseDto> getPlaces(Long cityId, Pageable pageable) {
+    public SliceResponseDto<CityPlaceResponseDto> getPlaces(Long cityId, Pageable pageable) {
         Slice<Place> places = placeRepository.findPlacesByCityId(cityId, pageable);
 
         Map<Long, List<TripRecordScheduleImageWithPlaceIdQueryDto>> imageMap = getImageMapFromPlaceIds(places.getContent());
 
-        return SliceResponse.of(
+        return SliceResponseDto.of(
             places
                 .map(place -> {
                     String imageUrl = imageMap.get(place.getId()).get(0).imageUrl();
@@ -111,8 +112,8 @@ public class CityContentReadService {
 
     // 도시 갤러리 리스트 조회 (페이징, 정렬)
     @Transactional(readOnly = true)
-    public SliceResponse<CityImageContentResponseDto> getImages(Long cityId, Pageable pageable) {
-        return SliceResponse.of(
+    public SliceResponseDto<CityImageContentResponseDto> getImages(Long cityId, Pageable pageable) {
+        return SliceResponseDto.of(
             tripRecordScheduleImageRepository.findByCityId(cityId, pageable)
                 .map(CityImageContentResponseDto::fromEntity)
         );
@@ -130,8 +131,8 @@ public class CityContentReadService {
 
     // 도시 쇼츠 리스트 조회 (페이징, 정렬)
     @Transactional(readOnly = true)
-    public SliceResponse<CityVideoContentResponseDto> getVideos(Long cityId, Pageable pageable) {
-        return SliceResponse.of(
+    public SliceResponseDto<CityVideoContentResponseDto> getVideos(Long cityId, Pageable pageable) {
+        return SliceResponseDto.of(
             tripRecordScheduleVideoRepository
                 .findByCityId(cityId, pageable)
                 .map(CityVideoContentResponseDto::fromEntity)

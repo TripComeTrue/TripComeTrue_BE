@@ -1,24 +1,24 @@
-package com.haejwo.tripcometrue.domain.city.dto.response;
+package com.haejwo.tripcometrue.global.util;
 
 import lombok.Builder;
 import org.springframework.data.domain.Sort;
 
 import java.util.Objects;
 
-public record SortResponse(
+public record SortResponseDto(
     Boolean sorted,
     String direction,
     String orderProperty
 ) {
 
     @Builder
-    public SortResponse {
+    public SortResponseDto {
     }
 
-    public static SortResponse of(Sort sort) {
+    public static SortResponseDto of(Sort sort) {
         Sort.Order order = sort.get().findFirst().orElse(null);
 
-        return SortResponse.builder()
+        return SortResponseDto.builder()
             .sorted(sort.isSorted())
             .direction(Objects.nonNull(order) ? order.getDirection().name() : null)
             .orderProperty(Objects.nonNull(order) ? order.getProperty() : null)
