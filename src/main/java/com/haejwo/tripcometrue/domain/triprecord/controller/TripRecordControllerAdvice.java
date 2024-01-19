@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.exception.ExpenseRangeTypeNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordScheduleVideoNotFoundException;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,17 @@ public class TripRecordControllerAdvice {
     @ExceptionHandler(ExpenseRangeTypeNotFoundException.class)
     public ResponseEntity<ResponseDTO<Void>> expenseRangeTypeNotFoundException(
         ExpenseRangeTypeNotFoundException e
+    ) {
+        HttpStatus status = e.getErrorCode().getHttpStatus();
+
+        return ResponseEntity
+            .status(status)
+            .body(ResponseDTO.errorWithMessage(status, e.getMessage()));
+    }
+
+    @ExceptionHandler(TripRecordScheduleVideoNotFoundException.class)
+    public ResponseEntity<ResponseDTO<Void>> tripRecordScheduleVideoNotFoundException(
+        TripRecordScheduleVideoNotFoundException e
     ) {
         HttpStatus status = e.getErrorCode().getHttpStatus();
 
