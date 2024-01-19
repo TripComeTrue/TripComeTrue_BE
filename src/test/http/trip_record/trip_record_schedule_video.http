@@ -1,6 +1,0 @@
-### 여행스케쥴 비디오(쇼츠) List 조회 (여행후기 보관수 높은순)
-GET http://localhost:8080/v1/trip-records/hot-shorts-list
-
-### 여행스케쥴 비디오(쇼츠) 상세 조회
-GET http://localhost:8080/v1/trip-records/shorts/1
-
