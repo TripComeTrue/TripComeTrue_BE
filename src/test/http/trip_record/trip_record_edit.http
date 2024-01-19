@@ -176,16 +176,3 @@ Content-Type: application/json
   "country": "KOREA",
   "cityname": "서울"
 }
-
-### 국가 조회
-GET http://localhost:8080/v1/country-city
-
-### 국가 조회
-GET http://localhost:8080/v1/country-city?continent=ASIA
-### 국가 조회
-GET http://localhost:8080/v1/country-city?continent=AMERICA
-### 국가 조회
-GET http://localhost:8080/v1/country-city?continent=EUROPE
-### 국가 조회
-GET http://localhost:8080/v1/country-city?continent=OCEANIA
-

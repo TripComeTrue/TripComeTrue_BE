@@ -1,8 +1,2 @@
-### 여행지 상세 조회
-GET http://localhost:8080/v1/places/1
-
-### 여행지 갤러리 List 조회
-GET http://localhost:8080/v1/trip-records-schedules?placeId=1
-
 ### 여행지 지도정보
 GET http://localhost:8080/v1/places/3/maplist
