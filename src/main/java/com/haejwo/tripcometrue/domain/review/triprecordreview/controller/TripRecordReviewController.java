@@ -5,6 +5,7 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.Evalua
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.ModifyTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.request.RegisterTripRecordReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.EvaluateTripRecordReviewResponseDto;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.SimpleTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.TripRecordReviewListResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.delete.DeleteTripRecordReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.latest.LatestReviewResponseDto;
@@ -74,23 +75,18 @@ public class TripRecordReviewController {
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
+    @GetMapping("/reviews/{tripRecordReviewId}")
+    public ResponseEntity<ResponseDTO<SimpleTripRecordResponseDto>> getTripRecordReview(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordReviewId
+    ) {
 
-    //todo: 단건 조회
-
+        SimpleTripRecordResponseDto responseDto =
+                tripRecordReviewService.getTripRecordReview(principalDetails, tripRecordReviewId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
 
     //todo: 목록 조회
-
-
-//    //단건 조회일 시 좋아요 정보 x
-//    //리뷰 수정시 필요한 API
-//    //todo 로그인한 사람이 글 주인인지 확인하는 로직 추가하기
-//    @GetMapping("/reviews/{tripRecordReviewId}")
-//    public ResponseEntity<ResponseDTO<TripRecordReviewResponseDto>> getTripRecordReview(
-//            @AuthenticationPrincipal PrincipalDetails principalDetails,
-//            @PathVariable Long tripRecordReviewId
-//    ) {
-//
-//    }
 
     @DeleteMapping("/reviews")
     public ResponseEntity<ResponseDTO<DeleteTripRecordReviewResponseDto>> removeTripRecordReviews(
