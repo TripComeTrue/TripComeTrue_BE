@@ -89,6 +89,14 @@ public class TripRecordReview extends BaseTimeEntity {
         this.imageUrl = requestDto.imageUrl();
     }
 
+    public void increaseLikesCount() {
+        this.likeCount += 1;
+    }
+
+    public void decreaseLikesCount() {
+        this.likeCount -= 1;
+    }
+
     @PrePersist
     private void init() {
         likeCount = 0;
