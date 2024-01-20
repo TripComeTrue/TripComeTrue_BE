@@ -81,6 +81,8 @@ public class PlaceReviewController {
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
+    //todo : 로그인한 사람이 맞는지 확인
+    //todo : 복수형 s 붙이기가
     @DeleteMapping("/reviews")
     public ResponseEntity<ResponseDTO<DeletePlaceReviewResponseDto>> removePlaceReview(
             @RequestBody DeletePlaceReviewRequestDto requestDto) {
