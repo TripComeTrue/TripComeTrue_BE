@@ -75,7 +75,7 @@ import org.springframework.stereotype.Service;
           .tripRecordReview(tripRecordReview)
           .build();
       tripRecordReviewLikesRepository.save(like);
-//      tripRecordReview.increaseLikesCount();
+      tripRecordReview.increaseLikesCount();
 
       return TripRecordReviewLikesResponseDto.fromEntity(like);
     }
@@ -106,7 +106,7 @@ import org.springframework.stereotype.Service;
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.LIKES_NOT_FOUND));
 
       tripRecordReviewLikesRepository.delete(like);
-//      tripRecordReview.decreaseLikesCount();
+      tripRecordReview.decreaseLikesCount();
     }
 
     private TripRecordReview findByTripRecordReviewId(Long tripRecordReviewId) {
