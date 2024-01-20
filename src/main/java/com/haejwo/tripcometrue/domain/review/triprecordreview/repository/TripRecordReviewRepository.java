@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TripRecordReviewRepository extends JpaRepository<TripRecordReview, Long> {
+public interface TripRecordReviewRepository extends JpaRepository<TripRecordReview, Long>, TripRecordReviewRepositoryCustom {
 
   @Query("select trr from TripRecordReview trr join fetch trr.member m where trr.member = :member and trr.content is not null order by trr.createdAt desc")
   Page<TripRecordReview> findByMember(@Param("member") Member member, Pageable pageable);

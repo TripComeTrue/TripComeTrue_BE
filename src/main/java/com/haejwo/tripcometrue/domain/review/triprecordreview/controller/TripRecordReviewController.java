@@ -86,8 +86,6 @@ public class TripRecordReviewController {
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
-    //todo: 목록 조회
-
     @DeleteMapping("/reviews")
     public ResponseEntity<ResponseDTO<DeleteTripRecordReviewResponseDto>> removeTripRecordReviews(
             @RequestBody DeleteTripRecordReviewRequestDto requestDto
@@ -95,6 +93,18 @@ public class TripRecordReviewController {
 
         DeleteTripRecordReviewResponseDto responseDto =
                 tripRecordReviewService.deleteTripRecordReviews(requestDto);
+        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @GetMapping("/{tripRecordId}/reviews")
+    public ResponseEntity<ResponseDTO<TripRecordReviewListResponseDto>> getTripRecordReviews(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordId,
+            Pageable pageable
+    ) {
+
+        TripRecordReviewListResponseDto responseDto =
+                tripRecordReviewService.getTripRecordReviewList(principalDetails, tripRecordId, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
