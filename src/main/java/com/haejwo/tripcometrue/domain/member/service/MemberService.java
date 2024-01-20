@@ -12,6 +12,7 @@ import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.exception.CurrentPasswordNotMatchException;
 import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
+import com.haejwo.tripcometrue.domain.member.exception.IntroductionLengthExceededException;
 import com.haejwo.tripcometrue.domain.member.exception.NewPasswordNotMatchException;
 import com.haejwo.tripcometrue.domain.member.exception.NewPasswordSameAsOldException;
 import com.haejwo.tripcometrue.domain.member.exception.NicknameAlreadyExistsException;
@@ -127,8 +128,11 @@ public class MemberService {
 
     public IntroductionResponseDto updateIntroduction(
         PrincipalDetails principalDetails, IntroductionRequestDto requestDto) {
-        Member member = getLoginMember(principalDetails);
+        if (requestDto.introduction().length() > 20) {
+            throw new IntroductionLengthExceededException();
+        }
 
+        Member member = getLoginMember(principalDetails);
         member.updateIntroduction(requestDto.introduction());
 
         return IntroductionResponseDto.fromEntity(member);
@@ -152,6 +156,7 @@ public class MemberService {
 
         memberRepository.delete(member);
     }
+
     public Member getLoginMember(PrincipalDetails principalDetails){
         Member member = memberRepository.findById(principalDetails.getMember().getId())
             .orElseThrow();
