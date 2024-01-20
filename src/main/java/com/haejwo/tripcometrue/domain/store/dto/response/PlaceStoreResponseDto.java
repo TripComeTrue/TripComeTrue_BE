@@ -1,4 +1,5 @@
 package com.haejwo.tripcometrue.domain.store.dto.response;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.store.entity.PlaceStore;
@@ -9,9 +10,14 @@ public record PlaceStoreResponseDto(
     String name,
     String address,
     String description,
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm-ss")
     LocalTime weekdayOpenTime,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm-ss")
     LocalTime weekdayCloseTime,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm-ss")
     LocalTime weekendOpenTime,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm-ss")
     LocalTime weekendCloseTime,
     Integer storedCount,
     Double latitude,
