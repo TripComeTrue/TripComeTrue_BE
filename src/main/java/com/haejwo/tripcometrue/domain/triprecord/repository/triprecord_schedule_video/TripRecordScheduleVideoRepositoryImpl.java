@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.NewestTripRecordScheduleVideoQueryDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.types.Order;
@@ -139,6 +140,30 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
             .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()).not())
             .orderBy(tripRecordScheduleVideo.createdAt.desc())
             .limit(size)
+            .fetch();
+    }
+
+    @Override
+    public List<TripRecordScheduleVideoQueryDto> findVideoListInMemberIds(List<Long> memberIds) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    TripRecordScheduleVideoQueryDto.class,
+                    tripRecordScheduleVideo.id,
+                    tripRecord.id,
+                    tripRecord.title,
+                    tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecordScheduleVideo.videoUrl,
+                    tripRecord.storeCount,
+                    member.id
+                )
+            )
+            .from(tripRecordScheduleVideo)
+            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecord.member, member)
+            .where(member.id.in(memberIds))
+            .orderBy(tripRecordScheduleVideo.createdAt.desc())
             .fetch();
     }
 
