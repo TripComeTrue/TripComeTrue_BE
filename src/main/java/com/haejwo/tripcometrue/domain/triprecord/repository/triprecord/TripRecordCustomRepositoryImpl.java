@@ -167,7 +167,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
                     .where(qTripRecordScheduleVideo.tripRecordSchedule.tripRecord.id.eq(qTripRecord.id)),
                 Projections.constructor(TripRecordMemberResponseDto.class,
                     qMember.memberBase.nickname,
-                    qMember.profile_image)))
+                    qMember.profileImage)))
             .from(qTripRecord)
             .leftJoin(qTripRecord.tripRecordSchedules, qTripRecordSchedule)
             .leftJoin(qTripRecordSchedule.tripRecordScheduleVideos, qTripRecordScheduleVideo)
