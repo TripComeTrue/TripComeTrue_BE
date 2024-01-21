@@ -182,4 +182,28 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         return result;
     }
 
+
+    @Override
+    public List<TripRecord> findTripRecordListInMemberIds(List<Long> memberIds) {
+        QTripRecord tripRecord = QTripRecord.tripRecord;
+        QMember member = QMember.member;
+
+        return queryFactory.selectFrom(tripRecord)
+            .join(tripRecord.member, member)
+            .where(member.id.in(memberIds))
+            .orderBy(tripRecord.storeCount.desc(), tripRecord.createdAt.desc())
+            .fetch();
+    }
+
+    @Override
+    public List<TripRecord> findTripRecordListWithMemberInMemberIds(List<Long> memberIds) {
+        QTripRecord tripRecord = QTripRecord.tripRecord;
+        QMember member = QMember.member;
+
+        return queryFactory.selectFrom(tripRecord)
+            .join(tripRecord.member, member).fetchJoin()
+            .where(member.id.in(memberIds))
+            .orderBy(tripRecord.storeCount.desc(), tripRecord.createdAt.desc())
+            .fetch();
+    }
 }
