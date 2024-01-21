@@ -137,7 +137,9 @@ public class PlaceReviewService {
     }
 
     @Transactional
-    public DeletePlaceReviewResponseDto deletePlaceReviews(DeletePlaceReviewRequestDto requestDto) {
+    public DeletePlaceReviewResponseDto deletePlaceReviews(
+            DeletePlaceReviewRequestDto requestDto
+    ) {
 
         List<Long> placeReviewIds = requestDto.placeReviewIds();
         List<Long> failedIds = new ArrayList<>();

@@ -6,7 +6,6 @@ import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceRevie
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.RegisterPlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeletePlaceReviewResponseDto;
-import com.haejwo.tripcometrue.domain.review.placereview.dto.response.delete.DeleteSomeFailurePlaceReviewResponseDto;
 import com.haejwo.tripcometrue.domain.review.placereview.service.PlaceReviewService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.MULTI_STATUS;
 
 @Slf4j
 @RestController
@@ -88,30 +86,24 @@ public class PlaceReviewController {
             @RequestBody DeletePlaceReviewRequestDto requestDto
     ) {
 
-        DeletePlaceReviewResponseDto responseDto = placeReviewService.deletePlaceReviews(requestDto);
-
-        if (responseDto instanceof DeleteSomeFailurePlaceReviewResponseDto) {
-            return ResponseEntity
-                    .status(MULTI_STATUS)
-                    .body(ResponseDTO.errorWithData(MULTI_STATUS, responseDto));
-        }
-
+        DeletePlaceReviewResponseDto responseDto =
+                placeReviewService.deletePlaceReviews(requestDto);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
     }
 
     @GetMapping("/reviews/my")
     public ResponseEntity<ResponseDTO<List<PlaceReviewListResponseDto>>> getMyPlaceReviews(
-        @AuthenticationPrincipal PrincipalDetails principalDetails,
-        Pageable pageable
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            Pageable pageable
     ) {
 
         List<PlaceReviewListResponseDto> responseDtos
-            = placeReviewService.getMyPlaceReviewsList(principalDetails, pageable);
+                = placeReviewService.getMyPlaceReviewsList(principalDetails, pageable);
         ResponseDTO<List<PlaceReviewListResponseDto>> responseBody
-            = ResponseDTO.okWithData(responseDtos);
+                = ResponseDTO.okWithData(responseDtos);
 
         return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(responseBody);
+                .status(HttpStatus.OK)
+                .body(responseBody);
     }
 }
