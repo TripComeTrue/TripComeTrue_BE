@@ -16,4 +16,8 @@ public interface TripRecordCustomRepository {
     List<TripRecord> findTopTripRecordListOverseas(int size);
 
     List<TripRecordHotShortsListResponseDto> findTripRecordHotShortsList(Pageable pageable);
+
+    List<TripRecord> findTripRecordListInMemberIds(List<Long> memberIds);
+
+    List<TripRecord> findTripRecordListWithMemberInMemberIds(List<Long> memberIds);
 }
