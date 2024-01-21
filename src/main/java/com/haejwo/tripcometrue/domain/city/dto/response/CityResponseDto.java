@@ -25,6 +25,24 @@ public record CityResponseDto(
     public CityResponseDto {
     }
 
+    public static CityResponseDto fromEntity(City entity) {
+        return CityResponseDto.builder()
+            .id(entity.getId())
+            .name(entity.getName())
+            .language(entity.getLanguage())
+            .timeDifference(entity.getTimeDifference())
+            .voltage(entity.getVoltage())
+            .visa(entity.getVisa())
+            .curUnit(
+                Objects.nonNull(entity.getCurrency()) ? entity.getCurrency().name() : null
+            )
+            .exchangeRate(null)
+            .weatherRecommendation(entity.getWeatherRecommendation())
+            .weatherDescription(entity.getWeatherDescription())
+            .country(entity.getCountry().getDescription())
+            .build();
+    }
+
     public static CityResponseDto fromEntity(City entity, String exchangeRate) {
         return CityResponseDto.builder()
             .id(entity.getId())
