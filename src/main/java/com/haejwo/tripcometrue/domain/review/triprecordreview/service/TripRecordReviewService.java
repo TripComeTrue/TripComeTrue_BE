@@ -143,22 +143,6 @@ public class TripRecordReviewService {
         }
     }
 
-    public TripRecordReviewListResponseDto getMyTripRecordReviewList(
-            PrincipalDetails principalDetails,
-            Pageable pageable
-    ) {
-
-        Page<TripRecordReview> reviews = tripRecordReviewRepository.findByMember(getMember(principalDetails), pageable);
-
-        List<TripRecordReviewResponseDto> responseDtos =
-                reviews.map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
-                        tripRecordReview,
-                        hasLikedTripRecordReview(principalDetails, tripRecordReview))
-                ).toList();
-
-        return TripRecordReviewListResponseDto.fromResponseDtos(reviews, responseDtos);
-    }
-
     @Transactional
     public DeleteTripRecordReviewResponseDto deleteTripRecordReviews(
             DeleteTripRecordReviewRequestDto requestDto
@@ -228,6 +212,22 @@ public class TripRecordReviewService {
 
         TripRecord tripRecord = getTripRecordById(tripRecordId);
         Page<TripRecordReview> reviews = tripRecordReviewRepository.findByTripRecord(tripRecord, pageable);
+
+        return TripRecordReviewListResponseDto.fromResponseDtos(
+                reviews,
+                reviews.map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
+                        tripRecordReview,
+                        hasLikedTripRecordReview(principalDetails, tripRecordReview))
+                ).toList());
+    }
+
+    public TripRecordReviewListResponseDto getMyTripRecordReviewList(
+            PrincipalDetails principalDetails,
+            Pageable pageable
+    ) {
+
+        Member loginMember = getMember(principalDetails);
+        Page<TripRecordReview> reviews = tripRecordReviewRepository.findByMember(loginMember, pageable);
 
         return TripRecordReviewListResponseDto.fromResponseDtos(
                 reviews,
