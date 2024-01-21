@@ -16,7 +16,7 @@ public record TripRecordResponseDto(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate tripEndDay,
     Integer totalDays,
     Integer viewCount,
-    Integer average_rating,
+    Double averageRating,
     Long memberId
 
 ) {
@@ -24,7 +24,7 @@ public record TripRecordResponseDto(
     @Builder
     public TripRecordResponseDto(Long id, String title, String content,
         ExpenseRangeType expenseRangeType, String countries, LocalDate tripStartDay, LocalDate tripEndDay,
-        Integer totalDays, Integer viewCount, Integer average_rating, Long memberId) {
+        Integer totalDays, Integer viewCount, Double averageRating, Long memberId) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -34,7 +34,7 @@ public record TripRecordResponseDto(
         this.tripEndDay = tripEndDay;
         this.totalDays = totalDays;
         this.viewCount = viewCount;
-        this.average_rating = average_rating;
+        this.averageRating = averageRating;
         this.memberId = memberId;
     }
 
@@ -49,7 +49,7 @@ public record TripRecordResponseDto(
             .tripEndDay(entity.getTripEndDay())
             .totalDays(entity.getTotalDays())
             .viewCount(entity.getViewCount())
-            .average_rating(entity.getAverageRating())
+            .averageRating(entity.getAverageRating())
             .memberId(entity.getMember().getId())
             .build();
     }
