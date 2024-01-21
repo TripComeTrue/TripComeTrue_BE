@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.review.placereview.service;
 
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -115,10 +117,17 @@ public class PlaceReviewService {
         Member loginMember = getMember(principalDetails);
         PlaceReview placeReview = getPlaceReviewById(placeReviewId);
 
+        validateRightMemberAccess(loginMember, placeReview);
         placeReview.update(requestDto, loginMember);
 
         return PlaceReviewResponseDto
                 .fromEntity(placeReview, hasLikedPlaceReview(principalDetails, placeReview));
+    }
+
+    private void validateRightMemberAccess(Member member, PlaceReview placeReview) {
+        if (!Objects.equals(placeReview.getMember().getId(), member.getId())) {
+            throw new UserInvalidAccessException();
+        }
     }
 
     @Transactional
