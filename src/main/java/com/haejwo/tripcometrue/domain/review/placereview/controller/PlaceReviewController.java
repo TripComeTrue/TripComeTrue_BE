@@ -82,12 +82,11 @@ public class PlaceReviewController {
     }
 
     //todo : 로그인한 사람이 맞는지 확인
-    //todo : 복수형 s 붙이기가
     @DeleteMapping("/reviews")
-    public ResponseEntity<ResponseDTO<DeletePlaceReviewResponseDto>> removePlaceReview(
+    public ResponseEntity<ResponseDTO<DeletePlaceReviewResponseDto>> removePlaceReviews(
             @RequestBody DeletePlaceReviewRequestDto requestDto) {
 
-        DeletePlaceReviewResponseDto responseDto = placeReviewService.deletePlaceReview(requestDto);
+        DeletePlaceReviewResponseDto responseDto = placeReviewService.deletePlaceReviews(requestDto);
 
         if (responseDto instanceof DeleteSomeFailurePlaceReviewResponseDto) {
             return ResponseEntity
