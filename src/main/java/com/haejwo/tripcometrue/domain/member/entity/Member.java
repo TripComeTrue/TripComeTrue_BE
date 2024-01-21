@@ -11,12 +11,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.*;
-import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,28 +33,29 @@ public class Member extends BaseTimeEntity {
 
     private String provider;
 
-    private String profile_image;
+    private String profileImage;
 
-    private Integer total_point;
+    private Integer totalPoint;
 
     @Enumerated(EnumType.STRING)
-    private MilkLevel milk_level;
+    private MilkLevel milkLevel;
 
     private String introduction;
 
     private Integer nickNameChangeCount;
 
-//    private double member_rating;
+    private Double memberRating;
 
     @Builder
     public Member(String email, String nickname, String password, String authority,
-        String provider) {
+        String provider, Double memberRating) {
         this.memberBase = new MemberBase(email, nickname, password, authority);
         this.provider = provider;
+        this.memberRating = Objects.isNull(memberRating) ? 0.0 : memberRating;
     }
 
     public void updateProfileImage(String profileImage){
-        this.profile_image = profileImage;
+        this.profileImage = profileImage;
     }
 
     public void updateIntroduction(String introduction){
@@ -66,17 +67,17 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateMilkLevel(){
-        this.milk_level= MilkLevel.getLevelByPoint(this.total_point);
+        this.milkLevel = MilkLevel.getLevelByPoint(this.totalPoint);
     }
 
     public void earnPoint(int point) {
-        this.total_point += point;
+        this.totalPoint += point;
         updateMilkLevel();
     }
 
     @PrePersist
     private void init(){
-        total_point = (total_point == null) ? 0 : total_point;
+        totalPoint = (totalPoint == null) ? 0 : totalPoint;
         nickNameChangeCount = (nickNameChangeCount == null) ? 0 : nickNameChangeCount;
         updateMilkLevel();
     }

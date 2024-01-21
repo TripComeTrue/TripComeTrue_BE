@@ -109,7 +109,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
                     .select(qTripRecordImage.imageUrl.min())
                     .from(qTripRecordImage)
                     .where(qTripRecordImage.tripRecord.id.eq(qTripRecord.id)),
-                Projections.constructor(TripRecordMemberResponseDto.class, qMember.memberBase.nickname, qMember.profile_image)
+                Projections.constructor(TripRecordMemberResponseDto.class, qMember.memberBase.nickname, qMember.profileImage)
             ))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
