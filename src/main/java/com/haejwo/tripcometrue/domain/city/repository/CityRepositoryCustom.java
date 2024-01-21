@@ -9,4 +9,6 @@ public interface CityRepositoryCustom {
     List<City> findTopCityListDomestic(int size);
 
     List<City> findTopCityListOverseas(int size);
+
+    List<City> findBySearchParams(String name);
 }
