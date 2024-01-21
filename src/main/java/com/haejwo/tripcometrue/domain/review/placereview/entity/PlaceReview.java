@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.haejwo.tripcometrue.domain.review.global.PointType.ONLY_ONE_POINT;
+import static com.haejwo.tripcometrue.domain.review.global.PointType.TWO_POINTS;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
@@ -43,6 +45,7 @@ public class PlaceReview extends BaseTimeEntity {
     private String imageUrl;
     private Integer likeCount;
     private Integer commentCount;
+    private boolean hasAnyRegisteredPhotoUrl;
 
     @Builder
     public PlaceReview(Member member, Place place, String content, String imageUrl) {
@@ -52,8 +55,23 @@ public class PlaceReview extends BaseTimeEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void update(PlaceReviewRequestDto requestDto) {
+    public void save(PlaceReviewRequestDto requestDto, Member member) {
+        if (requestDto.imageUrl() != null) {
+            member.earnPoint(TWO_POINTS.getPoint());
+            hasAnyRegisteredPhotoUrl = true;
+            return;
+        }
+
+        member.earnPoint(ONLY_ONE_POINT.getPoint());
+    }
+
+    public void update(PlaceReviewRequestDto requestDto, Member member) {
         this.content = requestDto.content();
+
+        if (!hasAnyRegisteredPhotoUrl && requestDto.imageUrl() != null) {
+            member.earnPoint(ONLY_ONE_POINT.getPoint());
+            hasAnyRegisteredPhotoUrl = true;
+        }
         this.imageUrl = requestDto.imageUrl();
     }
 

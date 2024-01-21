@@ -21,7 +21,6 @@ import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewDe
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,29 +40,29 @@ public class PlaceReviewService {
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
     private final MemberRepository memberRepository;
-    private final EntityManager em;
 
     @Transactional
     public RegisterPlaceReviewResponseDto savePlaceReview(
             PrincipalDetails principalDetails,
             Long placeId,
-            PlaceReviewRequestDto requestDto) {
+            PlaceReviewRequestDto requestDto
+    ) {
 
-        Member member = getPersistentMember(principalDetails);
+        Member loginMember = getMember(principalDetails);
         Place place = getPlaceById(placeId);
 
-        isPlaceReviewExists(member, place);
+        isAlreadyPlaceReviewExists(loginMember, place);
 
-        PlaceReview placeReview = PlaceReviewRequestDto.toEntity(member, place, requestDto);
-
-//        calculateAndSavePoints(placeReview, member);
+        PlaceReview placeReview = PlaceReviewRequestDto.toEntity(loginMember, place, requestDto);
+        placeReview.save(requestDto, loginMember);
 
         return RegisterPlaceReviewResponseDto
                 .fromEntity(placeReviewRepository.save(placeReview));
     }
 
-    private Member getPersistentMember(PrincipalDetails principalDetails) {
-        return em.merge(principalDetails.getMember()); //준영속 상태를 영속 상태로 변경
+    private Member getMember(PrincipalDetails principalDetails) {
+        return memberRepository.findById(principalDetails.getMember().getId())
+                .orElseThrow(UserNotFoundException::new);
     }
 
     private Place getPlaceById(Long placeId) {
@@ -71,20 +70,11 @@ public class PlaceReviewService {
                 .orElseThrow(PlaceNotFoundException::new);
     }
 
-    private void isPlaceReviewExists(Member member, Place place) {
+    private void isAlreadyPlaceReviewExists(Member member, Place place) {
         if (placeReviewRepository.existsByMemberAndPlace(member, place)) {
             throw new PlaceReviewAlreadyExistsException();
         }
     }
-
-//    private void calculateAndSavePoints(PlaceReview placeReview, Member member) {
-//        int point = isImageIncluded(placeReview) ? CONTENT_WITH_IMAGE_POINT.getPoint() : ONLY_CONTENT_POINT.getPoint();
-//        member.earnPoint(point);
-//    }
-//
-//    private boolean isImageIncluded(PlaceReview placeReview) {
-//        return placeReview.getImageUrl() != null;
-//    }
 
     public PlaceReviewResponseDto getPlaceReview(PrincipalDetails principalDetails, Long placeReviewId) {
 
@@ -119,10 +109,13 @@ public class PlaceReviewService {
     public PlaceReviewResponseDto modifyPlaceReview(
             PrincipalDetails principalDetails,
             Long placeReviewId,
-            PlaceReviewRequestDto requestDto) {
+            PlaceReviewRequestDto requestDto
+    ) {
 
+        Member loginMember = getMember(principalDetails);
         PlaceReview placeReview = getPlaceReviewById(placeReviewId);
-        placeReview.update(requestDto);
+
+        placeReview.update(requestDto, loginMember);
 
         return PlaceReviewResponseDto
                 .fromEntity(placeReview, hasLikedPlaceReview(principalDetails, placeReview));
@@ -190,10 +183,5 @@ public class PlaceReviewService {
                         placeReview,
                         hasLikedPlaceReview(principalDetails, placeReview))
                 ).toList());
-    }
-
-    private Member getMember(PrincipalDetails principalDetails) {
-        return memberRepository.findById(principalDetails.getMember().getId())
-                .orElseThrow(UserNotFoundException::new);
     }
 }
