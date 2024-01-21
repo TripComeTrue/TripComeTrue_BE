@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.city.service;
 
 import com.haejwo.tripcometrue.config.AbstractContainersSupport;
+import com.haejwo.tripcometrue.config.DatabaseCleanUpAfterEach;
 import com.haejwo.tripcometrue.domain.city.dto.response.CityInfoResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.WeatherResponseDto;
 import com.haejwo.tripcometrue.domain.city.entity.City;
@@ -13,7 +14,6 @@ import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.global.enums.Country;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
+@DatabaseCleanUpAfterEach
 @SpringBootTest
 class CityInfoReadServiceTest extends AbstractContainersSupport {
 
@@ -125,13 +127,5 @@ class CityInfoReadServiceTest extends AbstractContainersSupport {
         // when & then
         assertThatThrownBy(() -> cityInfoReadService.getWeatherInfo(cityId))
             .isInstanceOf(CityNotFoundException.class);
-    }
-
-    @AfterEach
-    void cleanUp() {
-        log.info("cleanUp 실행");
-        weatherRepository.deleteAll();
-        placeRepository.deleteAll();
-        cityRepository.deleteAll();
     }
 }
