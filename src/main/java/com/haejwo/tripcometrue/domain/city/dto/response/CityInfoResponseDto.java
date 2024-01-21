@@ -3,6 +3,8 @@ package com.haejwo.tripcometrue.domain.city.dto.response;
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import lombok.Builder;
 
+import java.util.Objects;
+
 public record CityInfoResponseDto(
     Long id,
     String name,
@@ -26,8 +28,12 @@ public record CityInfoResponseDto(
             .timeDifference(entity.getTimeDifference())
             .voltage(entity.getVoltage())
             .visa(entity.getVisa())
-            .curUnit(entity.getCurrency().toString())
-            .curName(entity.getCurrency().getCurrencyName())
+            .curUnit(
+                Objects.nonNull(entity.getCurrency()) ? entity.getCurrency().name() : null
+            )
+            .curName(
+                Objects.nonNull(entity.getCurrency()) ? entity.getCurrency().getCurrencyName() : null
+            )
             .build();
     }
 }
