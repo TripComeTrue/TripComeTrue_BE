@@ -27,7 +27,7 @@ public record PlaceReviewResponseDto(
                         placeReview.getId(),
                         placeReview.getMember().getId(),
                         placeReview.getMember().getMemberBase().getNickname(),
-                        placeReview.getMember().getProfile_image(),
+                        placeReview.getMember().getProfileImage(),
                         placeReview.getImageUrl(),
                         placeReview.getContent(),
                         placeReview.getLikeCount(),

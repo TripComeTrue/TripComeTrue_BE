@@ -39,7 +39,7 @@ public record TopTripRecordResponseDto(
             .tripRecordTitle(entity.getTitle())
             .memberId(member.getId())
             .memberName(member.getMemberBase().getNickname())
-            .profileImageUrl(member.getProfile_image())
+            .profileImageUrl(member.getProfileImage())
             .cityNames(cityNames)
             .totalDays(entity.getTotalDays())
             .storedCount(entity.getStoreCount())

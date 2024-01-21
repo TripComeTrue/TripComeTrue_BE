@@ -17,7 +17,7 @@ public record TripRecordMemberResponseDto(
     public static TripRecordMemberResponseDto fromEntity(Member entity) {
         return TripRecordMemberResponseDto.builder()
             .nickname(entity.getMemberBase().getNickname())
-            .profileImage(entity.getProfile_image())
+            .profileImage(entity.getProfileImage())
             .build();
     }
 
