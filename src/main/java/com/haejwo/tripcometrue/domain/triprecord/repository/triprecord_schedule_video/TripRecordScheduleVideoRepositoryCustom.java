@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.NewestTripRecordScheduleVideoQueryDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -18,4 +19,6 @@ public interface TripRecordScheduleVideoRepositoryCustom {
     List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoListDomestic(int size);
 
     List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoListOverseas(int size);
+
+    List<TripRecordScheduleVideoQueryDto> findVideoListInMemberIds(List<Long> memberIds);
 }
