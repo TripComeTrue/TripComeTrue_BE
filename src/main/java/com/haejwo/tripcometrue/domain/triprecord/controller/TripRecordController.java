@@ -64,6 +64,7 @@ public class TripRecordController {
 
     }
 
+    // 홈 피드 TOP 인기 여행 후기 리스트 조회
     @GetMapping("/top-list")
     public ResponseEntity<ResponseDTO<List<TopTripRecordResponseDto>>> tripRecordTopList(
         @RequestParam("type") @HomeTopListQueryType String type
