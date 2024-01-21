@@ -1,29 +1,29 @@
 package com.haejwo.tripcometrue.domain.review.placereview.dto.response;
 
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
+import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 public record PlaceReviewListResponseDto(
 
-    Long id,
-    String content,
-    String imageUrl,
-    Integer likeCount,
-    Long memberId,
-    Long placeId,
-    LocalDateTime createdAt
+        Long totalCount,
+        int nowPageNumber,
+        boolean isFirst,
+        boolean isLast,
+        List<PlaceReviewResponseDto> placeReviews
 
 ) {
-  public static PlaceReviewListResponseDto fromEntity(PlaceReview placeReview) {
-    return new PlaceReviewListResponseDto(
-        placeReview.getId(),
-        placeReview.getContent(),
-        placeReview.getImageUrl(),
-        placeReview.getLikeCount(),
-        placeReview.getMember().getId(),
-        placeReview.getPlace().getId(),
-        placeReview.getCreatedAt()
-    );
-  }
+    public static PlaceReviewListResponseDto fromResponseDtos(
+            Page<PlaceReview> reviews,
+            List<PlaceReviewResponseDto> placeReviews
+    ) {
+        return new PlaceReviewListResponseDto(
+                reviews.getTotalElements(),
+                reviews.getNumber(),
+                reviews.isFirst(),
+                reviews.isLast(),
+                placeReviews
+        );
+    }
 }
