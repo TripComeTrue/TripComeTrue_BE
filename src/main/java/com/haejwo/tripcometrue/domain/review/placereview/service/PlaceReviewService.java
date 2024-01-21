@@ -2,6 +2,8 @@ package com.haejwo.tripcometrue.domain.review.placereview.service;
 
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
+import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
@@ -29,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,6 +40,7 @@ public class PlaceReviewService {
 
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
+    private final MemberRepository memberRepository;
     private final EntityManager em;
 
     @Transactional
@@ -113,16 +115,6 @@ public class PlaceReviewService {
         return memberIds.contains(principalDetails.getMember().getId());
     }
 
-    public Page<PlaceReviewResponseDto> getPlaceReviews(PrincipalDetails principalDetails, Long placeId, boolean onlyImage, Pageable pageable) {
-
-        Place place = getPlaceById(placeId);
-        Page<PlaceReview> placeReviews = placeReviewRepository.findByPlace(place, onlyImage, pageable);
-
-        return placeReviews.map(placeReview ->
-                PlaceReviewResponseDto.fromEntity(placeReview, hasLikedPlaceReview(principalDetails, placeReview))
-        );
-    }
-
     @Transactional
     public PlaceReviewResponseDto modifyPlaceReview(
             PrincipalDetails principalDetails,
@@ -166,14 +158,42 @@ public class PlaceReviewService {
         return placeReviewIds.size() == failedIds.size();
     }
 
-    @Transactional(readOnly = true)
-    public List<PlaceReviewListResponseDto> getMyPlaceReviewsList(
-        PrincipalDetails principalDetails, Pageable pageable) {
-        Long memberId = principalDetails.getMember().getId();
-        List<PlaceReview> reviews = placeReviewRepository.findByMemberId(memberId, pageable);
+    public PlaceReviewListResponseDto getPlaceReviewList(
+            PrincipalDetails principalDetails,
+            Long placeId,
+            boolean onlyImage,
+            Pageable pageable
+    ) {
 
-        return reviews.stream()
-            .map(PlaceReviewListResponseDto::fromEntity)
-            .collect(Collectors.toList());
+        Place place = getPlaceById(placeId);
+        Page<PlaceReview> reviews = placeReviewRepository.findByPlace(place, onlyImage, pageable);
+
+        return PlaceReviewListResponseDto.fromResponseDtos(
+                reviews,
+                reviews.map(placeReview -> PlaceReviewResponseDto.fromEntity(
+                        placeReview,
+                        hasLikedPlaceReview(principalDetails, placeReview))
+                ).toList());
+    }
+
+    public PlaceReviewListResponseDto getMyPlaceReviewList(
+            PrincipalDetails principalDetails,
+            Pageable pageable
+    ) {
+
+        Member loginMember = getMember(principalDetails);
+        Page<PlaceReview> reviews = placeReviewRepository.findByMember(loginMember, pageable);
+
+        return PlaceReviewListResponseDto.fromResponseDtos(
+                reviews,
+                reviews.map(placeReview -> PlaceReviewResponseDto.fromEntity(
+                        placeReview,
+                        hasLikedPlaceReview(principalDetails, placeReview))
+                ).toList());
+    }
+
+    private Member getMember(PrincipalDetails principalDetails) {
+        return memberRepository.findById(principalDetails.getMember().getId())
+                .orElseThrow(UserNotFoundException::new);
     }
 }
