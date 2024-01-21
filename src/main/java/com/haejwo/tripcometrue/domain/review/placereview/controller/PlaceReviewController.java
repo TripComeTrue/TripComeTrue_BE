@@ -74,7 +74,8 @@ public class PlaceReviewController {
     public ResponseEntity<ResponseDTO<PlaceReviewResponseDto>> modifyPlaceReview(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeReviewId,
-            @RequestBody @Validated PlaceReviewRequestDto requestDto) {
+            @RequestBody @Validated PlaceReviewRequestDto requestDto
+    ) {
 
         PlaceReviewResponseDto responseDto = placeReviewService
                 .modifyPlaceReview(principalDetails, placeReviewId, requestDto);
@@ -82,12 +83,12 @@ public class PlaceReviewController {
     }
 
     //todo : 로그인한 사람이 맞는지 확인
-    //todo : 복수형 s 붙이기가
     @DeleteMapping("/reviews")
-    public ResponseEntity<ResponseDTO<DeletePlaceReviewResponseDto>> removePlaceReview(
-            @RequestBody DeletePlaceReviewRequestDto requestDto) {
+    public ResponseEntity<ResponseDTO<DeletePlaceReviewResponseDto>> removePlaceReviews(
+            @RequestBody DeletePlaceReviewRequestDto requestDto
+    ) {
 
-        DeletePlaceReviewResponseDto responseDto = placeReviewService.deletePlaceReview(requestDto);
+        DeletePlaceReviewResponseDto responseDto = placeReviewService.deletePlaceReviews(requestDto);
 
         if (responseDto instanceof DeleteSomeFailurePlaceReviewResponseDto) {
             return ResponseEntity
@@ -103,6 +104,7 @@ public class PlaceReviewController {
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable
     ) {
+
         List<PlaceReviewListResponseDto> responseDtos
             = placeReviewService.getMyPlaceReviewsList(principalDetails, pageable);
         ResponseDTO<List<PlaceReviewListResponseDto>> responseBody
