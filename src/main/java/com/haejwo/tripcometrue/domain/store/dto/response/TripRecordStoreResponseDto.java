@@ -12,7 +12,7 @@ public record TripRecordStoreResponseDto(
     LocalDate tripStartDay,
     LocalDate tripEndDay,
     Integer totalDays,
-    Integer averageRating,
+    Double averageRating,
     Integer viewCount
 ) {
 
