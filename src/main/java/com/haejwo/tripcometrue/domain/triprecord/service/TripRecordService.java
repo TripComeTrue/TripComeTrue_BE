@@ -75,39 +75,38 @@ public class TripRecordService {
     }
 
     @Transactional(readOnly = true)
-    public List<TopTripRecordResponseDto> findTopTripRecordList(String type) {
+    public List<TripRecordListItemResponseDto> findTopTripRecordList(String type) {
+
+        List<TripRecord> tripRecords;
         if (type.equalsIgnoreCase("domestic")) {
-            return tripRecordRepository
-                .findTopTripRecordListDomestic(HOME_CONTENT_SIZE)
-                .stream()
-                .map(TopTripRecordResponseDto::fromEntity)
-                .toList();
+            tripRecords = tripRecordRepository.findTopTripRecordListDomestic(HOME_CONTENT_SIZE);
         } else {
-            return tripRecordRepository
-                .findTopTripRecordListOverseas(HOME_CONTENT_SIZE)
-                .stream()
-                .map(TopTripRecordResponseDto::fromEntity)
-                .toList();
+            tripRecords = tripRecordRepository.findTopTripRecordListOverseas(HOME_CONTENT_SIZE);
         }
-    }
 
-    @Transactional(readOnly = true)
-    public List<TripRecordListItemResponseDto> findTripRecordsInMemberIds(List<Long> memberIds) {
-
-        return tripRecordRepository
-            .findTripRecordListInMemberIds(memberIds)
+        return tripRecords
             .stream()
-            .map(TripRecordListItemResponseDto::fromEntity)
+            .map(tripRecord ->
+                TripRecordListItemResponseDto.fromEntity(
+                    tripRecord,
+                    tripRecord.getTripRecordSchedules()
+                        .stream()
+                        .map(tripRecordSchedule ->
+                            tripRecordSchedule.getPlace().getCity().getName()
+                        ).collect(Collectors.toSet()),
+                    tripRecord.getMember()
+                )
+            )
             .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<TripRecordListItemWithMemberIdResponseDto> findTripRecordsWihMemberInMemberIds(List<Long> memberIds) {
+    public List<TripRecordListItemResponseDto> findTripRecordsWihMemberInMemberIds(List<Long> memberIds) {
 
         return tripRecordRepository
             .findTripRecordListWithMemberInMemberIds(memberIds)
             .stream()
-            .map(TripRecordListItemWithMemberIdResponseDto::fromEntity)
+            .map(tripRecord -> TripRecordListItemResponseDto.fromEntity(tripRecord, null, tripRecord.getMember()))
             .toList();
     }
 
