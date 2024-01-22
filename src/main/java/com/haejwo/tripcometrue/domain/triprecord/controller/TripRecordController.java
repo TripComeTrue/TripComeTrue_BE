@@ -2,7 +2,8 @@ package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.MyTripRecordListResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordSearchParamAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
@@ -15,6 +16,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -66,9 +69,25 @@ public class TripRecordController {
 
     }
 
+    // 여행 후기 검색(총 일수, 도시명, 여행지명, 도시 식별자) 및 페이징 조회
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO<?>> searchTripRecords(
+        @ModelAttribute TripRecordSearchParamAttribute searchParamAttribute,
+        @PageableDefault(sort = "averageRating", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    tripRecordService.findTripRecordList(searchParamAttribute, pageable)
+                )
+            );
+    }
+
     // 홈 피드 TOP 인기 여행 후기 리스트 조회
     @GetMapping("/top-list")
-    public ResponseEntity<ResponseDTO<List<TopTripRecordResponseDto>>> tripRecordTopList(
+    public ResponseEntity<ResponseDTO<List<TripRecordListItemResponseDto>>> tripRecordTopList(
         @RequestParam("type") @HomeTopListQueryType String type
     ) {
         return ResponseEntity
