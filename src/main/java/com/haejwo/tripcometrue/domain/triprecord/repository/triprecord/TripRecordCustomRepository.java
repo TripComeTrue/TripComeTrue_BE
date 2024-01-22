@@ -16,6 +16,8 @@ public interface TripRecordCustomRepository {
 
     Slice<TripRecord> findTripRecordListByFilter(TripRecordSearchParamAttribute requestParamAttribute, Pageable pageable);
 
+    Slice<TripRecord> findTripRecordsByHashTag(String hashTag, Pageable pageable);
+
     List<TripRecord> findTopTripRecordListDomestic(int size);
 
     List<TripRecord> findTopTripRecordListOverseas(int size);
