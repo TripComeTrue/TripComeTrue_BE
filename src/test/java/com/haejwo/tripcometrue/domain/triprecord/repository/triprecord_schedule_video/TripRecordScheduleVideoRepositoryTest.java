@@ -8,7 +8,7 @@ import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
-import com.haejwo.tripcometrue.domain.triprecord.dto.query.NewestTripRecordScheduleVideoQueryDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
@@ -296,7 +296,7 @@ class TripRecordScheduleVideoRepositoryTest {
         int size = 5;
 
         //when
-        List<NewestTripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoList(size);
+        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoList(size);
 
         //then
         assertThat(result).hasSize(size);
@@ -310,7 +310,7 @@ class TripRecordScheduleVideoRepositoryTest {
         int size = 5;
 
         //when
-        List<NewestTripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoListDomestic(size);
+        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoListDomestic(size);
 
         //then
         assertThat(result).hasSize(2);
@@ -322,7 +322,7 @@ class TripRecordScheduleVideoRepositoryTest {
         int size = 5;
 
         //when
-        List<NewestTripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoListOverseas(size);
+        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoListOverseas(size);
 
         //then
         assertThat(result).hasSize(4);

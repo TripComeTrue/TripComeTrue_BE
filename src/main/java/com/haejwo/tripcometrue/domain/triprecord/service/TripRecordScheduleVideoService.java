@@ -1,7 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.query.NewestTripRecordScheduleVideoQueryDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.NewestTripRecordScheduleVideoResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +18,9 @@ public class TripRecordScheduleVideoService {
     private static final int HOME_CONTENT_SIZE = 5;
 
     @Transactional(readOnly = true)
-    public List<NewestTripRecordScheduleVideoResponseDto> getNewestVideos(String type) {
+    public List<TripRecordScheduleVideoListItemResponseDto> getNewestVideos(String type) {
 
-        List<NewestTripRecordScheduleVideoQueryDto> queryResults;
+        List<TripRecordScheduleVideoQueryDto> queryResults;
 
         if (type.equalsIgnoreCase("all")) {
             queryResults = tripRecordScheduleVideoRepository.findNewestVideoList(HOME_CONTENT_SIZE);
@@ -32,7 +31,7 @@ public class TripRecordScheduleVideoService {
         }
 
         return queryResults.stream()
-            .map(NewestTripRecordScheduleVideoResponseDto::fromQueryDto)
+            .map(TripRecordScheduleVideoListItemResponseDto::fromQueryDto)
             .toList();
     }
 
