@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.member.entity;
 
-import com.haejwo.tripcometrue.domain.member.entity.rating.TripLevel;
+import com.haejwo.tripcometrue.domain.member.entity.tripLevel.TripLevel;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -38,7 +38,7 @@ public class Member extends BaseTimeEntity {
     private Integer totalPoint;
 
     @Enumerated(EnumType.STRING)
-    private TripLevel trip_level;
+    private TripLevel tripLevel;
 
     private String introduction;
 
@@ -67,7 +67,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateTripLevel(){
-        this.trip_level = TripLevel.getLevelByPoint(this.totalPoint);
+        this.tripLevel = TripLevel.getLevelByPoint(this.totalPoint);
     }
 
     public void earnPoint(int point) {
@@ -79,6 +79,9 @@ public class Member extends BaseTimeEntity {
     private void init(){
         totalPoint = (totalPoint == null) ? 0 : totalPoint;
         nickNameChangeCount = (nickNameChangeCount == null) ? 0 : nickNameChangeCount;
+        tripLevel = (tripLevel == null) ? TripLevel.BEGINNER : tripLevel;
+        profileImage = (profileImage == null) ? "https://i.imgur.com/PWZeQcP.png" : profileImage;   //임시 디폴트프로필 이미지 데이터
+
         updateTripLevel();
     }
 }
