@@ -11,6 +11,7 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedul
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
+import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TripRecordController {
 
     private final TripRecordService tripRecordService;
-
 
     @GetMapping("/{tripRecordId}")
     public ResponseEntity<ResponseDTO<TripRecordDetailResponseDto>> tripRecordDetail(
@@ -71,7 +71,7 @@ public class TripRecordController {
 
     // 여행 후기 검색(총 일수, 도시명, 여행지명, 도시 식별자) 및 페이징 조회
     @GetMapping("/search")
-    public ResponseEntity<ResponseDTO<?>> searchTripRecords(
+    public ResponseEntity<ResponseDTO<SliceResponseDto<TripRecordListItemResponseDto>>> searchTripRecords(
         @ModelAttribute TripRecordSearchParamAttribute searchParamAttribute,
         @PageableDefault(sort = "averageRating", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -81,6 +81,22 @@ public class TripRecordController {
             .body(
                 ResponseDTO.okWithData(
                     tripRecordService.findTripRecordList(searchParamAttribute, pageable)
+                )
+            );
+    }
+
+    // 여행 후기 검색(태그) 및 페이징 조회
+    @GetMapping("/search/hashtags")
+    public ResponseEntity<ResponseDTO<SliceResponseDto<TripRecordListItemResponseDto>>> searchTripRecordsByHashtag(
+        @RequestParam("hashtag") String hashtag,
+        @PageableDefault(sort = "averageRating", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    tripRecordService.listTripRecordsByHashTag(hashtag, pageable)
                 )
             );
     }
