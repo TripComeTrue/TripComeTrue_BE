@@ -1,5 +1,8 @@
 package com.haejwo.tripcometrue.domain.review.placereview.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.MULTI_STATUS;
+
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.DeletePlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.request.PlaceReviewRequestDto;
 import com.haejwo.tripcometrue.domain.review.placereview.dto.response.PlaceReviewListResponseDto;

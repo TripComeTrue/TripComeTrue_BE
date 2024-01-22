@@ -22,6 +22,9 @@ import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewDe
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
