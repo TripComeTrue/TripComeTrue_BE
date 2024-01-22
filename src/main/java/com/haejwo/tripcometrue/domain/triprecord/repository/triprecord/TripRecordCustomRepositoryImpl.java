@@ -153,6 +153,8 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         List<TripRecordHotShortsListResponseDto> result = queryFactory
             .select(Projections.constructor(TripRecordHotShortsListResponseDto.class,
                 qTripRecord.id,
+                qTripRecord.title,
+                qTripRecord.storeCount,
                 JPAExpressions
                     .select(qTripRecordScheduleVideo.id.min())
                     .from(qTripRecordScheduleVideo)
