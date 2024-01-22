@@ -13,6 +13,7 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordTag;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public record TripRecordDetailResponseDto(
     TripRecordMemberResponseDto member,
     List<TripRecordImageResponseDto> images,
     List<TripRecordTagResponseDto> tags,
-    Map<Integer, List<TripRecordScheduleDetailResponseDto>> schedules
+    Map<LocalDate, List<TripRecordScheduleDetailResponseDto>> schedules
 
 ) {
 
@@ -44,7 +45,7 @@ public record TripRecordDetailResponseDto(
         Integer totalDays, Double averageRating, Integer storeCount,
         TripRecordMemberResponseDto member, List<TripRecordImageResponseDto> images,
         List<TripRecordTagResponseDto> tags,
-        Map<Integer, List<TripRecordScheduleDetailResponseDto>> schedules) {
+        Map<LocalDate, List<TripRecordScheduleDetailResponseDto>> schedules) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -78,10 +79,27 @@ public record TripRecordDetailResponseDto(
                         .toList();
 
         List<TripRecordSchedule> schedules = entity.getTripRecordSchedules();
-        Map<Integer, List<TripRecordScheduleDetailResponseDto>> scheduleDtos = schedules.stream()
+        Map<LocalDate, List<TripRecordScheduleDetailResponseDto>> scheduleDtos = schedules.stream()
             .map(TripRecordScheduleDetailResponseDto::fromEntity)
             .sorted(Comparator.comparing(TripRecordScheduleDetailResponseDto::ordering))
-            .collect(Collectors.groupingBy(TripRecordScheduleDetailResponseDto::dayNumber));
+            .collect(Collectors.groupingBy(
+                dto -> entity.getTripStartDay().plusDays(dto.dayNumber() - 1),
+                LinkedHashMap::new,
+                Collectors.toList()
+            ));
+        // List 타입으로 응답할 시
+//        List<List<TripRecordScheduleDetailResponseDto>> scheduleDtos = new ArrayList<>(
+//            schedules.stream()
+//                .map(TripRecordScheduleDetailResponseDto::fromEntity)
+//                .collect(Collectors.groupingBy(
+//                    TripRecordScheduleDetailResponseDto::dayNumber,
+//                    LinkedHashMap::new,
+//                    Collectors.collectingAndThen(
+//                        Collectors.toList(),
+//                        list -> list.stream().sorted(Comparator.comparing(TripRecordScheduleDetailResponseDto::ordering)).collect(Collectors.toList())
+//                    )
+//                )).values()
+//        );
 
         return TripRecordDetailResponseDto.builder()
             .id(entity.getId())
