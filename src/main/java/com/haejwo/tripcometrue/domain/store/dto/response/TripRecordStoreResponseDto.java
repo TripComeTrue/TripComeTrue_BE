@@ -1,4 +1,5 @@
 package com.haejwo.tripcometrue.domain.store.dto.response;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.store.entity.TripRecordStore;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -16,10 +17,13 @@ public record TripRecordStoreResponseDto(
     LocalDate tripEndDay,
     Integer totalDays,
     Double averageRating,
-    Integer viewCount
+    Integer viewCount,
+    Integer storeCount,
+    Integer commentCount,
+    String imageUrl
 ) {
 
-  public static TripRecordStoreResponseDto fromEntity(TripRecordStore tripRecordStore) {
+  public static TripRecordStoreResponseDto fromEntity(TripRecordStore tripRecordStore, String imageUrl) {
     TripRecord tripRecord = tripRecordStore.getTripRecord();
     return new TripRecordStoreResponseDto(
         tripRecord.getId(),
@@ -31,7 +35,10 @@ public record TripRecordStoreResponseDto(
         tripRecord.getTripEndDay(),
         tripRecord.getTotalDays(),
         tripRecord.getAverageRating(),
-        tripRecord.getViewCount()
+        tripRecord.getViewCount(),
+        tripRecord.getStoreCount(),
+        tripRecord.getCommentCount(),
+        imageUrl
     );
   }
 }

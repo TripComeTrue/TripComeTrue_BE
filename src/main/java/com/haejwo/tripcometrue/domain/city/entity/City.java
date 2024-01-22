@@ -59,5 +59,13 @@ public class City extends BaseTimeEntity {
     public void prePersist() {
         this.storeCount = 0;
     }
+
+    public void incrementStoreCount() {
+        if(this.storeCount == null) {
+            this.storeCount = 1;
+        } else {
+            this.storeCount++;
+        }
+    }
 }
 
