@@ -3,14 +3,12 @@ package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordImage;
-import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import lombok.Builder;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public record TopTripRecordResponseDto(
+public record TripRecordListItemResponseDto(
     Long tripRecordId,
     String tripRecordTitle,
     Long memberId,
@@ -23,23 +21,25 @@ public record TopTripRecordResponseDto(
 ) {
 
     @Builder
-    public TopTripRecordResponseDto {
+    public TripRecordListItemResponseDto {
     }
 
-    public static TopTripRecordResponseDto fromEntity(TripRecord entity) {
-        Set<String> cityNames = new HashSet<>();
-        for (TripRecordSchedule tripRecordSchedule : entity.getTripRecordSchedules()) {
-            cityNames.add(tripRecordSchedule.getPlace().getCity().getName());
-        }
-
-        Member member = entity.getMember();
-
-        return TopTripRecordResponseDto.builder()
+    public static TripRecordListItemResponseDto fromEntity(
+        TripRecord entity, Set<String> cityNames, Member member
+    ) {
+        boolean isPresentMember = Objects.nonNull(member);
+        return TripRecordListItemResponseDto.builder()
             .tripRecordId(entity.getId())
             .tripRecordTitle(entity.getTitle())
-            .memberId(member.getId())
-            .memberName(member.getMemberBase().getNickname())
-            .profileImageUrl(member.getProfileImage())
+            .memberId(
+                isPresentMember ? member.getId() : null
+            )
+            .memberName(
+                isPresentMember ? member.getMemberBase().getNickname() : null
+            )
+            .profileImageUrl(
+                isPresentMember ? member.getProfileImage() : null
+            )
             .cityNames(cityNames)
             .totalDays(entity.getTotalDays())
             .storedCount(entity.getStoreCount())
