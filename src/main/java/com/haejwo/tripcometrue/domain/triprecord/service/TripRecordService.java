@@ -85,6 +85,16 @@ public class TripRecordService {
     }
 
     @Transactional(readOnly = true)
+    public SliceResponseDto<TripRecordListItemResponseDto> listTripRecordsByHashTag(
+        String hashTag, Pageable pageable
+    ) {
+        return SliceResponseDto.of(
+            tripRecordRepository.findTripRecordsByHashTag(hashTag, pageable)
+                .map(tripRecord -> TripRecordListItemResponseDto.fromEntity(tripRecord, null, tripRecord.getMember()))
+        );
+    }
+
+    @Transactional(readOnly = true)
     public List<TripRecordListItemResponseDto> findTopTripRecordList(String type) {
 
         List<TripRecord> tripRecords;
