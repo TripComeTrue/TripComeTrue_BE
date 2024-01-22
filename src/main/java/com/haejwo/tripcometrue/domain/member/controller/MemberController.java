@@ -7,6 +7,7 @@ import com.haejwo.tripcometrue.domain.member.dto.request.ProfileImageRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.IntroductionResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.LoginResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.NicknameResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.ProfileImageResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
@@ -146,5 +147,14 @@ public class MemberController {
     public ResponseEntity<ResponseDTO<Void>> deleteAccount(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         memberService.deleteAccount(principalDetails);
         return ResponseEntity.ok(ResponseDTO.ok());
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<ResponseDTO<MemberDetailResponseDto>> getMemberDetails(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        MemberDetailResponseDto responseDto = memberService.getMemberDetails(principalDetails);
+        ResponseDTO<MemberDetailResponseDto> response = ResponseDTO.okWithData(responseDto);
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
     }
 }
