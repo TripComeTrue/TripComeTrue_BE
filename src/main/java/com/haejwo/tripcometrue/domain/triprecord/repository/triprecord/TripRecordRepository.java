@@ -3,7 +3,7 @@ package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import java.util.Optional;
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +13,6 @@ public interface TripRecordRepository extends
 
 {
 
-  List<TripRecord> findByMemberId(Long memberId, Pageable pageable);
+  Page<TripRecord> findByMemberId(Long memberId, Pageable pageable);
   Optional<TripRecord> findById (Member member);
 }
