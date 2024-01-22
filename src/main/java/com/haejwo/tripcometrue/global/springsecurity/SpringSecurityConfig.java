@@ -77,7 +77,7 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/member/profile-image")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/introduction")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/nickname")).permitAll()
-            .requestMatchers(new AntPathRequestMatcher("/v1/member/nickname")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/details")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/view-history")).permitAll()
 
             .requestMatchers(new AntPathRequestMatcher("/v1/cities/**")).permitAll()
@@ -90,7 +90,7 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/schedule-place/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/trip-plan/{planId}")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/country-city")).permitAll()
-            
+
             .anyRequest().authenticated());
 
         /**
