@@ -16,6 +16,7 @@ public record TripRecordListItemResponseDto(
     String profileImageUrl,
     Set<String> cityNames,
     Integer totalDays,
+    Double averageRating,
     Integer storedCount,
     String imageUrl
 ) {
@@ -42,6 +43,7 @@ public record TripRecordListItemResponseDto(
             )
             .cityNames(cityNames)
             .totalDays(entity.getTotalDays())
+            .averageRating(entity.getAverageRating())
             .storedCount(entity.getStoreCount())
             .imageUrl(
                 entity.getTripRecordImages()
