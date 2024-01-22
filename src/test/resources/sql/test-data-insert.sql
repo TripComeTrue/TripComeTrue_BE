@@ -37,6 +37,9 @@ values (3, now(), now(), '여행지3 주소', 3, '여행지3 설명', '여행지
 insert into place (place_id, created_at, updated_at, address, city_id, description, name, stored_count, latitude, longitude, comment_count, review_count)
 values (4, now(), now(), '여행지4 주소', 4, '여행지4 설명', '여행지4', 20, 130.7, 45.6, 33, 10);
 
+insert into place (place_id, created_at, updated_at, address, city_id, description, name, stored_count, latitude, longitude, comment_count, review_count)
+values (5, now(), now(), '여행지5 주소', 1, '여행지5 설명', '여행지5', 50, 130.7, 45.6, 14, 15);
+
 
 /* trip_record */
 insert into trip_record (trip_record_id, average_rating, content, countries, expense_range_type, title, total_days, trip_end_day, trip_start_day, view_count,
@@ -49,11 +52,11 @@ values (2, 4.1, '여행 컨텐츠2', 'JAPAN', 'BELOW_200', '도쿄 여행 제목
 
 insert into trip_record (trip_record_id, average_rating, content, countries, expense_range_type, title, total_days, trip_end_day, trip_start_day, view_count,
                          created_at, updated_at, member_id, comment_count, review_count, store_count)
-values (3, 2.9, '여행 컨텐츠3', 'KOREA', 'BELOW_50', '부산 여행 제목', 2, '2024-01-30', '2024-01-29', 200, now(), now(), 2, 5, 3, 45);
+values (3, 2.9, '여행 컨텐츠4', 'USA', 'BELOW_300', '뉴욕 여행 제목', 10, '2024-02-01', '2024-02-10', 400, now(), now(), 3, 5, 3, 70);
 
 insert into trip_record (trip_record_id, average_rating, content, countries, expense_range_type, title, total_days, trip_end_day, trip_start_day, view_count,
                          created_at, updated_at, member_id, comment_count, review_count, store_count)
-values (4, 2.9, '여행 컨텐츠4', 'USA', 'BELOW_300', '뉴욕 여행 제목', 10, '2024-02-01', '2024-02-10', 400, now(), now(), 3, 5, 3, 70);
+values (4, 2.9, '여행 컨텐츠3', 'KOREA', 'BELOW_50', '부산 여행 제목', 2, '2024-01-30', '2024-01-29', 200, now(), now(), 2, 5, 3, 45);
 
 
 /* trip_record_schedule */
@@ -61,7 +64,7 @@ insert into trip_record_schedule (trip_record_schedule_id, content, day_number, 
 values (1, '여행 스케줄1', 1, 1, 1, now(), now(), 1);
 
 insert into trip_record_schedule (trip_record_schedule_id, content, day_number, ordering, trip_record_id, created_at, updated_at, place_id)
-values (2, '여행 스케줄2', 1, 2, 1, now(), now(), 1);
+values (2, '여행 스케줄2', 1, 2, 1, now(), now(), 5);
 
 insert into trip_record_schedule (trip_record_schedule_id, content, day_number, ordering, trip_record_id, created_at, updated_at, place_id)
 values (3, '여행 스케줄3', 1, 1, 2, now(), now(), 2);
