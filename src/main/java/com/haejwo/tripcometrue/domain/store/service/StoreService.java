@@ -21,11 +21,13 @@ import com.haejwo.tripcometrue.domain.store.repository.CityStoreRepository;
 import com.haejwo.tripcometrue.domain.store.repository.PlaceStoreRepository;
 import com.haejwo.tripcometrue.domain.store.repository.TripRecordStoreRepository;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordImage;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +55,9 @@ public class StoreService{
                 throw new StoreAlreadyExistException(ErrorCode.STORE_ALREADY_EXIST);
             });
 
+        city.incrementStoreCount();
+        cityRepository.save(city);
+
         CityStore store = cityStoreRepository.save(request.toEntity(principalDetails.getMember(), city));
         return CityStoreResponseDto.fromEntity(store);
     }
@@ -66,6 +71,9 @@ public class StoreService{
             .ifPresent(store -> {
                 throw new StoreAlreadyExistException(ErrorCode.STORE_ALREADY_EXIST);
             });
+
+        place.incrementStoreCount();
+        placeRepository.save(place);
 
         PlaceStore store = placeStoreRepository.save(request.toEntity(principalDetails.getMember(), place));
         return PlaceStoreResponseDto.fromEntity(store);
@@ -81,8 +89,14 @@ public class StoreService{
                 throw new StoreAlreadyExistException(ErrorCode.STORE_ALREADY_EXIST);
             });
 
+        tripRecord.incrementStoreCount();
+        tripRecordRepository.save(tripRecord);
+
         TripRecordStore store = tripRecordStoreRepository.save(request.toEntity(principalDetails.getMember(), tripRecord));
-        return TripRecordStoreResponseDto.fromEntity(store);
+        List<TripRecordImage> images = tripRecord.getTripRecordImages();
+        String imageUrl = images.isEmpty() ? null : images.get(0).getImageUrl();
+
+        return TripRecordStoreResponseDto.fromEntity(store, imageUrl);
     }
 
     @Transactional
@@ -121,7 +135,12 @@ public class StoreService{
 
     public Page<TripRecordStoreResponseDto> getStoredTripRecords(PrincipalDetails principalDetails, Pageable pageable) {
         Page<TripRecordStore> storedTripRecords = tripRecordStoreRepository.findByMember(principalDetails.getMember(), pageable);
-        return storedTripRecords.map(TripRecordStoreResponseDto::fromEntity);
+        return storedTripRecords.map(tripRecordStore -> {
+            TripRecord tripRecord = tripRecordStore.getTripRecord();
+            List<TripRecordImage> images = tripRecord.getTripRecordImages();
+            String imageUrl = images.isEmpty() ? null : images.get(0).getImageUrl();
+            return TripRecordStoreResponseDto.fromEntity(tripRecordStore, imageUrl);
+        });
     }
 
     public Long getStoredCountForCity(Long cityId) {
