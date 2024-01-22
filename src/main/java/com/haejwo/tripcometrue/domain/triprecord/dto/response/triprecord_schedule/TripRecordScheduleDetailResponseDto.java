@@ -5,6 +5,7 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedul
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleImage;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExternalLinkTagType;
 import java.util.List;
 import lombok.Builder;
 
@@ -13,6 +14,10 @@ public record TripRecordScheduleDetailResponseDto(
     Integer dayNumber,
     Integer ordering,
     String content,
+    ExternalLinkTagType tagType,
+    String tagUrl,
+    String countryName,
+    String cityName,
     Long placeId,
     String placeName,
     Double latitude,
@@ -24,13 +29,19 @@ public record TripRecordScheduleDetailResponseDto(
 
     @Builder
     public TripRecordScheduleDetailResponseDto(Long id, Integer dayNumber, Integer ordering,
-        String content, Long placeId, String placeName, Double latitude, Double longitude,
-        Long tripRecordId, List<TripRecordScheduleImageResponseDto> images,
+        String content, ExternalLinkTagType tagType, String tagUrl, String countryName,
+        String cityName,
+        Long placeId, String placeName, Double latitude, Double longitude, Long tripRecordId,
+        List<TripRecordScheduleImageResponseDto> images,
         List<TripRecordScheduleVideoResponseDto> videos) {
         this.id = id;
         this.dayNumber = dayNumber;
         this.ordering = ordering;
         this.content = content;
+        this.tagType = tagType;
+        this.tagUrl = tagUrl;
+        this.countryName = countryName;
+        this.cityName = cityName;
         this.placeId = placeId;
         this.placeName = placeName;
         this.latitude = latitude;
@@ -39,7 +50,6 @@ public record TripRecordScheduleDetailResponseDto(
         this.images = images;
         this.videos = videos;
     }
-
 
     public static TripRecordScheduleDetailResponseDto fromEntity(TripRecordSchedule entity) {
 
@@ -59,6 +69,10 @@ public record TripRecordScheduleDetailResponseDto(
             .dayNumber(entity.getDayNumber())
             .ordering(entity.getOrdering())
             .content(entity.getContent())
+            .tagType(entity.getTagType())
+            .tagUrl(entity.getTagUrl())
+            .countryName(entity.getPlace().getCity().getCountry().getDescription())
+            .cityName(entity.getPlace().getCity().getName())
             .placeId(entity.getPlace().getId())
             .placeName(entity.getPlace().getName())
             .latitude(entity.getPlace().getLatitude())
