@@ -6,6 +6,7 @@ import com.haejwo.tripcometrue.domain.member.dto.request.PasswordRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.ProfileImageRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.IntroductionResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.NicknameResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.ProfileImageResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
@@ -161,6 +162,11 @@ public class MemberService {
         Member member = memberRepository.findById(principalDetails.getMember().getId())
             .orElseThrow();
         return member;
+    }
+
+    public MemberDetailResponseDto getMemberDetails(PrincipalDetails principalDetails) {
+        Member member = getLoginMember(principalDetails);
+        return MemberDetailResponseDto.fromEntity(member);
     }
 }
 

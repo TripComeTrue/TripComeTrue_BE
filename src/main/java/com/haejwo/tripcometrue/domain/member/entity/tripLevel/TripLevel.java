@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.member.entity.rating;
+package com.haejwo.tripcometrue.domain.member.entity.tripLevel;
 
 public enum TripLevel {
   BEGINNER(0, 49),
