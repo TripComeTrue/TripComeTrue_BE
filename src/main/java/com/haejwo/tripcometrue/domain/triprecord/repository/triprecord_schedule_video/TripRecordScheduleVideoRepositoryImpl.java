@@ -155,7 +155,9 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
                     tripRecordScheduleVideo.thumbnailUrl,
                     tripRecordScheduleVideo.videoUrl,
                     tripRecord.storeCount,
-                    member.id
+                    member.id,
+                    member.memberBase.nickname,
+                    member.profileImage
                 )
             )
             .from(tripRecordScheduleVideo)

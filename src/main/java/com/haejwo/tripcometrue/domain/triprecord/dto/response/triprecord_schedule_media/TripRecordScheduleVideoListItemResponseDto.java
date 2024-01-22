@@ -10,7 +10,9 @@ public record TripRecordScheduleVideoListItemResponseDto(
     String thumbnailUrl,
     String videoUrl,
     Integer storedCount,
-    Long memberId
+    Long memberId,
+    String memberName,
+    String profileImageUrl
 ) {
 
     @Builder
@@ -26,6 +28,8 @@ public record TripRecordScheduleVideoListItemResponseDto(
             .videoUrl(dto.videoUrl())
             .storedCount(dto.storedCount())
             .memberId(dto.memberId())
+            .memberName(dto.memberName())
+            .profileImageUrl(dto.profileImageUrl())
             .build();
     }
 }

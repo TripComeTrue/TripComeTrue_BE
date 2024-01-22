@@ -7,6 +7,8 @@ public record TripRecordScheduleVideoQueryDto(
     String thumbnailUrl,
     String videoUrl,
     Integer storedCount,
-    Long memberId
+    Long memberId,
+    String memberName,
+    String profileImageUrl
 ) {
 }
