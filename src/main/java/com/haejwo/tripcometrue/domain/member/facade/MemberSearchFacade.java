@@ -5,7 +5,6 @@ import com.haejwo.tripcometrue.domain.member.dto.response.MemberListItemResponse
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSearchResultWithContentResponseDto;
 import com.haejwo.tripcometrue.domain.member.service.MemberSearchService;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemWithMemberIdResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordScheduleVideoService;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordService;
@@ -38,7 +37,7 @@ public class MemberSearchFacade {
             .toList();
 
         List<TripRecordScheduleVideoListItemResponseDto> videos = tripRecordScheduleVideoService.getVideosInMemberIds(memberIds);
-        List<TripRecordListItemResponseDto> tripRecords = tripRecordService.findTripRecordsInMemberIds(memberIds);
+        List<TripRecordListItemResponseDto> tripRecords = tripRecordService.findTripRecordsWihMemberInMemberIds(memberIds);
 
         return MemberSearchResultWithContentResponseDto.builder()
             .members(members)
@@ -56,7 +55,7 @@ public class MemberSearchFacade {
             .map(MemberListItemResponseDto::id)
             .toList();
 
-        Map<Long, List<TripRecordListItemWithMemberIdResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(memberIds);
+        Map<Long, List<TripRecordListItemResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(memberIds);
 
         Map<Long, List<TripRecordScheduleVideoListItemResponseDto>> videoMap = getGroupByMemberIdVideoMap(memberIds);
 
@@ -89,9 +88,9 @@ public class MemberSearchFacade {
             .collect(Collectors.groupingBy(TripRecordScheduleVideoListItemResponseDto::memberId));
     }
 
-    private Map<Long, List<TripRecordListItemWithMemberIdResponseDto>> getGroupByMemberIdTripRecordMap(List<Long> memberIds) {
+    private Map<Long, List<TripRecordListItemResponseDto>> getGroupByMemberIdTripRecordMap(List<Long> memberIds) {
         return tripRecordService.findTripRecordsWihMemberInMemberIds(memberIds)
             .stream()
-            .collect(Collectors.groupingBy(TripRecordListItemWithMemberIdResponseDto::memberId));
+            .collect(Collectors.groupingBy(TripRecordListItemResponseDto::memberId));
     }
 }
