@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/v1/schedule-videos")
+@RequestMapping("/v1/videos")
 @RestController
 public class TripRecordScheduleVideoController {
 
