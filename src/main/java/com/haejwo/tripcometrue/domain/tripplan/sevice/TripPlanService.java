@@ -12,6 +12,7 @@ import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsRespo
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanListReponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
+import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlanSchedule;
 import com.haejwo.tripcometrue.domain.tripplan.exception.TripPlanNotFoundException;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanRepository;
 import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanScheduleRepository;
@@ -23,6 +24,7 @@ import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -138,13 +140,19 @@ public class TripPlanService {
     }
 
     @Transactional(readOnly = true)
-    public List<TripPlanListReponseDto> getMyTripPlansList(
+    public Page<TripPlanListReponseDto> getMyTripPlansList(
         PrincipalDetails principalDetails, Pageable pageable) {
         Long memberId = principalDetails.getMember().getId();
-        List<TripPlan> tripPlans = tripPlanRepository.findByMemberId(memberId, pageable);
+        Page<TripPlan> tripPlans = tripPlanRepository.findByMemberId(memberId, pageable);
 
-        return tripPlans.stream()
-            .map(TripPlanListReponseDto::fromEntity)
-            .collect(Collectors.toList());
-    }
+        return tripPlans.map(tripPlan -> {
+            List<String> placesVisited = tripPlan.getTripPlanSchedules().stream()
+                .map(TripPlanSchedule::getPlaceId)
+                .map(placeId -> placeRepository.findById(placeId)
+                    .map(Place::getName)
+                    .orElse(null)) // 장소가 없는 경우 null 반환
+                .collect(Collectors.toList());
+
+            return TripPlanListReponseDto.fromEntity(tripPlan, placesVisited);
+        });    }
 }

@@ -7,8 +7,8 @@ import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanListReponseD
 import com.haejwo.tripcometrue.domain.tripplan.sevice.TripPlanService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,13 +96,13 @@ public class TripPlanController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<ResponseDTO<List<TripPlanListReponseDto>>> getMyTripPlans(
+    public ResponseEntity<ResponseDTO<Page<TripPlanListReponseDto>>> getMyTripPlans(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable
     ) {
-        List<TripPlanListReponseDto> responseDtos
+        Page<TripPlanListReponseDto> responseDtos
             = tripPlanService.getMyTripPlansList(principalDetails, pageable);
-        ResponseDTO<List<TripPlanListReponseDto>> responseBody
+        ResponseDTO<Page<TripPlanListReponseDto>> responseBody
             = ResponseDTO.okWithData(responseDtos);
 
         return ResponseEntity
