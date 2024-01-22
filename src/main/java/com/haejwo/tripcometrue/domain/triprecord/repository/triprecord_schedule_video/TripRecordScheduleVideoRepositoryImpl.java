@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video;
 
-import com.haejwo.tripcometrue.domain.triprecord.dto.query.NewestTripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVideoQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.global.enums.Country;
@@ -67,19 +66,20 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoList(int size) {
+    public List<TripRecordScheduleVideoQueryDto> findNewestVideoList(int size) {
         return queryFactory
             .select(
                 Projections.constructor(
-                    NewestTripRecordScheduleVideoQueryDto.class,
+                    TripRecordScheduleVideoQueryDto.class,
                     tripRecordScheduleVideo.id,
                     tripRecord.id,
                     tripRecord.title,
-                    tripRecordScheduleVideo.videoUrl,
                     tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecordScheduleVideo.videoUrl,
                     tripRecord.storeCount,
                     member.id,
-                    member.memberBase.nickname
+                    member.memberBase.nickname,
+                    member.profileImage
                 )
             )
             .from(tripRecordScheduleVideo)
@@ -92,19 +92,20 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoListDomestic(int size) {
+    public List<TripRecordScheduleVideoQueryDto> findNewestVideoListDomestic(int size) {
         return queryFactory
             .select(
                 Projections.constructor(
-                    NewestTripRecordScheduleVideoQueryDto.class,
+                    TripRecordScheduleVideoQueryDto.class,
                     tripRecordScheduleVideo.id,
                     tripRecord.id,
                     tripRecord.title,
-                    tripRecordScheduleVideo.videoUrl,
                     tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecordScheduleVideo.videoUrl,
                     tripRecord.storeCount,
                     member.id,
-                    member.memberBase.nickname
+                    member.memberBase.nickname,
+                    member.profileImage
                 )
             )
             .from(tripRecordScheduleVideo)
@@ -118,19 +119,20 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<NewestTripRecordScheduleVideoQueryDto> findNewestVideoListOverseas(int size) {
+    public List<TripRecordScheduleVideoQueryDto> findNewestVideoListOverseas(int size) {
         return queryFactory
             .select(
                 Projections.constructor(
-                    NewestTripRecordScheduleVideoQueryDto.class,
+                    TripRecordScheduleVideoQueryDto.class,
                     tripRecordScheduleVideo.id,
                     tripRecord.id,
                     tripRecord.title,
-                    tripRecordScheduleVideo.videoUrl,
                     tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecordScheduleVideo.videoUrl,
                     tripRecord.storeCount,
                     member.id,
-                    member.memberBase.nickname
+                    member.memberBase.nickname,
+                    member.profileImage
                 )
             )
             .from(tripRecordScheduleVideo)

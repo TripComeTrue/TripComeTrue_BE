@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.controller;
 
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordScheduleVideoService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import com.haejwo.tripcometrue.global.validator.annotation.HomeVideoListQueryType;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/v1/videos")
 @RestController
@@ -18,7 +21,7 @@ public class TripRecordScheduleVideoController {
     private final TripRecordScheduleVideoService tripRecordScheduleVideoService;
 
     @GetMapping("/list")
-    public ResponseEntity<ResponseDTO<?>> getVideosByType(
+    public ResponseEntity<ResponseDTO<List<TripRecordScheduleVideoListItemResponseDto>>> getVideosByType(
         @RequestParam("type") @HomeVideoListQueryType String type
     ) {
         return ResponseEntity
