@@ -33,6 +33,7 @@ import static com.haejwo.tripcometrue.domain.member.entity.QMember.member;
 import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripRecord;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag.tripRecordTag;
 
 public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport implements TripRecordCustomRepository {
 
@@ -173,6 +174,37 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
     }
 
     @Override
+    public Slice<TripRecord> findTripRecordsByHashTag(String hashTag, Pageable pageable) {
+
+        int pageSize = pageable.getPageSize();
+        List<TripRecord> content = queryFactory
+            .selectFrom(tripRecord)
+            .where(
+                tripRecord.id.in(
+                    JPAExpressions.select(tripRecord.id)
+                        .from(tripRecordTag)
+                        .join(tripRecordTag.tripRecord, tripRecord)
+                        .where(
+                            containsIgnoreCaseHashTag(hashTag)
+                        )
+                        .groupBy(tripRecord.id)
+                )
+            )
+            .orderBy(getSort(pageable))
+            .offset(pageable.getOffset())
+            .limit(pageSize + 1)
+            .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageSize) {
+            content.remove(pageSize);
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    @Override
     public List<TripRecord> findTopTripRecordListDomestic(int size) {
 
         return queryFactory
@@ -282,6 +314,18 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
 
         return Expressions.stringTemplate(
             "function('replace',{0},{1},{2})", place.name, " ", ""
+        ).containsIgnoreCase(replacedWhitespace);
+    }
+
+    private BooleanExpression containsIgnoreCaseHashTag(String hashTag) {
+        if (!StringUtils.hasText(hashTag)) {
+            return null;
+        }
+
+        String replacedWhitespace = hashTag.replaceAll(" ", "");
+
+        return Expressions.stringTemplate(
+            "function('replace',{0},{1},{2})", tripRecordTag.hashTagType, " ", ""
         ).containsIgnoreCase(replacedWhitespace);
     }
 
