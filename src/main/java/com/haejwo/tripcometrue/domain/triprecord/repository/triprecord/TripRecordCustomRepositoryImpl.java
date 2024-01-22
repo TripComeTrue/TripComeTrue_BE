@@ -2,26 +2,37 @@ package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord;
 
 import com.haejwo.tripcometrue.domain.member.entity.QMember;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordSearchParamAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordMemberResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
-import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordImage;
-import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
-import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleVideo;
-import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag;
-import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.*;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.util.StringUtils;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
+import static com.haejwo.tripcometrue.domain.member.entity.QMember.member;
+import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripRecord;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
 
 public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport implements TripRecordCustomRepository {
 
@@ -120,8 +131,49 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
     }
 
     @Override
+    public Slice<TripRecord> findTripRecordListByFilter(
+        TripRecordSearchParamAttribute requestParamAttribute,
+        Pageable pageable
+    ) {
+
+        List<Long> tripRecordIds = queryFactory
+            .select(tripRecord.id)
+            .from(tripRecordSchedule)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecordSchedule.place, place)
+            .join(place.city, city)
+            .where(
+                eqCityId(requestParamAttribute.cityId()),
+                containsIgnoreCaseCityName(requestParamAttribute.cityName()),
+                containsIgnoreCasePlaceName(requestParamAttribute.placeName()),
+                eqOrGoeTotalDays(requestParamAttribute.totalDays())
+            )
+            .groupBy(tripRecord.id)
+            .fetch();
+
+        int pageSize = pageable.getPageSize();
+        List<TripRecord> content = queryFactory
+            .selectFrom(tripRecord)
+            .join(tripRecord.member, member).fetchJoin()
+            .where(
+                tripRecord.id.in(tripRecordIds)
+            )
+            .orderBy(getSort(pageable))
+            .offset(pageable.getOffset())
+            .limit(pageSize + 1)
+            .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageSize) {
+            content.remove(pageSize);
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    @Override
     public List<TripRecord> findTopTripRecordListDomestic(int size) {
-        QTripRecord tripRecord = QTripRecord.tripRecord;
 
         return queryFactory
             .selectFrom(tripRecord)
@@ -133,7 +185,6 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
 
     @Override
     public List<TripRecord> findTopTripRecordListOverseas(int size) {
-        QTripRecord tripRecord = QTripRecord.tripRecord;
 
         return queryFactory
             .selectFrom(tripRecord)
@@ -188,8 +239,6 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
 
     @Override
     public List<TripRecord> findTripRecordListInMemberIds(List<Long> memberIds) {
-        QTripRecord tripRecord = QTripRecord.tripRecord;
-        QMember member = QMember.member;
 
         return queryFactory.selectFrom(tripRecord)
             .join(tripRecord.member, member)
@@ -200,13 +249,81 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
 
     @Override
     public List<TripRecord> findTripRecordListWithMemberInMemberIds(List<Long> memberIds) {
-        QTripRecord tripRecord = QTripRecord.tripRecord;
-        QMember member = QMember.member;
 
         return queryFactory.selectFrom(tripRecord)
             .join(tripRecord.member, member).fetchJoin()
             .where(member.id.in(memberIds))
             .orderBy(tripRecord.storeCount.desc(), tripRecord.createdAt.desc())
             .fetch();
+    }
+
+    private BooleanExpression eqCityId(Long cityId) {
+        return Objects.nonNull(cityId) ? city.id.eq(cityId) : null;
+    }
+
+    private BooleanExpression containsIgnoreCaseCityName(String cityName) {
+        if (!StringUtils.hasText(cityName)) {
+            return null;
+        }
+
+        String replacedWhitespace = cityName.replaceAll(" ", "");
+
+        return Expressions.stringTemplate(
+            "function('replace',{0},{1},{2})", city.name, " ", ""
+        ).containsIgnoreCase(replacedWhitespace);
+    }
+
+    private BooleanExpression containsIgnoreCasePlaceName(String placeName) {
+        if (!StringUtils.hasText(placeName)) {
+            return null;
+        }
+
+        String replacedWhitespace = placeName.replaceAll(" ", "");
+
+        return Expressions.stringTemplate(
+            "function('replace',{0},{1},{2})", place.name, " ", ""
+        ).containsIgnoreCase(replacedWhitespace);
+    }
+
+    private BooleanExpression eqOrGoeTotalDays(String totalDays) {
+        if (!StringUtils.hasText(totalDays)) {
+            return null;
+        }
+
+        if (totalDays.equalsIgnoreCase("etc")) {
+            return tripRecord.totalDays.goe(5);
+        }
+
+        return tripRecord.totalDays.eq(Integer.parseInt(totalDays));
+    }
+
+    private OrderSpecifier<?>[] getSort(Pageable pageable) {
+
+        List<OrderSpecifier<?>> orderSpecifiers = new LinkedList<>();
+        if (!pageable.getSort().isEmpty()) {
+            for (Sort.Order sortOrder : pageable.getSort()) {
+                Order direction = sortOrder.getDirection().isAscending() ? Order.ASC : Order.DESC;
+
+                String property = sortOrder.getProperty();
+                switch (property) {
+                    case "id":
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, tripRecord.id));
+                        break;
+                    case "createdAt":
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, tripRecord.createdAt));
+                        break;
+                    case "storeCount":
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, tripRecord.storeCount));
+                        break;
+                    case "averageRating":
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, tripRecord.averageRating));
+                        break;
+
+                    // TODO: 정렬 기준 예외 처리
+                }
+            }
+        }
+
+        return orderSpecifiers.isEmpty() ? null : orderSpecifiers.toArray(OrderSpecifier[]::new); // 최신순
     }
 }
