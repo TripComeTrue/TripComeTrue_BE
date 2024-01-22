@@ -4,7 +4,7 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVid
 import lombok.Builder;
 
 public record TripRecordScheduleVideoListItemResponseDto(
-    Long id,
+    Long videoId,
     Long tripRecordId,
     String tripRecordTitle,
     String thumbnailUrl,
@@ -19,7 +19,7 @@ public record TripRecordScheduleVideoListItemResponseDto(
 
     public static TripRecordScheduleVideoListItemResponseDto fromQueryDto(TripRecordScheduleVideoQueryDto dto) {
         return TripRecordScheduleVideoListItemResponseDto.builder()
-            .id(dto.id())
+            .videoId(dto.id())
             .tripRecordId(dto.tripRecordId())
             .tripRecordTitle(dto.tripRecordTitle())
             .thumbnailUrl(dto.thumbnailUrl())
