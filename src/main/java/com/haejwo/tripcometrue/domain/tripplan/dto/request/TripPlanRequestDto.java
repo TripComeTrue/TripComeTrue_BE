@@ -17,6 +17,7 @@ public record TripPlanRequestDto(
     @NotNull(message = "tripEndDay은 필수값입니다")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate tripEndDay,
+    Long referencedBy,
     List<TripPlanScheduleRequestDto> tripPlanSchedules
 ) {
 
@@ -26,6 +27,7 @@ public record TripPlanRequestDto(
             .tripStartDay(this.tripStartDay)
             .tripEndDay(this.tripEndDay)
             .member(member)
+            .referencedBy(this.referencedBy)
             .build();
     }
 }
