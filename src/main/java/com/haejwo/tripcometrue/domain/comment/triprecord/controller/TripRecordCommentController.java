@@ -8,20 +8,21 @@ import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.data.domain.Sort.Direction;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/trip-records")
 public class TripRecordCommentController {
 
     private final TripRecordCommentService commentService;
 
-    @PostMapping("/trip-records/{tripRecordId}/comments")
+    @PostMapping("/{tripRecordId}/comments")
     public ResponseEntity<ResponseDTO<Void>> registerComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
@@ -32,7 +33,7 @@ public class TripRecordCommentController {
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @PostMapping("/trip-records/{tripRecordId}/comments/{tripRecordCommentId}")
+    @PostMapping("/{tripRecordId}/comments/{tripRecordCommentId}")
     public ResponseEntity<ResponseDTO<Void>> registerReplyComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
@@ -44,15 +45,25 @@ public class TripRecordCommentController {
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-    @GetMapping("/trip-records/{tripRecordId}/comments")
-    public ResponseEntity<ResponseDTO<TripRecordCommentListResponseDto>> getTripRecordCommentList(
+    @GetMapping("/{tripRecordId}/comments")
+    public ResponseEntity<ResponseDTO<TripRecordCommentListResponseDto>> getCommentList(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = "createdAt", direction = Direction.DESC) Pageable pageable
     ) {
 
         TripRecordCommentListResponseDto responseDto =
-                commentService.getTripRecordCommentList(principalDetails, tripRecordId, pageable);
+                commentService.getCommentList(principalDetails, tripRecordId, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
+    }
+
+    @DeleteMapping("/comments/{tripRecordCommentId}")
+    public ResponseEntity<ResponseDTO<Void>> deleteComment(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordCommentId
+    ) {
+
+        commentService.removeComment(principalDetails, tripRecordCommentId);
+        return ResponseEntity.ok(ResponseDTO.ok());
     }
 }

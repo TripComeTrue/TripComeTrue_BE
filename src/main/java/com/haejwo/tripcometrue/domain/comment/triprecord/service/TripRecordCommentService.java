@@ -6,6 +6,7 @@ import com.haejwo.tripcometrue.domain.comment.triprecord.entity.TripRecordCommen
 import com.haejwo.tripcometrue.domain.comment.triprecord.exception.TripRecordCommentNotFoundException;
 import com.haejwo.tripcometrue.domain.comment.triprecord.repository.TripRecordCommentRepository;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
@@ -18,16 +19,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class TripRecordCommentService {
 
     private final MemberRepository memberRepository;
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordCommentRepository tripRecordCommentRepository;
 
-    @Transactional
     public void saveComment(
             PrincipalDetails principalDetails,
             Long tripRecordId,
@@ -46,7 +48,6 @@ public class TripRecordCommentService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    @Transactional
     public void saveReplyComment(
             PrincipalDetails principalDetails,
             Long tripRecordId,
@@ -72,7 +73,8 @@ public class TripRecordCommentService {
                 .orElseThrow(TripRecordNotFoundException::new);
     }
 
-    public TripRecordCommentListResponseDto getTripRecordCommentList(
+    @Transactional(readOnly = true)
+    public TripRecordCommentListResponseDto getCommentList(
             PrincipalDetails principalDetails,
             Long tripRecordId,
             Pageable pageable
@@ -83,5 +85,25 @@ public class TripRecordCommentService {
 
         Page<TripRecordComment> tripRecordComments = tripRecordCommentRepository.findByTripRecord(tripRecord, pageable);
         return TripRecordCommentListResponseDto.fromData(tripRecordComments, loginMember);
+    }
+
+    public void removeComment(PrincipalDetails principalDetails, Long tripRecordCommentId) {
+
+        Member loginMember = getMember(principalDetails);
+        TripRecordComment tripRecordComment = getTripRecordComment(tripRecordCommentId);
+        validateRightMemberAccess(loginMember, tripRecordComment);
+
+        tripRecordCommentRepository.delete(tripRecordComment);
+    }
+
+    private TripRecordComment getTripRecordComment(Long tripRecordCommentId) {
+        return tripRecordCommentRepository.findById(tripRecordCommentId)
+                .orElseThrow(TripRecordCommentNotFoundException::new);
+    }
+
+    private void validateRightMemberAccess(Member member, TripRecordComment tripRecordComment) {
+        if (!Objects.equals(tripRecordComment.getMember().getId(), member.getId())) {
+            throw new UserInvalidAccessException();
+        }
     }
 }
