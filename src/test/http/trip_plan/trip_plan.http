@@ -65,5 +65,5 @@ Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci
 GET http://localhost:8080/v1/trip-plan/1
 
 ### 여행 계획 복사
-POST http://localhost:8080/v1/trip-plan/from-trip-record/1
-Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
+GET http://localhost:8080/v1/trip-plan/from-trip-record/1
+Authorization: token
