@@ -57,10 +57,10 @@ public class MemberService {
     public String generateName() {
         List<String> first = Arrays.asList("자유로운", "서운한",
             "당당한", "배부른", "수줍은", "멋있는",
-            "열받은", "심심한", "잘생긴", "이쁜", "시끄러운");
+            "용기있는", "심심한", "잘생긴", "이쁜", "눈웃음치는", "행복한", "사랑스러운", "순수한");
         List<String> name = Arrays.asList("사자", "코끼리", "호랑이", "곰", "여우", "늑대", "너구리",
-            "참새", "고슴도치", "강아지", "고양이", "거북이", "토끼", "앵무새", "하이에나", "돼지", "하마",
-            "얼룩말", "치타", "악어", "기린", "수달", "염소", "다람쥐", "판다");
+            "참새", "고슴도치", "강아지", "고양이", "거북이", "토끼", "앵무새", "하이에나", "펭귄", "하마",
+            "얼룩말", "치타", "악어", "기린", "수달", "염소", "다람쥐", "판다", "코알라", "앵무새", "독수리", "알파카");
         Collections.shuffle(first);
         Collections.shuffle(name);
         return first.get(0) + name.get(0);
@@ -80,7 +80,7 @@ public class MemberService {
 
         //새비밀번호 재입력값 동일여부 최종 검증
         if (!passwordRequestDto.newPassword().equals(passwordRequestDto.confirmPassword())) {
-                throw new NewPasswordNotMatchException();
+            throw new NewPasswordNotMatchException();
         }
 
         String encodedNewPassword = passwordEncoder.encode(newPassword);
@@ -96,14 +96,16 @@ public class MemberService {
         String newPassword = passwordRequestDto.newPassword();
 
         // 현재 비밀번호만 입력된 경우
-        if (passwordRequestDto.currentPassword() != null && passwordRequestDto.newPassword() == null) {
+        if (passwordRequestDto.currentPassword() != null
+            && passwordRequestDto.newPassword() == null) {
             if (!passwordEncoder.matches(passwordRequestDto.currentPassword(), currentPassword)) {
                 throw new CurrentPasswordNotMatchException();
             }
         }
 
         // 새 비밀번호만 입력된 경우
-        if (passwordRequestDto.newPassword() != null && passwordRequestDto.currentPassword() == null) {
+        if (passwordRequestDto.newPassword() != null
+            && passwordRequestDto.currentPassword() == null) {
             if (passwordEncoder.matches(passwordRequestDto.newPassword(), currentPassword)) {
                 throw new NewPasswordSameAsOldException();
             }
@@ -142,7 +144,9 @@ public class MemberService {
     public NicknameResponseDto updateNickname(
         PrincipalDetails principalDetails, NicknameRequestDto requestDto) {
         memberRepository.findByMemberBaseNickname(requestDto.nickname())
-            .ifPresent(existingMember -> {throw new NicknameAlreadyExistsException();});
+            .ifPresent(existingMember -> {
+                throw new NicknameAlreadyExistsException();
+            });
         Member member = getLoginMember(principalDetails);
         member.getMemberBase().changeNickname(requestDto.nickname());
         member.updateNickNameChangeCount();
@@ -158,7 +162,7 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    public Member getLoginMember(PrincipalDetails principalDetails){
+    public Member getLoginMember(PrincipalDetails principalDetails) {
         Member member = memberRepository.findById(principalDetails.getMember().getId())
             .orElseThrow();
         return member;
