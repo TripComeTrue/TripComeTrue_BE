@@ -4,13 +4,12 @@ import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.store.entity.TripRecordStore;
-import com.haejwo.tripcometrue.domain.store.repository.TripRecordStoreRepository;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanRequestDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.request.TripPlanScheduleRequestDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.CopyTripPlanFromTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanDetailsResponseDto;
-import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanListReponseDto;
+import com.haejwo.tripcometrue.domain.tripplan.dto.response.TripPlanScheduleResponseDto;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
 import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlanSchedule;
 import com.haejwo.tripcometrue.domain.tripplan.exception.TripPlanNotFoundException;
@@ -36,7 +35,6 @@ public class TripPlanService {
     private final TripPlanRepository tripPlanRepository;
     private final TripPlanScheduleRepository tripPlanScheduleRepository;
     private final PlaceRepository placeRepository;
-    private final TripRecordStoreRepository tripRecordStoreRepository;
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordScheduleRepository tripRecordScheduleRepository;
 
@@ -122,8 +120,6 @@ public class TripPlanService {
                 .orElseThrow(TripRecordNotFoundException::new))
             .build();
 
-        tripRecordStoreRepository.save(tripRecordStore);
-
         List<TripPlanScheduleResponseDto> responseDtos = tripRecordScheduleRepository
             .findAllByTripRecordId(tripRecordId)
             .stream()
@@ -154,5 +150,6 @@ public class TripPlanService {
                 .collect(Collectors.toList());
 
             return TripPlanListReponseDto.fromEntity(tripPlan, placesVisited);
-        });    }
+        });
+    }
 }
