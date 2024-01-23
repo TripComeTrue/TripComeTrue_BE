@@ -82,7 +82,7 @@ public class TripPlanController {
             .body(responseBody);
     }
 
-    @PostMapping("from-trip-record/{tripRecordId}")
+    @GetMapping("from-trip-record/{tripRecordId}")
     public ResponseEntity<ResponseDTO<CopyTripPlanFromTripRecordResponseDto>> copyTripPlanFromTripRecord(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long tripRecordId) {
