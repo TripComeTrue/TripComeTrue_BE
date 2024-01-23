@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class CommentController {
+public class TripRecordCommentController {
 
     private final TripRecordCommentService commentService;
 
@@ -36,7 +36,7 @@ public class CommentController {
     public ResponseEntity<ResponseDTO<TripRecordCommentListResponseDto>> getTripRecordCommentList(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
         TripRecordCommentListResponseDto responseDto =

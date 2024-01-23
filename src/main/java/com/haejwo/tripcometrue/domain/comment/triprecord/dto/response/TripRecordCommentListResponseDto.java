@@ -5,6 +5,7 @@ import com.haejwo.tripcometrue.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Objects;
 
 public record TripRecordCommentListResponseDto(
 
@@ -16,8 +17,13 @@ public record TripRecordCommentListResponseDto(
     public static TripRecordCommentListResponseDto fromData(Page<TripRecordComment> page, Member loginMember) {
         return new TripRecordCommentListResponseDto(
                 page.getTotalElements(),
-                page.map(tripRecordComment ->
-                                TripRecordCommentResponseDto.fromEntity(tripRecordComment, loginMember))
+                page.map(tripRecordComment -> {
+                            if (tripRecordComment.getParentComment() == null) {
+                                return TripRecordCommentResponseDto.fromEntity(tripRecordComment, loginMember);
+                            }
+                            return null;
+                        })
+                        .filter(Objects::nonNull)
                         .toList()
         );
     }
