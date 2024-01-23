@@ -43,9 +43,10 @@ public class TripRecordComment extends BaseTimeEntity {
     private String content;
 
     @Builder
-    public TripRecordComment(Member member, TripRecord tripRecord, String content) {
+    public TripRecordComment(Member member, TripRecord tripRecord, TripRecordComment parentComment, String content) {
         this.member = member;
         this.tripRecord = tripRecord;
+        this.parentComment = parentComment;
         this.content = content;
     }
 }

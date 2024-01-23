@@ -77,6 +77,9 @@ public enum ErrorCode {
     CAN_NOT_MODIFYING_WITHOUT_CONTENT(HttpStatus.BAD_REQUEST, "리뷰 내용 작성 이전에 본문을 수정할 수 없습니다."),
     TRIP_RECORD_REVIEW_DELETE_ALL_FAILURE(HttpStatus.BAD_REQUEST, "요청한 여행 후기 리뷰가 모두 존재하지 않아서 삭제에 실패했습니다."),
 
+    // COMMENT
+    TRIP_RECORD_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행 후기 댓글입니다."),
+
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
 

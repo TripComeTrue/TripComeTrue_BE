@@ -14,10 +14,25 @@ public record CommentRequestDto(
 
 ) {
 
-    public static TripRecordComment toEntity(Member member, TripRecord tripRecord, CommentRequestDto requestDto) {
+    public static TripRecordComment toComment(Member member, TripRecord tripRecord, CommentRequestDto requestDto) {
         return TripRecordComment.builder()
                 .member(member)
                 .tripRecord(tripRecord)
+                .content(requestDto.content)
+                .build();
+    }
+
+    public static TripRecordComment toReplyComment(
+            Member member,
+            TripRecord tripRecord,
+            TripRecordComment tripRecordComment,
+            CommentRequestDto requestDto
+    ) {
+
+        return TripRecordComment.builder()
+                .member(member)
+                .tripRecord(tripRecord)
+                .parentComment(tripRecordComment)
                 .content(requestDto.content)
                 .build();
     }

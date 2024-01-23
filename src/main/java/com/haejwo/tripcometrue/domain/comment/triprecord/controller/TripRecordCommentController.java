@@ -21,14 +21,26 @@ public class TripRecordCommentController {
 
     private final TripRecordCommentService commentService;
 
-    @PostMapping("/trip-record/{tripRecordId}/comments")
-    public ResponseEntity<ResponseDTO<Void>> registerTripRecordComment(
+    @PostMapping("/trip-records/{tripRecordId}/comments")
+    public ResponseEntity<ResponseDTO<Void>> registerComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
             @RequestBody @Valid CommentRequestDto requestDto
     ) {
 
         commentService.saveComment(principalDetails, tripRecordId, requestDto);
+        return ResponseEntity.ok(ResponseDTO.ok());
+    }
+
+    @PostMapping("/trip-records/{tripRecordId}/comments/{tripRecordCommentId}")
+    public ResponseEntity<ResponseDTO<Void>> registerReplyComment(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long tripRecordId,
+            @PathVariable Long tripRecordCommentId,
+            @RequestBody @Valid CommentRequestDto requestDto
+    ) {
+
+        commentService.saveReplyComment(principalDetails, tripRecordId, tripRecordCommentId, requestDto);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 

@@ -27,15 +27,15 @@ public record TripRecordCommentResponseDto(
     public static TripRecordCommentResponseDto fromEntity(TripRecordComment tripRecordComment, Member loginMember) {
 
 
-            return new TripRecordCommentResponseDto(
-                    tripRecordComment.getId(),
-                    tripRecordComment.getMember().getId(),
-                    tripRecordComment.getMember().getProfile_image(),
-                    tripRecordComment.getMember().getMemberBase().getNickname(),
-                    isWriter(tripRecordComment, loginMember),
-                    tripRecordComment.getCreatedAt(),
-                    getReplyComments(tripRecordComment, loginMember)
-            );
+        return new TripRecordCommentResponseDto(
+                tripRecordComment.getId(),
+                tripRecordComment.getMember().getId(),
+                tripRecordComment.getMember().getProfile_image(),
+                tripRecordComment.getMember().getMemberBase().getNickname(),
+                isWriter(tripRecordComment, loginMember),
+                tripRecordComment.getCreatedAt(),
+                getReplyComments(tripRecordComment, loginMember)
+        );
 
     }
 
