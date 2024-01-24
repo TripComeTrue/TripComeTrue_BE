@@ -1,14 +1,12 @@
 package com.haejwo.tripcometrue.domain.city.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import lombok.Builder;
 
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public record CityResponseDto(
-    Long id,
+    Long cityId,
     String name,
     String language,
     String timeDifference,
@@ -18,7 +16,8 @@ public record CityResponseDto(
     String exchangeRate,
     String weatherRecommendation,
     String weatherDescription,
-    String country
+    String country,
+    String imageUrl
 ) {
 
     @Builder
@@ -27,7 +26,7 @@ public record CityResponseDto(
 
     public static CityResponseDto fromEntity(City entity) {
         return CityResponseDto.builder()
-            .id(entity.getId())
+            .cityId(entity.getId())
             .name(entity.getName())
             .language(entity.getLanguage())
             .timeDifference(entity.getTimeDifference())
@@ -40,12 +39,13 @@ public record CityResponseDto(
             .weatherRecommendation(entity.getWeatherRecommendation())
             .weatherDescription(entity.getWeatherDescription())
             .country(entity.getCountry().getDescription())
+            .imageUrl(entity.getImageUrl())
             .build();
     }
 
     public static CityResponseDto fromEntity(City entity, String exchangeRate) {
         return CityResponseDto.builder()
-            .id(entity.getId())
+            .cityId(entity.getId())
             .name(entity.getName())
             .language(entity.getLanguage())
             .timeDifference(entity.getTimeDifference())
@@ -58,6 +58,7 @@ public record CityResponseDto(
             .weatherRecommendation(entity.getWeatherRecommendation())
             .weatherDescription(entity.getWeatherDescription())
             .country(entity.getCountry().getDescription())
+            .imageUrl(entity.getImageUrl())
             .build();
     }
 }
