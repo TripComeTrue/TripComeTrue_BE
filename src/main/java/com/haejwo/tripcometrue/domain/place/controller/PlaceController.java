@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.place.controller;
 
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceNearbyResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.service.PlaceService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
@@ -65,6 +66,20 @@ public class PlaceController {
         return ResponseEntity
             .status(responseBody.getCode())
             .body(responseBody);
+    }
+
+    @GetMapping("/{placeId}/nearby")
+    public ResponseEntity<ResponseDTO<List<PlaceNearbyResponseDto>>> placeNearbyList(
+        @PathVariable Long placeId
+    ) {
+
+        List<PlaceNearbyResponseDto> responseDtos = placeService.findNearbyPlaceList(placeId);
+
+        ResponseDTO<List<PlaceNearbyResponseDto>> responseBody = ResponseDTO.okWithData(responseDtos);
+
+        return ResponseEntity.status(responseBody
+                .getCode())
+                .body(responseBody);
     }
 
     @GetMapping
