@@ -12,6 +12,8 @@ import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -76,7 +78,7 @@ public class StoreController {
     @GetMapping("/v1/cities/stores")
     public ResponseEntity<ResponseDTO<Page<CityStoreResponseDto>>> getStoredCities(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
-        Pageable pageable) {
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CityStoreResponseDto> storedCities = storeService.getStoredCities(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedCities));
     }
@@ -84,7 +86,7 @@ public class StoreController {
     @GetMapping("/v1/places/stores")
     public ResponseEntity<ResponseDTO<Page<PlaceStoreResponseDto>>> getStoredPlaces(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
-        Pageable pageable) {
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PlaceStoreResponseDto> storedPlaces = storeService.getStoredPlaces(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedPlaces));
     }
@@ -92,7 +94,7 @@ public class StoreController {
     @GetMapping("/v1/trip-records/stores")
     public ResponseEntity<ResponseDTO<Page<TripRecordStoreResponseDto>>> getStoredTripRecords(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
-        Pageable pageable) {
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<TripRecordStoreResponseDto> storedTripRecords = storeService.getStoredTripRecords(principalDetails, pageable);
         return ResponseEntity.ok(ResponseDTO.okWithData(storedTripRecords));
     }

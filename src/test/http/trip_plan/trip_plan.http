@@ -1,13 +1,14 @@
 
 ### 여행 계획 작성
 POST http://localhost:8080/v1/trip-plan
-Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
+Authorization: token
 Content-Type: application/json
 
 {
   "countries": "한국,일본",
   "tripStartDay": "2024-01-10",
   "tripEndDay": "2024-01-20",
+  "referencedBy":10,
   "tripPlanSchedules": [
     {
       "dayNumber": 1,
@@ -30,7 +31,7 @@ Content-Type: application/json
 
 ### 여행 계획 수정
 PUT http://localhost:8080/v1/trip-plan/1
-Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
+Authorization: token
 Content-Type: application/json
 
 {
@@ -65,5 +66,5 @@ Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci
 GET http://localhost:8080/v1/trip-plan/1
 
 ### 여행 계획 복사
-POST http://localhost:8080/v1/trip-plan/from-trip-record/1
-Authorization: eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJpYXQiOjE3MDUxNDE4NzksImV4cCI6MTcwNTI4NTg3OX0.WsPlvC_DJDnh4j3O0x6Di3SRc6FfqjnhRlgMFBOZkaI
+GET http://localhost:8080/v1/trip-plan/from-trip-record/1
+Authorization: token

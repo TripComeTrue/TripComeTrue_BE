@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.controller;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.MyTripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
@@ -12,6 +13,7 @@ import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +66,7 @@ public class TripRecordController {
 
     }
 
+    // 홈 피드 TOP 인기 여행 후기 리스트 조회
     @GetMapping("/top-list")
     public ResponseEntity<ResponseDTO<List<TopTripRecordResponseDto>>> tripRecordTopList(
         @RequestParam("type") @HomeTopListQueryType String type
@@ -78,13 +81,13 @@ public class TripRecordController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<ResponseDTO<List<TripRecordListResponseDto>>> getMyTripRecords(
+    public ResponseEntity<ResponseDTO<Page<MyTripRecordListResponseDto>>> getMyTripRecords(
         @AuthenticationPrincipal PrincipalDetails principalDetails,
         Pageable pageable
     ) {
-        List<TripRecordListResponseDto> responseDtos
+        Page<MyTripRecordListResponseDto> responseDtos
             = tripRecordService.getMyTripRecordsList(principalDetails, pageable);
-        ResponseDTO<List<TripRecordListResponseDto>> responseBody
+        ResponseDTO<Page<MyTripRecordListResponseDto>> responseBody
             = ResponseDTO.okWithData(responseDtos);
 
         return ResponseEntity

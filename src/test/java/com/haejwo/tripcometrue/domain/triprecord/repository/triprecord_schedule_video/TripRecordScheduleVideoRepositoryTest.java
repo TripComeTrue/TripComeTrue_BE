@@ -18,20 +18,21 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecor
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule.TripRecordScheduleRepository;
 import com.haejwo.tripcometrue.global.enums.Country;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
+@ActiveProfiles("test")
 @Import(TestQuerydslConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
@@ -143,7 +144,7 @@ class TripRecordScheduleVideoRepositoryTest {
 
         TripRecord tripRecord1 = tripRecordRepository.save(
             TripRecord.builder()
-                .averageRating(4)
+                .averageRating(4.0)
                 .title("여행 후기 제목")
                 .content("여행 후기")
                 .countries("THAILAND")
@@ -162,7 +163,7 @@ class TripRecordScheduleVideoRepositoryTest {
 
         TripRecord tripRecord2 = tripRecordRepository.save(
             TripRecord.builder()
-                .averageRating(4)
+                .averageRating(4.0)
                 .title("여행 후기 제목")
                 .content("여행 후기")
                 .countries("JAPAN")
@@ -181,7 +182,7 @@ class TripRecordScheduleVideoRepositoryTest {
 
         TripRecord tripRecord3 = tripRecordRepository.save(
             TripRecord.builder()
-                .averageRating(4)
+                .averageRating(4.0)
                 .title("여행 후기 제목")
                 .content("여행 후기")
                 .countries("KOREA")
@@ -325,15 +326,5 @@ class TripRecordScheduleVideoRepositoryTest {
 
         //then
         assertThat(result).hasSize(4);
-    }
-
-    @AfterEach
-    void cleanUp() {
-        tripRecordScheduleVideoRepository.deleteAll();
-        tripRecordScheduleRepository.deleteAll();
-        tripRecordRepository.deleteAll();
-        memberRepository.deleteAll();
-        placeRepository.deleteAll();
-        cityRepository.deleteAll();
     }
 }

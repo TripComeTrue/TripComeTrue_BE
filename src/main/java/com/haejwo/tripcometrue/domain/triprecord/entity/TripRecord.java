@@ -39,7 +39,7 @@ public class TripRecord extends BaseTimeEntity {
     private LocalDate tripEndDay;
 
     private Integer totalDays;
-    private Integer averageRating;
+    private Double averageRating;
     private Integer viewCount;
     private Integer storeCount;
     private Integer reviewCount;
@@ -65,7 +65,7 @@ public class TripRecord extends BaseTimeEntity {
     @Builder
     public TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
         String countries, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
-        Integer averageRating, Integer viewCount, Integer storeCount, Integer reviewCount,
+        Double averageRating, Integer viewCount, Integer storeCount, Integer reviewCount,
         Integer commentCount, List<TripRecordSchedule> tripRecordSchedules,
         List<TripRecordTag> tripRecordTags, List<TripRecordImage> tripRecordImages,
         List<TripRecordStore> tripRecordStores, Member member) {

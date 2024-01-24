@@ -105,11 +105,12 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
                 qTripRecord.totalDays,
                 qTripRecord.commentCount,
                 qTripRecord.storeCount,
+                qTripRecord.averageRating,
                 JPAExpressions
                     .select(qTripRecordImage.imageUrl.min())
                     .from(qTripRecordImage)
                     .where(qTripRecordImage.tripRecord.id.eq(qTripRecord.id)),
-                Projections.constructor(TripRecordMemberResponseDto.class, qMember.memberBase.nickname, qMember.profile_image)
+                Projections.constructor(TripRecordMemberResponseDto.class, qMember.memberBase.nickname, qMember.profileImage)
             ))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -153,6 +154,8 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         List<TripRecordHotShortsListResponseDto> result = queryFactory
             .select(Projections.constructor(TripRecordHotShortsListResponseDto.class,
                 qTripRecord.id,
+                qTripRecord.title,
+                qTripRecord.storeCount,
                 JPAExpressions
                     .select(qTripRecordScheduleVideo.id.min())
                     .from(qTripRecordScheduleVideo)
@@ -167,7 +170,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
                     .where(qTripRecordScheduleVideo.tripRecordSchedule.tripRecord.id.eq(qTripRecord.id)),
                 Projections.constructor(TripRecordMemberResponseDto.class,
                     qMember.memberBase.nickname,
-                    qMember.profile_image)))
+                    qMember.profileImage)))
             .from(qTripRecord)
             .leftJoin(qTripRecord.tripRecordSchedules, qTripRecordSchedule)
             .leftJoin(qTripRecordSchedule.tripRecordScheduleVideos, qTripRecordScheduleVideo)
@@ -182,4 +185,28 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         return result;
     }
 
+
+    @Override
+    public List<TripRecord> findTripRecordListInMemberIds(List<Long> memberIds) {
+        QTripRecord tripRecord = QTripRecord.tripRecord;
+        QMember member = QMember.member;
+
+        return queryFactory.selectFrom(tripRecord)
+            .join(tripRecord.member, member)
+            .where(member.id.in(memberIds))
+            .orderBy(tripRecord.storeCount.desc(), tripRecord.createdAt.desc())
+            .fetch();
+    }
+
+    @Override
+    public List<TripRecord> findTripRecordListWithMemberInMemberIds(List<Long> memberIds) {
+        QTripRecord tripRecord = QTripRecord.tripRecord;
+        QMember member = QMember.member;
+
+        return queryFactory.selectFrom(tripRecord)
+            .join(tripRecord.member, member).fetchJoin()
+            .where(member.id.in(memberIds))
+            .orderBy(tripRecord.storeCount.desc(), tripRecord.createdAt.desc())
+            .fetch();
+    }
 }

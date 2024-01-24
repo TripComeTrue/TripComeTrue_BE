@@ -4,6 +4,6 @@ import com.haejwo.tripcometrue.domain.member.entity.Member;
 
 public record ProfileImageResponseDto(String profileImageUrl) {
   public static ProfileImageResponseDto fromEntity(Member member) {
-    return new ProfileImageResponseDto(member.getProfile_image());
+    return new ProfileImageResponseDto(member.getProfileImage());
   }
 }

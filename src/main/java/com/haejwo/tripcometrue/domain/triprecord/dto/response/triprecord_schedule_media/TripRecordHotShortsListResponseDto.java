@@ -6,6 +6,8 @@ import lombok.Builder;
 public record TripRecordHotShortsListResponseDto(
 
     Long tripRecordId,
+    String tripRecordTitle,
+    Integer tripRecordStoreCount,
     Long videoId,
     String thumbnailUrl,
     TripRecordMemberResponseDto member
@@ -13,9 +15,12 @@ public record TripRecordHotShortsListResponseDto(
 ) {
 
     @Builder
-    public TripRecordHotShortsListResponseDto(Long tripRecordId, Long videoId, String thumbnailUrl,
+    public TripRecordHotShortsListResponseDto(Long tripRecordId, String tripRecordTitle,
+        Integer tripRecordStoreCount, Long videoId, String thumbnailUrl,
         TripRecordMemberResponseDto member) {
         this.tripRecordId = tripRecordId;
+        this.tripRecordTitle = tripRecordTitle;
+        this.tripRecordStoreCount = tripRecordStoreCount;
         this.videoId = videoId;
         this.thumbnailUrl = thumbnailUrl;
         this.member = member;

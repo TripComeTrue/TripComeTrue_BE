@@ -1,8 +1,11 @@
 package com.haejwo.tripcometrue.domain.triprecord.service;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.MyTripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TopTripRecordResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordDetailResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemWithMemberIdResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoDetailDto;
@@ -18,9 +21,9 @@ import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordVi
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +91,26 @@ public class TripRecordService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<TripRecordListItemResponseDto> findTripRecordsInMemberIds(List<Long> memberIds) {
+
+        return tripRecordRepository
+            .findTripRecordListInMemberIds(memberIds)
+            .stream()
+            .map(TripRecordListItemResponseDto::fromEntity)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TripRecordListItemWithMemberIdResponseDto> findTripRecordsWihMemberInMemberIds(List<Long> memberIds) {
+
+        return tripRecordRepository
+            .findTripRecordListWithMemberInMemberIds(memberIds)
+            .stream()
+            .map(TripRecordListItemWithMemberIdResponseDto::fromEntity)
+            .toList();
+    }
+
     @Transactional
     public void incrementViewCount(TripRecord tripRecord) {
 
@@ -102,14 +125,12 @@ public class TripRecordService {
     }
 
     @Transactional(readOnly = true)
-    public List<TripRecordListResponseDto> getMyTripRecordsList(
+    public Page<MyTripRecordListResponseDto> getMyTripRecordsList(
         PrincipalDetails principalDetails, Pageable pageable) {
         Long memberId = principalDetails.getMember().getId();
-        List<TripRecord> tripRecords = tripRecordRepository.findByMemberId(memberId, pageable);
+        Page<TripRecord> tripRecords = tripRecordRepository.findByMemberId(memberId, pageable);
 
-        return tripRecords.stream()
-            .map(TripRecordListResponseDto::fromEntity)
-            .collect(Collectors.toList());
+        return tripRecords.map(MyTripRecordListResponseDto::fromEntity);
     }
 
     public List<TripRecordHotShortsListResponseDto> findTripRecordHotShortsList(Pageable pageable) {

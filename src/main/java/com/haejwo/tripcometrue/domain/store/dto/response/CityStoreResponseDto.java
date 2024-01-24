@@ -14,7 +14,9 @@ public record CityStoreResponseDto(
     CurrencyUnit currency,
     String weatherRecommendation,
     String weatherDescription,
-    Country country
+    Country country,
+    Integer storeCount,
+    String imageUrl
 ) {
 
   public static CityStoreResponseDto fromEntity(CityStore cityStore) {
@@ -29,7 +31,9 @@ public record CityStoreResponseDto(
         city.getCurrency(),
         city.getWeatherRecommendation(),
         city.getWeatherDescription(),
-        city.getCountry()
+        city.getCountry(),
+        city.getStoreCount(),
+        city.getImageUrl()
     );
   }
 }

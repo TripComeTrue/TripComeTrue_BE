@@ -20,12 +20,16 @@ import com.haejwo.tripcometrue.domain.store.exception.StoreNotFoundException;
 import com.haejwo.tripcometrue.domain.store.repository.CityStoreRepository;
 import com.haejwo.tripcometrue.domain.store.repository.PlaceStoreRepository;
 import com.haejwo.tripcometrue.domain.store.repository.TripRecordStoreRepository;
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleImageWithPlaceIdQueryDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordImage;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +45,7 @@ public class StoreService{
     private final CityStoreRepository cityStoreRepository;
     private final PlaceStoreRepository placeStoreRepository;
     private final TripRecordStoreRepository tripRecordStoreRepository;
-
+    private final TripRecordScheduleImageRepository tripRecordScheduleImageRepository;
 
     @Transactional
     public CityStoreResponseDto storeCity(CityStoreRequestDto request, PrincipalDetails principalDetails) {
@@ -52,6 +56,9 @@ public class StoreService{
             .ifPresent(store -> {
                 throw new StoreAlreadyExistException(ErrorCode.STORE_ALREADY_EXIST);
             });
+
+        city.incrementStoreCount();
+        cityRepository.save(city);
 
         CityStore store = cityStoreRepository.save(request.toEntity(principalDetails.getMember(), city));
         return CityStoreResponseDto.fromEntity(store);
@@ -67,8 +74,14 @@ public class StoreService{
                 throw new StoreAlreadyExistException(ErrorCode.STORE_ALREADY_EXIST);
             });
 
+        place.incrementStoreCount();
+        placeRepository.save(place);
+
         PlaceStore store = placeStoreRepository.save(request.toEntity(principalDetails.getMember(), place));
-        return PlaceStoreResponseDto.fromEntity(store);
+
+        String imageUrl = findFirstImageForPlace(place);
+
+        return PlaceStoreResponseDto.fromEntity(store, imageUrl);
     }
 
     @Transactional
@@ -81,8 +94,14 @@ public class StoreService{
                 throw new StoreAlreadyExistException(ErrorCode.STORE_ALREADY_EXIST);
             });
 
+        tripRecord.incrementStoreCount();
+        tripRecordRepository.save(tripRecord);
+
         TripRecordStore store = tripRecordStoreRepository.save(request.toEntity(principalDetails.getMember(), tripRecord));
-        return TripRecordStoreResponseDto.fromEntity(store);
+        List<TripRecordImage> images = tripRecord.getTripRecordImages();
+        String imageUrl = images.isEmpty() ? null : images.get(0).getImageUrl();
+
+        return TripRecordStoreResponseDto.fromEntity(store, imageUrl);
     }
 
     @Transactional
@@ -116,12 +135,29 @@ public class StoreService{
 
     public Page<PlaceStoreResponseDto> getStoredPlaces(PrincipalDetails principalDetails, Pageable pageable) {
         Page<PlaceStore> storedPlaces = placeStoreRepository.findByMember(principalDetails.getMember(), pageable);
-        return storedPlaces.map(PlaceStoreResponseDto::fromEntity);
+        return storedPlaces.map(placeStore -> {
+            String imageUrl = findFirstImageForPlace(placeStore.getPlace());
+            return PlaceStoreResponseDto.fromEntity(placeStore, imageUrl);
+        });    }
+
+    private String findFirstImageForPlace(Place place){
+        List<TripRecordScheduleImageWithPlaceIdQueryDto> images =
+            tripRecordScheduleImageRepository.findInPlaceIdsOrderByCreatedAtDesc(List.of(place.getId()));
+
+        if (!images.isEmpty()) {
+            return images.get(0).imageUrl();
+        }
+        return null;
     }
 
     public Page<TripRecordStoreResponseDto> getStoredTripRecords(PrincipalDetails principalDetails, Pageable pageable) {
         Page<TripRecordStore> storedTripRecords = tripRecordStoreRepository.findByMember(principalDetails.getMember(), pageable);
-        return storedTripRecords.map(TripRecordStoreResponseDto::fromEntity);
+        return storedTripRecords.map(tripRecordStore -> {
+            TripRecord tripRecord = tripRecordStore.getTripRecord();
+            List<TripRecordImage> images = tripRecord.getTripRecordImages();
+            String imageUrl = images.isEmpty() ? null : images.get(0).getImageUrl();
+            return TripRecordStoreResponseDto.fromEntity(tripRecordStore, imageUrl);
+        });
     }
 
     public Long getStoredCountForCity(Long cityId) {
