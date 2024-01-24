@@ -8,12 +8,15 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRec
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoDetailDto;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
 import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,7 +88,7 @@ public class TripRecordController {
             );
     }
 
-    // 여행 후기 검색(태그) 및 페이징 조회
+    // 여행 후기 검색(해시태그) 및 페이징 조회
     @GetMapping("/search/hashtags")
     public ResponseEntity<ResponseDTO<SliceResponseDto<TripRecordListItemResponseDto>>> searchTripRecordsByHashtag(
         @RequestParam("hashtag") String hashtag,
@@ -96,7 +99,25 @@ public class TripRecordController {
             .ok()
             .body(
                 ResponseDTO.okWithData(
-                    tripRecordService.listTripRecordsByHashTag(hashtag, pageable)
+                    tripRecordService.listTripRecordsByHashtag(hashtag, pageable)
+                )
+            );
+    }
+
+    // 여행 후기 검색(여행 경비 범위) 및 페이징 조회
+    @GetMapping("/search/expense-ranges")
+    public ResponseEntity<ResponseDTO<SliceResponseDto<TripRecordListItemResponseDto>>> searchTripRecordsByExpenseRangeType(
+        @RequestParam("expenseRangeType")
+        @NotNull(message = "요청값은 [BELOW_50, BELOW_100, BELOW_200, BELOW_300, ABOVE_300] 중 하나여야 합니다.")
+        ExpenseRangeType expenseRangeType,
+        @PageableDefault(sort = "averageRating", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    tripRecordService.listTripRecordsByExpenseRangeType(expenseRangeType, pageable)
                 )
             );
     }
