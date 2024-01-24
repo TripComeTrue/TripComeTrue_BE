@@ -5,6 +5,7 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.Trip
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -16,7 +17,9 @@ public interface TripRecordCustomRepository {
 
     Slice<TripRecord> findTripRecordListByFilter(TripRecordSearchParamAttribute requestParamAttribute, Pageable pageable);
 
-    Slice<TripRecord> findTripRecordsByHashTag(String hashTag, Pageable pageable);
+    Slice<TripRecord> findTripRecordsByHashtag(String hashTag, Pageable pageable);
+
+    Slice<TripRecord> findTripRecordsByExpenseRangeType(ExpenseRangeType expenseRangeType, Pageable pageable);
 
     List<TripRecord> findTopTripRecordListDomestic(int size);
 
