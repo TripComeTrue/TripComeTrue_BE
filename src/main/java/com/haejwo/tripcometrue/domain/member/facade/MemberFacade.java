@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberSearchFacade {
+public class MemberFacade {
 
     private final MemberSearchService memberSearchService;
     private final TripRecordScheduleVideoService tripRecordScheduleVideoService;

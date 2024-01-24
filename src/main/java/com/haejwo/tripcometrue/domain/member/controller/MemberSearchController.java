@@ -2,7 +2,7 @@ package com.haejwo.tripcometrue.domain.member.controller;
 
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailListItemResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSearchResultWithContentResponseDto;
-import com.haejwo.tripcometrue.domain.member.facade.MemberSearchFacade;
+import com.haejwo.tripcometrue.domain.member.facade.MemberFacade;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberSearchController {
 
-    private final MemberSearchFacade memberSearchFacade;
+    private final MemberFacade memberFacade;
 
     @GetMapping("/list")
     public ResponseEntity<ResponseDTO<MemberSearchResultWithContentResponseDto>> searchByNicknameResultWithContent(
@@ -30,7 +30,7 @@ public class MemberSearchController {
             .ok()
             .body(
                 ResponseDTO.okWithData(
-                    memberSearchFacade.searchByNicknameResultWithContent(query)
+                    memberFacade.searchByNicknameResultWithContent(query)
                 )
             );
     }
@@ -44,7 +44,7 @@ public class MemberSearchController {
             .ok()
             .body(
                 ResponseDTO.okWithData(
-                    memberSearchFacade.searchByNicknamePagination(query, pageable)
+                    memberFacade.searchByNicknamePagination(query, pageable)
                 )
             );
     }

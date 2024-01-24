@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DatabaseCleanUpAfterEach
 @Sql(scripts = "classpath:sql/test-data-insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest
-class MemberSearchFacadeTest extends AbstractContainersSupport {
+class MemberFacadeTest extends AbstractContainersSupport {
 
     @Autowired
-    private MemberSearchFacade memberSearchFacade;
+    private MemberFacade memberFacade;
 
     @Test
     void searchByNicknameResultWithContent() {
@@ -30,7 +30,7 @@ class MemberSearchFacadeTest extends AbstractContainersSupport {
         String query = "치 앙마이";
 
         // when
-        MemberSearchResultWithContentResponseDto result = memberSearchFacade.searchByNicknameResultWithContent(query);
+        MemberSearchResultWithContentResponseDto result = memberFacade.searchByNicknameResultWithContent(query);
 
         // then
         assertThat(result.members()).hasSize(2);
@@ -47,7 +47,7 @@ class MemberSearchFacadeTest extends AbstractContainersSupport {
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "memberRating"));
 
         // when
-        SliceResponseDto<MemberDetailListItemResponseDto> result = memberSearchFacade.searchByNicknamePagination(query, pageRequest);
+        SliceResponseDto<MemberDetailListItemResponseDto> result = memberFacade.searchByNicknamePagination(query, pageRequest);
 
         // then
         assertThat(result.currentPageNum()).isEqualTo(pageNum);
@@ -64,7 +64,7 @@ class MemberSearchFacadeTest extends AbstractContainersSupport {
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "memberRating"));
 
         // when
-        SliceResponseDto<MemberDetailListItemResponseDto> result = memberSearchFacade.searchByNicknamePagination(query, pageRequest);
+        SliceResponseDto<MemberDetailListItemResponseDto> result = memberFacade.searchByNicknamePagination(query, pageRequest);
 
         // then
         assertThat(result.currentPageNum()).isEqualTo(pageNum);
