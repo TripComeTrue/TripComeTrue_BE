@@ -1,6 +1,5 @@
 package com.haejwo.tripcometrue.domain.review.placereview.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import org.springframework.data.domain.Page;
 
