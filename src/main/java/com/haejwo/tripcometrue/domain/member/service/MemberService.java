@@ -163,8 +163,7 @@ public class MemberService {
     }
 
     public Member getLoginMember(PrincipalDetails principalDetails) {
-        Member member = memberRepository.findById(principalDetails.getMember().getId())
-            .orElseThrow();
+        Member member = principalDetails.getMember();
         return member;
     }
 
