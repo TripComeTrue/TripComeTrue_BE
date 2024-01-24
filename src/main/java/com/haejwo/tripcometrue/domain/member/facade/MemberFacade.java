@@ -1,8 +1,6 @@
 package com.haejwo.tripcometrue.domain.member.facade;
 
-import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailListItemResponseDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.MemberListItemResponseDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.MemberSearchResultWithContentResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.*;
 import com.haejwo.tripcometrue.domain.member.service.MemberSearchService;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
@@ -29,11 +27,11 @@ public class MemberFacade {
     private final TripRecordService tripRecordService;
 
     public MemberSearchResultWithContentResponseDto searchByNicknameResultWithContent(String nickname) {
-        List<MemberListItemResponseDto> members = memberSearchService.searchByNickname(nickname);
+        List<MemberSimpleResponseDto> members = memberSearchService.searchByNickname(nickname);
 
         List<Long> memberIds = members
             .stream()
-            .map(MemberListItemResponseDto::memberId)
+            .map(MemberSimpleResponseDto::memberId)
             .toList();
 
         List<TripRecordScheduleVideoListItemResponseDto> videos = tripRecordScheduleVideoService.getVideosInMemberIds(memberIds);
@@ -48,11 +46,11 @@ public class MemberFacade {
 
     public SliceResponseDto<MemberDetailListItemResponseDto> searchByNicknamePagination(String query, Pageable pageable) {
 
-        SliceResponseDto<MemberListItemResponseDto> sliceResult = memberSearchService.searchByNickname(query, pageable);
+        SliceResponseDto<MemberSimpleResponseDto> sliceResult = memberSearchService.searchByNickname(query, pageable);
 
         List<Long> memberIds = sliceResult.content()
             .stream()
-            .map(MemberListItemResponseDto::memberId)
+            .map(MemberSimpleResponseDto::memberId)
             .toList();
 
         Map<Long, List<TripRecordListItemResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(memberIds);
