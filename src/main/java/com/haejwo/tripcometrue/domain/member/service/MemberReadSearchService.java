@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class MemberSearchService {
+public class MemberReadSearchService {
 
     private final MemberRepository memberRepository;
 
