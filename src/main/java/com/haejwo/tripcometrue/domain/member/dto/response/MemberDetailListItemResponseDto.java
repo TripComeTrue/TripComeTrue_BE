@@ -3,11 +3,11 @@ package com.haejwo.tripcometrue.domain.member.dto.response;
 import lombok.Builder;
 
 public record MemberDetailListItemResponseDto(
-    Long id,
+    Long memberId,
     String nickname,
     String introduction,
     String profileUrl,
-    Double avgRate,
+    Double averageRating,
     Integer tripRecordTotal,
     Integer videoTotal
 ) {
@@ -18,11 +18,11 @@ public record MemberDetailListItemResponseDto(
 
     public static MemberDetailListItemResponseDto of(MemberListItemResponseDto dto, Integer tripRecordTotal, Integer videoTotal) {
         return MemberDetailListItemResponseDto.builder()
-            .id(dto.id())
+            .memberId(dto.id())
             .nickname(dto.nickname())
             .introduction(dto.introduction())
             .profileUrl(dto.profileUrl())
-            .avgRate(dto.avgRate())
+            .averageRating(dto.avgRate())
             .tripRecordTotal(tripRecordTotal)
             .videoTotal(videoTotal)
             .build();
