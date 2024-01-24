@@ -174,11 +174,5 @@ public class MemberService {
         return MemberDetailResponseDto.fromEntity(member);
     }
 
-    public MemberSimpleResponseDto getMemberSimpleInfo(Long memberId) {
-        return MemberSimpleResponseDto.fromEntity(
-            memberRepository.findById(memberId)
-                .orElseThrow(UserNotFoundException::new)
-        );
-    }
 }
 

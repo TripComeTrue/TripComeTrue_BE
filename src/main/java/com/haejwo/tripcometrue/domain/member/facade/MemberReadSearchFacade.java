@@ -2,7 +2,6 @@ package com.haejwo.tripcometrue.domain.member.facade;
 
 import com.haejwo.tripcometrue.domain.member.dto.response.*;
 import com.haejwo.tripcometrue.domain.member.service.MemberReadSearchService;
-import com.haejwo.tripcometrue.domain.member.service.MemberService;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordScheduleVideoService;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class MemberReadSearchFacade {
 
-    private final MemberService memberService;
     private final MemberReadSearchService memberReadSearchService;
     private final TripRecordScheduleVideoService tripRecordScheduleVideoService;
     private final TripRecordService tripRecordService;
@@ -83,7 +81,7 @@ public class MemberReadSearchFacade {
     }
 
     public MemberCreatorInfoResponseDto getCreatorInfo(Long memberId) {
-        MemberSimpleResponseDto memberInfo = memberService.getMemberSimpleInfo(memberId);
+        MemberSimpleResponseDto memberInfo = memberReadSearchService.getMemberSimpleInfo(memberId);
 
         List<TripRecordScheduleVideoListItemResponseDto> videos = tripRecordScheduleVideoService.getVideosInMemberIds(List.of(memberId));
         List<TripRecordListItemResponseDto> tripRecords = tripRecordService.findTripRecordsWihMemberInMemberIds(List.of(memberId));
