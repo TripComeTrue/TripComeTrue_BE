@@ -17,8 +17,11 @@ import com.haejwo.tripcometrue.domain.member.exception.IntroductionLengthExceede
 import com.haejwo.tripcometrue.domain.member.exception.NewPasswordNotMatchException;
 import com.haejwo.tripcometrue.domain.member.exception.NewPasswordSameAsOldException;
 import com.haejwo.tripcometrue.domain.member.exception.NicknameAlreadyExistsException;
+import com.haejwo.tripcometrue.domain.member.exception.NicknameChangeNotAvailableException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -143,13 +146,22 @@ public class MemberService {
 
     public NicknameResponseDto updateNickname(
         PrincipalDetails principalDetails, NicknameRequestDto requestDto) {
+        Member member = memberRepository.findById(principalDetails.getMember().getId())
+            .orElseThrow();
+
         memberRepository.findByMemberBaseNickname(requestDto.nickname())
             .ifPresent(existingMember -> {
                 throw new NicknameAlreadyExistsException();
             });
-        Member member = getLoginMember(principalDetails);
+
+        if(member.getNickNameChangeTime() != null &&
+            ChronoUnit.MONTHS.between(member.getNickNameChangeTime(), LocalDateTime.now()) < 6){
+            throw new NicknameChangeNotAvailableException();
+        }
+
         member.getMemberBase().changeNickname(requestDto.nickname());
         member.updateNickNameChangeCount();
+        member.updateNickNameChangeTime(LocalDateTime.now());
 
         return NicknameResponseDto.fromEntity(member);
     }
