@@ -105,6 +105,7 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
                 qTripRecord.totalDays,
                 qTripRecord.commentCount,
                 qTripRecord.storeCount,
+                qTripRecord.averageRating,
                 JPAExpressions
                     .select(qTripRecordImage.imageUrl.min())
                     .from(qTripRecordImage)

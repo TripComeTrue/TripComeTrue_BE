@@ -11,20 +11,22 @@ public record TripRecordListResponseDto(
     Integer totalDays,
     Integer commentCount,
     Integer storeCount,
+    Double averageRating,
     String imageUrl,
     TripRecordMemberResponseDto member
 ) {
 
     @Builder
-    public TripRecordListResponseDto(Long tripRecordId, String title, String countries, Integer totalDays,
-        Integer commentCount, Integer storeCount, String imageUrl,
-        TripRecordMemberResponseDto member) {
+    public TripRecordListResponseDto(Long tripRecordId, String title, String countries,
+        Integer totalDays, Integer commentCount, Integer storeCount, Double averageRating,
+        String imageUrl, TripRecordMemberResponseDto member) {
         this.tripRecordId = tripRecordId;
         this.title = title;
         this.countries = countries;
         this.totalDays = totalDays;
         this.commentCount = commentCount;
         this.storeCount = storeCount;
+        this.averageRating = averageRating;
         this.imageUrl = imageUrl;
         this.member = member;
     }
