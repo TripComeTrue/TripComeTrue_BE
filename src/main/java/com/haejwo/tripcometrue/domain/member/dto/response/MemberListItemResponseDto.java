@@ -4,11 +4,11 @@ import com.haejwo.tripcometrue.domain.member.entity.Member;
 import lombok.Builder;
 
 public record MemberListItemResponseDto(
-    Long id,
+    Long memberId,
     String nickname,
     String introduction,
-    String profileUrl,
-    Double avgRate
+    String profileImageUrl,
+    Double averageRating
 ) {
 
     @Builder
@@ -17,11 +17,11 @@ public record MemberListItemResponseDto(
 
     public static MemberListItemResponseDto fromEntity(Member entity) {
         return MemberListItemResponseDto.builder()
-            .id(entity.getId())
+            .memberId(entity.getId())
             .nickname(entity.getMemberBase().getNickname())
             .introduction(entity.getIntroduction())
-            .profileUrl(entity.getProfileImage())
-            .avgRate(entity.getMemberRating())
+            .profileImageUrl(entity.getProfileImage())
+            .averageRating(entity.getMemberRating())
             .build();
     }
 }

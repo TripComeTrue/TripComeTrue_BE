@@ -6,7 +6,7 @@ public record MemberDetailListItemResponseDto(
     Long memberId,
     String nickname,
     String introduction,
-    String profileUrl,
+    String profileImageUrl,
     Double averageRating,
     Integer tripRecordTotal,
     Integer videoTotal
@@ -18,11 +18,11 @@ public record MemberDetailListItemResponseDto(
 
     public static MemberDetailListItemResponseDto of(MemberListItemResponseDto dto, Integer tripRecordTotal, Integer videoTotal) {
         return MemberDetailListItemResponseDto.builder()
-            .memberId(dto.id())
+            .memberId(dto.memberId())
             .nickname(dto.nickname())
             .introduction(dto.introduction())
-            .profileUrl(dto.profileUrl())
-            .averageRating(dto.avgRate())
+            .profileImageUrl(dto.profileImageUrl())
+            .averageRating(dto.averageRating())
             .tripRecordTotal(tripRecordTotal)
             .videoTotal(videoTotal)
             .build();

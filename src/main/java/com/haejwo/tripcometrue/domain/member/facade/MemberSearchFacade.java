@@ -33,7 +33,7 @@ public class MemberSearchFacade {
 
         List<Long> memberIds = members
             .stream()
-            .map(MemberListItemResponseDto::id)
+            .map(MemberListItemResponseDto::memberId)
             .toList();
 
         List<TripRecordScheduleVideoListItemResponseDto> videos = tripRecordScheduleVideoService.getVideosInMemberIds(memberIds);
@@ -52,7 +52,7 @@ public class MemberSearchFacade {
 
         List<Long> memberIds = sliceResult.content()
             .stream()
-            .map(MemberListItemResponseDto::id)
+            .map(MemberListItemResponseDto::memberId)
             .toList();
 
         Map<Long, List<TripRecordListItemResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(memberIds);
@@ -65,8 +65,8 @@ public class MemberSearchFacade {
                 sliceResult.content()
                     .stream()
                     .map(dto -> {
-                            int tripRecordTotal = (Objects.isNull(tripRecordMap.get(dto.id()))) ? 0 : tripRecordMap.get(dto.id()).size();
-                            int videoTotal = (Objects.isNull(videoMap.get(dto.id()))) ? 0 : videoMap.get(dto.id()).size();
+                            int tripRecordTotal = (Objects.isNull(tripRecordMap.get(dto.memberId()))) ? 0 : tripRecordMap.get(dto.memberId()).size();
+                            int videoTotal = (Objects.isNull(videoMap.get(dto.memberId()))) ? 0 : videoMap.get(dto.memberId()).size();
 
                             return MemberDetailListItemResponseDto.of(dto, tripRecordTotal, videoTotal);
                         }
