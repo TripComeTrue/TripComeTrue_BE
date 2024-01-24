@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.haejwo.tripcometrue.domain.review.global.PointType.ONLY_ONE_POINT;
 import static com.haejwo.tripcometrue.domain.review.global.PointType.TWO_POINTS;
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
@@ -36,7 +37,7 @@ public class PlaceReview extends BaseTimeEntity {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    @OneToMany(mappedBy = "placeReview")
+    @OneToMany(mappedBy = "placeReview", cascade = REMOVE, orphanRemoval = true)
     private List<PlaceReviewLikes> placeReviewLikeses = new ArrayList<>();
 
     @Column(nullable = false)
