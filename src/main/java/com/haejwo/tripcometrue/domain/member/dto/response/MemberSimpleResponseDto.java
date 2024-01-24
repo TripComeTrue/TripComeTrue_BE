@@ -3,7 +3,7 @@ package com.haejwo.tripcometrue.domain.member.dto.response;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import lombok.Builder;
 
-public record MemberListItemResponseDto(
+public record MemberSimpleResponseDto(
     Long memberId,
     String nickname,
     String introduction,
@@ -12,11 +12,11 @@ public record MemberListItemResponseDto(
 ) {
 
     @Builder
-    public MemberListItemResponseDto {
+    public MemberSimpleResponseDto {
     }
 
-    public static MemberListItemResponseDto fromEntity(Member entity) {
-        return MemberListItemResponseDto.builder()
+    public static MemberSimpleResponseDto fromEntity(Member entity) {
+        return MemberSimpleResponseDto.builder()
             .memberId(entity.getId())
             .nickname(entity.getMemberBase().getNickname())
             .introduction(entity.getIntroduction())

@@ -7,7 +7,7 @@ import lombok.Builder;
 import java.util.List;
 
 public record MemberSearchResultWithContentResponseDto(
-    List<MemberListItemResponseDto> members,
+    List<MemberSimpleResponseDto> members,
     List<TripRecordScheduleVideoListItemResponseDto> videos,
     List<TripRecordListItemResponseDto> tripRecords
 ) {

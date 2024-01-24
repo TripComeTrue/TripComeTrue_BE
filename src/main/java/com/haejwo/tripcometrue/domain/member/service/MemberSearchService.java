@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.member.service;
 
-import com.haejwo.tripcometrue.domain.member.dto.response.MemberListItemResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.MemberSimpleResponseDto;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -17,21 +17,21 @@ public class MemberSearchService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public List<MemberListItemResponseDto> searchByNickname(String nickname) {
+    public List<MemberSimpleResponseDto> searchByNickname(String nickname) {
         return memberRepository
             .findByNicknameOrderByMemberRating(nickname)
             .stream()
-            .map(MemberListItemResponseDto::fromEntity)
+            .map(MemberSimpleResponseDto::fromEntity)
             .toList();
     }
 
     @Transactional(readOnly = true)
-    public SliceResponseDto<MemberListItemResponseDto> searchByNickname(String nickname, Pageable pageable) {
+    public SliceResponseDto<MemberSimpleResponseDto> searchByNickname(String nickname, Pageable pageable) {
 
         return SliceResponseDto.of(
             memberRepository
                 .findByNicknameOrderByMemberRating(nickname, pageable)
-                .map(MemberListItemResponseDto::fromEntity)
+                .map(MemberSimpleResponseDto::fromEntity)
         );
     }
 }

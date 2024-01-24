@@ -16,7 +16,7 @@ public record MemberDetailListItemResponseDto(
     public MemberDetailListItemResponseDto {
     }
 
-    public static MemberDetailListItemResponseDto of(MemberListItemResponseDto dto, Integer tripRecordTotal, Integer videoTotal) {
+    public static MemberDetailListItemResponseDto of(MemberSimpleResponseDto dto, Integer tripRecordTotal, Integer videoTotal) {
         return MemberDetailListItemResponseDto.builder()
             .memberId(dto.memberId())
             .nickname(dto.nickname())
