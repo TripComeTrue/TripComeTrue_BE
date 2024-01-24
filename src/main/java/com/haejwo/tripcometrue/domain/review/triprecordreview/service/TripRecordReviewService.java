@@ -215,9 +215,17 @@ public class TripRecordReviewService {
 
         return TripRecordReviewListResponseDto.fromResponseDtos(
                 reviews,
-                reviews.map(tripRecordReview -> TripRecordReviewResponseDto.fromEntity(
-                        tripRecordReview,
-                        hasLikedTripRecordReview(principalDetails, tripRecordReview))
+                reviews.map(tripRecordReview -> {
+                            boolean hasLiked = false;
+                            if (principalDetails != null) {
+                                hasLiked = hasLikedTripRecordReview(principalDetails, tripRecordReview);
+                            }
+                            return TripRecordReviewResponseDto.fromEntity(
+                                    tripRecordReview,
+                                    hasLiked
+
+                            );
+                        }
                 ).toList());
     }
 
