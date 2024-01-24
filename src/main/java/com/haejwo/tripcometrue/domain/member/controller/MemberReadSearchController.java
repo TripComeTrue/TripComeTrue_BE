@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.member.controller;
 
+import com.haejwo.tripcometrue.domain.member.dto.response.MemberCreatorInfoResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailListItemResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSearchResultWithContentResponseDto;
 import com.haejwo.tripcometrue.domain.member.facade.MemberFacade;
@@ -10,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/members")
@@ -21,6 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberReadSearchController {
 
     private final MemberFacade memberFacade;
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<ResponseDTO<MemberCreatorInfoResponseDto>> memberCreatorInfo(
+        @PathVariable("memberId") Long memberId
+    ) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    memberFacade.getCreatorInfo(memberId)
+                )
+            );
+    }
 
     @GetMapping("/list")
     public ResponseEntity<ResponseDTO<MemberSearchResultWithContentResponseDto>> searchByNicknameResultWithContent(
