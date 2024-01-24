@@ -87,8 +87,8 @@ public class PlaceReview extends BaseTimeEntity {
         commentCount += 1;
     }
 
-    public void decreaseCommentCount() {
-        commentCount -= 1;
+    public void decreaseCommentCount(int count) {
+        this.commentCount -= count;
     }
 
     @PrePersist
