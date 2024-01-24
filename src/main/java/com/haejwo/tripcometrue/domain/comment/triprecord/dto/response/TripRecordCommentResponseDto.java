@@ -15,6 +15,7 @@ public record TripRecordCommentResponseDto(
         Long memberId,
         String profileUrl,
         String nickname,
+        String content,
         boolean isWriter,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH-mm-ss")
@@ -30,6 +31,7 @@ public record TripRecordCommentResponseDto(
                 tripRecordComment.getMember().getId(),
                 tripRecordComment.getMember().getProfileImage(),
                 tripRecordComment.getMember().getMemberBase().getNickname(),
+                tripRecordComment.getContent(),
                 isWriter(tripRecordComment, loginMember),
                 tripRecordComment.getCreatedAt(),
                 getReplyComments(tripRecordComment, loginMember) //자식 댓글 리스트에 담기
