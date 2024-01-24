@@ -1,5 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity.type;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.haejwo.tripcometrue.domain.triprecord.exception.ExpenseRangeTypeNotFoundException;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -23,6 +24,22 @@ public enum ExpenseRangeType {
                     .filter(p -> Objects.equals(p.max, max))
                     .findFirst()
                     .orElseThrow(ExpenseRangeTypeNotFoundException::new);
+    }
+
+    @JsonCreator
+    public static ExpenseRangeType parse(String inputValue) {
+        return Stream.of(ExpenseRangeType.values())
+            .filter(e -> {
+                    String replacedInputValue = inputValue.replaceAll(" ", "")
+                        .replaceAll("_", "");
+
+                    String replacedExpenseRangeType = e.name().replaceAll("_", "");
+
+                    return replacedExpenseRangeType.equals(replacedInputValue.toUpperCase());
+                }
+            )
+            .findFirst()
+            .orElse(null);
     }
 
 }
