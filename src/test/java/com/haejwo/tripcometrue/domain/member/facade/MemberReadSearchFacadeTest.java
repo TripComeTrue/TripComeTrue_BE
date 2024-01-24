@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.member.facade;
 
 import com.haejwo.tripcometrue.config.AbstractContainersSupport;
 import com.haejwo.tripcometrue.config.DatabaseCleanUpAfterEach;
+import com.haejwo.tripcometrue.domain.member.dto.response.MemberCreatorInfoResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailListItemResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSearchResultWithContentResponseDto;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
@@ -70,5 +71,20 @@ class MemberReadSearchFacadeTest extends AbstractContainersSupport {
         assertThat(result.currentPageNum()).isEqualTo(pageNum);
         assertThat(result.totalCount()).isEqualTo(0);
         assertThat(result.last()).isTrue();
+    }
+
+    @Test
+    void getCreatorInfo() {
+        // given
+        Long memberId = 1L;
+
+        // when
+        MemberCreatorInfoResponseDto result = memberReadSearchFacade.getCreatorInfo(memberId);
+
+        // then
+        log.info("{}", result);
+        assertThat(result.memberDetailInfo().memberId()).isEqualTo(memberId);
+        assertThat(result.tripRecords().size()).isEqualTo(result.memberDetailInfo().tripRecordTotal());
+        assertThat(result.videos().size()).isEqualTo(result.memberDetailInfo().videoTotal());
     }
 }
