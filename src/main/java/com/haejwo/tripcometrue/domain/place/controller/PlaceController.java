@@ -1,15 +1,21 @@
 package com.haejwo.tripcometrue.domain.place.controller;
 
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceListItemResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceNearbyResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.service.PlaceService;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import java.util.List;
+
+import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,6 +101,24 @@ public class PlaceController {
         return ResponseEntity
             .status(responseBody.getCode())
             .body(responseBody);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO<SliceResponseDto<PlaceListItemResponseDto>>> searchPlacesByName(
+        @RequestParam("placeName") String placeName,
+        @PageableDefault
+        @SortDefault.SortDefaults({
+                @SortDefault(sort = "storedCount", direction = Sort.Direction.DESC),
+                @SortDefault(sort = "commentCount", direction = Sort.Direction.DESC)})
+        Pageable pageable
+    ) {
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    placeService.listPlacesByName(placeName, pageable)
+                )
+            );
     }
 
     @PutMapping("/{placeId}")
