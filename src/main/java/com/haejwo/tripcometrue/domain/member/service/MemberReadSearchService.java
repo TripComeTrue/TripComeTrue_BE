@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.member.service;
 
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSimpleResponseDto;
+import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,14 @@ import java.util.List;
 public class MemberReadSearchService {
 
     private final MemberRepository memberRepository;
+
+    @Transactional(readOnly = true)
+    public MemberSimpleResponseDto getMemberSimpleInfo(Long memberId) {
+        return MemberSimpleResponseDto.fromEntity(
+            memberRepository.findById(memberId)
+                .orElseThrow(UserNotFoundException::new)
+        );
+    }
 
     @Transactional(readOnly = true)
     public List<MemberSimpleResponseDto> searchByNickname(String nickname) {
