@@ -93,3 +93,43 @@ values (5, now(), now(), '쇼츠5', 5, '쇼츠5 썸네일');
 
 insert into trip_record_schedule_video (trip_record_schedule_video_id, created_at, updated_at, video_url, trip_schedule_id, thumbnail_url)
 values (6, now(), now(), '쇼츠6', 1, '쇼츠6 썸네일');
+
+/* trip_record_tag */
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (1, now(), now(), '연인끼리', 1);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (2, now(), now(), '자유여행', 1);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (3, now(), now(), '인기여행지', 1);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (4, now(), now(), '친구끼리', 2);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (5, now(), now(), '고예산', 2);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (6, now(), now(), '자유여행', 3);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (7, now(), now(), '고예산', 3);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (8, now(), now(), '자유여행', 3);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (9, now(), now(), '고예산', 3);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (10, now(), now(), '자유여행', 3);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (11, now(), now(), '혼자여행', 4);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (12, now(), now(), '자유여행', 4);
+
+insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
+values (13, now(), now(), '맛집', 4);
