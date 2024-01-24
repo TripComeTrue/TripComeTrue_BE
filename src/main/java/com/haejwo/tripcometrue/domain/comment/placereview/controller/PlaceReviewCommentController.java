@@ -51,14 +51,14 @@ public class PlaceReviewCommentController {
 //                commentService.getCommentList(principalDetails, tripRecordId, pageable);
 //        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
 //    }
-//
-//    @DeleteMapping("/comments/{tripRecordCommentId}")
-//    public ResponseEntity<ResponseDTO<Void>> deleteComment(
-//            @AuthenticationPrincipal PrincipalDetails principalDetails,
-//            @PathVariable Long tripRecordCommentId
-//    ) {
-//
-//        commentService.removeComment(principalDetails, tripRecordCommentId);
-//        return ResponseEntity.ok(ResponseDTO.ok());
-//    }
+
+    @DeleteMapping("/comments/{placeReviewCommentId}")
+    public ResponseEntity<ResponseDTO<Void>> deleteComment(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long placeReviewCommentId
+    ) {
+
+        commentService.removeComment(principalDetails, placeReviewCommentId);
+        return ResponseEntity.ok(ResponseDTO.ok());
+    }
 }

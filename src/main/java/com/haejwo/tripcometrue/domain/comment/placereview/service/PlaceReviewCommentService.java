@@ -7,6 +7,7 @@ import com.haejwo.tripcometrue.domain.comment.placereview.repository.PlaceReview
 import com.haejwo.tripcometrue.domain.comment.triprecord.entity.TripRecordComment;
 import com.haejwo.tripcometrue.domain.comment.triprecord.exception.TripRecordCommentNotFoundException;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -67,8 +70,8 @@ public class PlaceReviewCommentService {
         placeReview.increaseCommentCount();
     }
 
-    private PlaceReviewComment getPlaceReviewCommentById(Long tripRecordCommentId) {
-        return placeReviewCommentRepository.findById(tripRecordCommentId)
+    private PlaceReviewComment getPlaceReviewCommentById(Long placeReviewCommentId) {
+        return placeReviewCommentRepository.findById(placeReviewCommentId)
                 .orElseThrow(PlaceReviewCommentNotFoundException::new);
     }
 //
@@ -85,33 +88,33 @@ public class PlaceReviewCommentService {
 //        Slice<TripRecordComment> tripRecordComments = tripRecordCommentRepository.findByTripRecord(tripRecord, pageable);
 //        return TripRecordCommentListResponseDto.fromData(tripRecord.getCommentCount(), tripRecordComments, loginMember);
 //    }
-//
-//    public void removeComment(PrincipalDetails principalDetails, Long tripRecordCommentId) {
-//
-//        Member loginMember = getMember(principalDetails);
-//        TripRecordComment tripRecordComment = getTripRecordComment(tripRecordCommentId);
-//        TripRecord tripRecord = tripRecordComment.getTripRecord();
-//
-//        validateRightMemberAccess(loginMember, tripRecordComment);
-//
-//        int removedCount = getRemovedCount(tripRecordCommentId, tripRecordComment);
-//        tripRecord.decreaseCommentCount(removedCount);
-//    }
-//
-//    private int getRemovedCount(Long tripRecordCommentId, TripRecordComment tripRecordComment) {
-//        int childrenCount = tripRecordCommentRepository.deleteChildrenByTripRecordCommentId(tripRecordComment.getId());
-//        int parentCount = tripRecordCommentRepository.deleteParentByTripRecordCommentId(tripRecordCommentId);
-//        return childrenCount + parentCount;
-//    }
-//
-//    private TripRecordComment getTripRecordComment(Long tripRecordCommentId) {
-//        return tripRecordCommentRepository.findById(tripRecordCommentId)
-//                .orElseThrow(TripRecordCommentNotFoundException::new);
-//    }
-//
-//    private void validateRightMemberAccess(Member member, TripRecordComment tripRecordComment) {
-//        if (!Objects.equals(tripRecordComment.getMember().getId(), member.getId())) {
-//            throw new UserInvalidAccessException();
-//        }
-//    }
+
+    public void removeComment(PrincipalDetails principalDetails, Long placeReviewCommentId) {
+
+        Member loginMember = getMember(principalDetails);
+        PlaceReviewComment placeReviewComment = getPlaceReviewComment(placeReviewCommentId);
+        PlaceReview placeReview = placeReviewComment.getPlaceReview();
+
+        validateRightMemberAccess(loginMember, placeReviewComment);
+
+        int removedCount = getRemovedCount(placeReviewCommentId, placeReviewComment);
+        placeReview.decreaseCommentCount(removedCount);
+    }
+
+    private PlaceReviewComment getPlaceReviewComment(Long placeReviewCommentId) {
+        return placeReviewCommentRepository.findById(placeReviewCommentId)
+                .orElseThrow(PlaceReviewCommentNotFoundException::new);
+    }
+
+    private int getRemovedCount(Long placeReviewCommentId, PlaceReviewComment placeReviewComment) {
+        int childrenCount = placeReviewCommentRepository.deleteChildrenByPlaceReviewCommentId(placeReviewComment.getId());
+        int parentCount = placeReviewCommentRepository.deleteParentByPlaceReviewCommentId(placeReviewCommentId);
+        return childrenCount + parentCount;
+    }
+
+    private void validateRightMemberAccess(Member member, PlaceReviewComment placeReviewComment) {
+        if (!Objects.equals(placeReviewComment.getMember().getId(), member.getId())) {
+            throw new UserInvalidAccessException();
+        }
+    }
 }
