@@ -3,6 +3,7 @@ package com.haejwo.tripcometrue.domain.place.repositroy;
 import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.city.entity.QCity;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceNearbyResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.entity.QPlace;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
@@ -147,6 +148,56 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return result;
 
+    }
+
+    @Override
+    public List<PlaceNearbyResponseDto> findNearbyPlaces(Long placeId) {
+
+        QPlace qPlace = QPlace.place;
+        QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
+        QTripRecordScheduleImage qTripRecordScheduleImage = QTripRecordScheduleImage.tripRecordScheduleImage;
+
+        // 주어진 placeId에 해당하는 장소의 위도, 경도를 찾는다.
+        Place centerPlace = queryFactory
+            .selectFrom(qPlace)
+            .where(qPlace.id.eq(placeId))
+            .fetchOne();
+
+        // 주변 장소를 뽑아냅니다. (1도 범위 내면 보통 11km 안쪽임)
+        List<Place> nearbyPlaces = queryFactory
+            .selectFrom(qPlace)
+            .where(qPlace.latitude.between(centerPlace.getLatitude() - 1, centerPlace.getLatitude() + 1)
+                .and(qPlace.longitude.between(centerPlace.getLongitude() - 1, centerPlace.getLongitude() + 1)))
+            .orderBy(qPlace.storedCount.desc())
+            .where(qPlace.id.ne(placeId))
+            .limit(5)
+            .fetch();
+
+        // 각 장소에 해당하는 스케줄 이미지를 찾아 PlaceNearbyResponseDto 객체를 생성한다. (어차피 컨텐츠가 5개 고정이여서 이게 더 간단함)
+        List<PlaceNearbyResponseDto> result = nearbyPlaces.stream()
+                    .map(place -> {
+                        String imageUrl = queryFactory
+                            .select(qTripRecordScheduleImage.imageUrl)
+                            .from(qTripRecordScheduleImage)
+                            .join(qTripRecordScheduleImage.tripRecordSchedule, qTripRecordSchedule)
+                            .where(qTripRecordSchedule.place.id.eq(place.getId()))
+                            .orderBy(qTripRecordScheduleImage.id.asc())
+                            .fetchFirst();
+
+                        return new PlaceNearbyResponseDto(
+                            place.getId(),
+                            place.getName(),
+                            imageUrl,
+                            place.getLatitude(),
+                            place.getLongitude(),
+                            place.getStoredCount(),
+                            place.getReviewCount(),
+                            place.getCommentCount()
+                        );
+                    })
+                    .collect(Collectors.toList());
+
+        return result;
     }
 
     private OrderSpecifier<?>[] getSort(Pageable pageable) {
