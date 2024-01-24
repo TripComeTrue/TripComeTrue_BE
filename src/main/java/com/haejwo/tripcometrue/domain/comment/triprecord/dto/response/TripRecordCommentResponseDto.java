@@ -25,8 +25,6 @@ public record TripRecordCommentResponseDto(
 ) {
 
     public static TripRecordCommentResponseDto fromEntity(TripRecordComment tripRecordComment, Member loginMember) {
-
-
         return new TripRecordCommentResponseDto(
                 tripRecordComment.getId(),
                 tripRecordComment.getMember().getId(),
@@ -34,9 +32,8 @@ public record TripRecordCommentResponseDto(
                 tripRecordComment.getMember().getMemberBase().getNickname(),
                 isWriter(tripRecordComment, loginMember),
                 tripRecordComment.getCreatedAt(),
-                getReplyComments(tripRecordComment, loginMember)
+                getReplyComments(tripRecordComment, loginMember) //자식 댓글 리스트에 담기
         );
-
     }
 
     private static boolean isWriter(TripRecordComment tripRecordComment, Member loginMember) {

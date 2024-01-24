@@ -14,13 +14,15 @@ import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundExc
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -41,6 +43,7 @@ public class TripRecordCommentService {
 
         TripRecordComment comment = CommentRequestDto.toComment(loginMember, tripRecord, requestDto);
         tripRecordCommentRepository.save(comment);
+        tripRecord.incrementCommentCount();
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
@@ -50,17 +53,17 @@ public class TripRecordCommentService {
 
     public void saveReplyComment(
             PrincipalDetails principalDetails,
-            Long tripRecordId,
             Long tripRecordCommentId,
             CommentRequestDto requestDto
     ) {
 
         Member loginMember = getMember(principalDetails);
-        TripRecord tripRecord = getTripRecordById(tripRecordId);
         TripRecordComment tripRecordComment = getTripRecordCommentById(tripRecordCommentId);
+        TripRecord tripRecord = tripRecordComment.getTripRecord();
 
         TripRecordComment comment = CommentRequestDto.toReplyComment(loginMember, tripRecord, tripRecordComment, requestDto);
         tripRecordCommentRepository.save(comment);
+        tripRecord.incrementCommentCount();
     }
 
     private TripRecordComment getTripRecordCommentById(Long tripRecordCommentId) {
@@ -83,17 +86,26 @@ public class TripRecordCommentService {
         Member loginMember = getMember(principalDetails);
         TripRecord tripRecord = getTripRecordById(tripRecordId);
 
-        Page<TripRecordComment> tripRecordComments = tripRecordCommentRepository.findByTripRecord(tripRecord, pageable);
-        return TripRecordCommentListResponseDto.fromData(tripRecordComments, loginMember);
+        Slice<TripRecordComment> tripRecordComments = tripRecordCommentRepository.findByTripRecord(tripRecord, pageable);
+        return TripRecordCommentListResponseDto.fromData(tripRecord.getCommentCount(), tripRecordComments, loginMember);
     }
 
     public void removeComment(PrincipalDetails principalDetails, Long tripRecordCommentId) {
 
         Member loginMember = getMember(principalDetails);
         TripRecordComment tripRecordComment = getTripRecordComment(tripRecordCommentId);
+        TripRecord tripRecord = tripRecordComment.getTripRecord();
+
         validateRightMemberAccess(loginMember, tripRecordComment);
 
-        tripRecordCommentRepository.delete(tripRecordComment);
+        int removedCount = getRemovedCount(tripRecordCommentId, tripRecordComment);
+        tripRecord.decreaseCommentCount(removedCount);
+    }
+
+    private int getRemovedCount(Long tripRecordCommentId, TripRecordComment tripRecordComment) {
+        int childrenCount = tripRecordCommentRepository.deleteChildrenByTripRecordCommentId(tripRecordComment.getId());
+        int parentCount = tripRecordCommentRepository.deleteParentByTripRecordCommentId(tripRecordCommentId);
+        return childrenCount + parentCount;
     }
 
     private TripRecordComment getTripRecordComment(Long tripRecordCommentId) {

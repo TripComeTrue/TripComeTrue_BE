@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
@@ -36,7 +37,7 @@ public class TripRecordComment extends BaseTimeEntity {
     @JoinColumn(name = "parent_comment_id")
     private TripRecordComment parentComment;
 
-    @OneToMany(mappedBy = "parentComment", orphanRemoval = true)
+    @OneToMany(mappedBy = "parentComment", cascade = REMOVE, orphanRemoval = true)
     private List<TripRecordComment> childComments = new ArrayList<>();
 
     @Column(nullable = false)
