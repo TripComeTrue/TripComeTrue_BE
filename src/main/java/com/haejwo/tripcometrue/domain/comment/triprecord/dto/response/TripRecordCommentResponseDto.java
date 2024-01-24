@@ -28,7 +28,7 @@ public record TripRecordCommentResponseDto(
         return new TripRecordCommentResponseDto(
                 tripRecordComment.getId(),
                 tripRecordComment.getMember().getId(),
-                tripRecordComment.getMember().getProfile_image(),
+                tripRecordComment.getMember().getProfileImage(),
                 tripRecordComment.getMember().getMemberBase().getNickname(),
                 isWriter(tripRecordComment, loginMember),
                 tripRecordComment.getCreatedAt(),
