@@ -1,20 +1,20 @@
-### 여행지 리뷰 좋아요(placeReviewId 1에 대한)
-POST http://localhost:8080/v1/likes/place-review/1
+### 여행지 리뷰 좋아요
+POST http://tripcometrue.site/v1/places/reviews/1/likes
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MzMzQG5hdmVyLmNvbSIsImlhdCI6MTcwNjA5NDk1MSwiZXhwIjoxNzA2MjM4OTUxfQ.ojYq1REMoIfIKbP_0O3vcOdWXfASMMZP9d-srehCp7Y
 Content-Type: application/json
-Authorization: (로그인 후 토큰값)
 
-### 여행지 리뷰 좋아요 취소(placeReviewId 1에 대한)
-DELETE http://localhost:8080/v1/likes/place-review/1
+### 여행지 리뷰 좋아요 취소
+DELETE http://localhost:8080/v1/places/reviews/2/likes
 Content-Type: application/json
-Authorization: (로그인 후 토큰값)
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MzMzQG5hdmVyLmNvbSIsImlhdCI6MTcwNjA5NTQzMywiZXhwIjoxNzA2MjM5NDMzfQ.iA2XkB0wWdxbL_S7BkCEDrTdrxbaW-l6Z2xqhBuOOyw
 
-### 여행후기 리뷰 좋아요(tripRecordReviewId 1에 대한)
-POST http://localhost:8080/v1/likes/trip-record-review/1
+### 여행후기 리뷰 좋아요
+POST http://localhost:8080/v1/trip-records/reviews/103/likes
 Content-Type: application/json
-Authorization: (로그인 후 토큰값)
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MzMzQG5hdmVyLmNvbSIsImlhdCI6MTcwNjA5NTQzMywiZXhwIjoxNzA2MjM5NDMzfQ.iA2XkB0wWdxbL_S7BkCEDrTdrxbaW-l6Z2xqhBuOOyw
 
-### 여행후기 리뷰 좋아요(tripRecordReviewId 1에 대한)
-DELETE http://localhost:8080/v1/likes/trip-record-review/1
+### 여행후기 리뷰 좋아요 취소
+DELETE http://localhost:8080/v1/trip-records/reviews/102/likes
 Content-Type: application/json
-Authorization: (로그인 후 토큰값)
+Authorization: eyJraWQiOiJrZXkxIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MzMzQG5hdmVyLmNvbSIsImlhdCI6MTcwNjA5NTQzMywiZXhwIjoxNzA2MjM5NDMzfQ.iA2XkB0wWdxbL_S7BkCEDrTdrxbaW-l6Z2xqhBuOOyw
 
