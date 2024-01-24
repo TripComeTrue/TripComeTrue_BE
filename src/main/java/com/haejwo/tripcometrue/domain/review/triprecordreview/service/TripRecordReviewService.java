@@ -64,6 +64,9 @@ public class TripRecordReviewService {
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            return null;
+        }
         return memberRepository.findById(principalDetails.getMember().getId())
                 .orElseThrow(UserNotFoundException::new);
     }
