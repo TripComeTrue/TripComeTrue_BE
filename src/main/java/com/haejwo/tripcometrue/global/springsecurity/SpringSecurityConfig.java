@@ -78,6 +78,7 @@ public class SpringSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/v1/member/introduction")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/nickname")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/member/details")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/members/**")).permitAll()
             .requestMatchers(new AntPathRequestMatcher("/v1/view-history")).permitAll()
 
             .requestMatchers(new AntPathRequestMatcher("/v1/cities/**")).permitAll()
