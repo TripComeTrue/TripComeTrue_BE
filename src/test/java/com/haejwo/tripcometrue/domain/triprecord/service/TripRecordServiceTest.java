@@ -4,6 +4,7 @@ import com.haejwo.tripcometrue.config.AbstractContainersSupport;
 import com.haejwo.tripcometrue.config.DatabaseCleanUpAfterEach;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordSearchParamAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -89,5 +90,41 @@ class TripRecordServiceTest extends AbstractContainersSupport {
 
         // then
         assertThat(result).hasSize(3);
+    }
+
+    @Test
+    void listTripRecordsByHashtag() {
+        // given
+        String hashtag = "자유여행";
+        PageRequest pageRequest = PageRequest.of(0, 2,
+            Sort.by(Sort.Order.desc("averageRating"), Sort.Order.desc("storeCount")));
+
+        // when
+        SliceResponseDto<TripRecordListItemResponseDto> result = tripRecordService.listTripRecordsByHashtag(hashtag, pageRequest);
+
+        // then
+        assertThat(result.content()).hasSize(2);
+        assertThat(result.currentPageNum()).isEqualTo(0);
+        assertThat(result.pageSize()).isEqualTo(2);
+        assertThat(result.first()).isTrue();
+        assertThat(result.last()).isFalse();
+    }
+
+    @Test
+    void listTripRecordsByExpenseRangeType() {
+        // given
+        ExpenseRangeType expenseRangeType = ExpenseRangeType.BELOW_200;
+        PageRequest pageRequest = PageRequest.of(0, 2,
+            Sort.by(Sort.Order.desc("averageRating"), Sort.Order.desc("storeCount")));
+
+        // when
+        SliceResponseDto<TripRecordListItemResponseDto> result = tripRecordService.listTripRecordsByExpenseRangeType(expenseRangeType, pageRequest);
+
+        // then
+        assertThat(result.content()).hasSize(1);
+        assertThat(result.currentPageNum()).isEqualTo(0);
+        assertThat(result.pageSize()).isEqualTo(2);
+        assertThat(result.first()).isTrue();
+        assertThat(result.last()).isTrue();
     }
 }
