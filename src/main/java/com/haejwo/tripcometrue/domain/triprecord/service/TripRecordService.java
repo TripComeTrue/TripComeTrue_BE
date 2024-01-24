@@ -8,6 +8,7 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedul
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewCount;
+import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordScheduleVideoNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
@@ -85,11 +86,21 @@ public class TripRecordService {
     }
 
     @Transactional(readOnly = true)
-    public SliceResponseDto<TripRecordListItemResponseDto> listTripRecordsByHashTag(
+    public SliceResponseDto<TripRecordListItemResponseDto> listTripRecordsByHashtag(
         String hashTag, Pageable pageable
     ) {
         return SliceResponseDto.of(
-            tripRecordRepository.findTripRecordsByHashTag(hashTag, pageable)
+            tripRecordRepository.findTripRecordsByHashtag(hashTag, pageable)
+                .map(tripRecord -> TripRecordListItemResponseDto.fromEntity(tripRecord, null, tripRecord.getMember()))
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public SliceResponseDto<TripRecordListItemResponseDto> listTripRecordsByExpenseRangeType(
+        ExpenseRangeType expenseRangeType, Pageable pageable
+    ) {
+        return SliceResponseDto.of(
+            tripRecordRepository.findTripRecordsByExpenseRangeType(expenseRangeType, pageable)
                 .map(tripRecord -> TripRecordListItemResponseDto.fromEntity(tripRecord, null, tripRecord.getMember()))
         );
     }
