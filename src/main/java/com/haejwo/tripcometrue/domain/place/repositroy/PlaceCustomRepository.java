@@ -16,6 +16,8 @@ public interface PlaceCustomRepository {
 
     Slice<Place> findPlacesByCityId(Long cityId, Pageable pageable);
 
+    Slice<Place> findPlacesWithCityByName(String placeName, Pageable pageable);
+
     List<Place> findPlacesByCityAndOrderByStoredCountLimitSize(City city, int size);
 
     List<PlaceMapInfoResponseDto> findPlaceMapInfoListByPlaceId(Long placeId);

@@ -11,9 +11,14 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +26,10 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.util.StringUtils;
+
+import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
+import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
 
 public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport implements PlaceCustomRepository {
 
@@ -37,15 +46,15 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
         QPlace place = QPlace.place;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        if(storedCount != null && storedCount >= 0) {
+        if (storedCount != null && storedCount >= 0) {
             booleanBuilder.and(place.storedCount.goe(storedCount));
         }
 
         List<Place> result = from(place)
-                                .where(booleanBuilder)
-                                .offset(pageable.getOffset())
-                                .limit(pageable.getPageSize())
-                                .fetch();
+            .where(booleanBuilder)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         // 프론트의 Page 정보 필요 유무에 따라 응답 객체 List, Page 나뉨
         long total = from(place).where(booleanBuilder).fetchCount();
@@ -56,8 +65,6 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 
     @Override
     public Slice<Place> findPlacesByCityId(Long cityId, Pageable pageable) {
-        QPlace place = QPlace.place;
-        QCity city = QCity.city;
 
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
@@ -79,9 +86,43 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public List<Place> findPlacesByCityAndOrderByStoredCountLimitSize(City city, int size) {
+    public Slice<Place> findPlacesWithCityByName(String placeName, Pageable pageable) {
 
-        QPlace place = QPlace.place;
+        int pageSize = pageable.getPageSize();
+        List<Place> content = queryFactory
+            .selectFrom(place)
+            .join(place.city, city).fetchJoin()
+            .where(
+                containsIgnoreCasePlaceName(placeName)
+            )
+            .orderBy(getSort(pageable))
+            .offset(pageable.getOffset())
+            .limit(pageSize + 1)
+            .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageSize) {
+            content.remove(pageSize);
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    private BooleanExpression containsIgnoreCasePlaceName(String placeName) {
+        if (!StringUtils.hasText(placeName)) {
+            return null;
+        }
+
+        String replacedWhitespace = placeName.replaceAll(" ", "");
+
+        return Expressions.stringTemplate(
+            "function('replace',{0},{1},{2})", place.name, " ", ""
+        ).containsIgnoreCase(replacedWhitespace);
+    }
+
+    @Override
+    public List<Place> findPlacesByCityAndOrderByStoredCountLimitSize(City city, int size) {
 
         return queryFactory
             .selectFrom(place)
@@ -95,8 +136,8 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     @Override
     public List<PlaceMapInfoResponseDto> findPlaceMapInfoListByPlaceId(Long placeId) {
 
-        QPlace qPlace = QPlace.place;
-        QCity qCity = QCity.city;
+        QPlace qPlace = place;
+        QCity qCity = city;
         QTripRecordSchedule qTripRecordSchedule = QTripRecordSchedule.tripRecordSchedule;
         QTripRecordScheduleImage qTripRecordScheduleImage = QTripRecordScheduleImage.tripRecordScheduleImage;
 
@@ -150,32 +191,32 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     private OrderSpecifier<?>[] getSort(Pageable pageable) {
-        QPlace place = QPlace.place;
 
-        OrderSpecifier<?> byStoredCount = new OrderSpecifier<>(Order.DESC, place.storedCount);
-        OrderSpecifier<?> byCommentCount = new OrderSpecifier<>(Order.DESC, place.commentCount);
-
-        //서비스에서 보내준 Pageable 객체에 정렬조건 null 값 체크
+        List<OrderSpecifier<?>> orderSpecifiers = new LinkedList<>();
         if (!pageable.getSort().isEmpty()) {
-            //정렬값이 들어 있으면 for 사용하여 값을 가져온다
             for (Sort.Order sortOrder : pageable.getSort()) {
-                // 서비스에서 넣어준 DESC or ASC 를 가져온다.
-                com.querydsl.core.types.Order direction = sortOrder.getDirection().isAscending() ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC;
-                // 서비스에서 넣어준 정렬 조건을 스위치 케이스 문을 활용하여 셋팅하여 준다.
+                Order direction = sortOrder.getDirection().isAscending() ? Order.ASC : Order.DESC;
+
                 String property = sortOrder.getProperty();
                 switch (property) {
                     case "id":
-                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, place.id)};
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, place.id));
+                        break;
                     case "createdAt":
-                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, place.createdAt)};
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, place.createdAt));
+                        break;
                     case "storedCount":
-                        return new OrderSpecifier[] {byStoredCount, byCommentCount};
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, place.storedCount));
+                        break;
                     case "commentCount":
-                        return new OrderSpecifier[] {byCommentCount, byStoredCount};
+                        orderSpecifiers.add(new OrderSpecifier<>(direction, place.commentCount));
+                        break;
+
+                    // TODO: 정렬 기준 예외 처리
                 }
             }
         }
 
-        return new OrderSpecifier[] {byStoredCount, byCommentCount}; // 보관순
+        return orderSpecifiers.isEmpty() ? null : orderSpecifiers.toArray(OrderSpecifier[]::new);
     }
 }
