@@ -5,19 +5,9 @@ import com.haejwo.tripcometrue.domain.member.dto.request.NicknameRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.PasswordRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.ProfileImageRequestDto;
 import com.haejwo.tripcometrue.domain.member.dto.request.SignUpRequestDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.IntroductionResponseDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailResponseDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.NicknameResponseDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.ProfileImageResponseDto;
-import com.haejwo.tripcometrue.domain.member.dto.response.SignUpResponseDto;
+import com.haejwo.tripcometrue.domain.member.dto.response.*;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
-import com.haejwo.tripcometrue.domain.member.exception.CurrentPasswordNotMatchException;
-import com.haejwo.tripcometrue.domain.member.exception.EmailDuplicateException;
-import com.haejwo.tripcometrue.domain.member.exception.IntroductionLengthExceededException;
-import com.haejwo.tripcometrue.domain.member.exception.NewPasswordNotMatchException;
-import com.haejwo.tripcometrue.domain.member.exception.NewPasswordSameAsOldException;
-import com.haejwo.tripcometrue.domain.member.exception.NicknameAlreadyExistsException;
-import com.haejwo.tripcometrue.domain.member.exception.NicknameChangeNotAvailableException;
+import com.haejwo.tripcometrue.domain.member.exception.*;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.time.LocalDateTime;
@@ -182,6 +172,13 @@ public class MemberService {
     public MemberDetailResponseDto getMemberDetails(PrincipalDetails principalDetails) {
         Member member = getLoginMember(principalDetails);
         return MemberDetailResponseDto.fromEntity(member);
+    }
+
+    public MemberSimpleResponseDto getMemberSimpleInfo(Long memberId) {
+        return MemberSimpleResponseDto.fromEntity(
+            memberRepository.findById(memberId)
+                .orElseThrow(UserNotFoundException::new)
+        );
     }
 }
 
