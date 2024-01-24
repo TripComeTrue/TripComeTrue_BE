@@ -4,8 +4,6 @@ import com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceRevie
 import com.haejwo.tripcometrue.domain.comment.placereview.entity.PlaceReviewComment;
 import com.haejwo.tripcometrue.domain.comment.placereview.exception.PlaceReviewCommentNotFoundException;
 import com.haejwo.tripcometrue.domain.comment.placereview.repository.PlaceReviewCommentRepository;
-import com.haejwo.tripcometrue.domain.comment.triprecord.entity.TripRecordComment;
-import com.haejwo.tripcometrue.domain.comment.triprecord.exception.TripRecordCommentNotFoundException;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
@@ -74,20 +72,6 @@ public class PlaceReviewCommentService {
         return placeReviewCommentRepository.findById(placeReviewCommentId)
                 .orElseThrow(PlaceReviewCommentNotFoundException::new);
     }
-//
-//    @Transactional(readOnly = true)
-//    public TripRecordCommentListResponseDto getCommentList(
-//            PrincipalDetails principalDetails,
-//            Long tripRecordId,
-//            Pageable pageable
-//    ) {
-//
-//        Member loginMember = getMember(principalDetails);
-//        TripRecord tripRecord = getPlaceReviewById(tripRecordId);
-//
-//        Slice<TripRecordComment> tripRecordComments = tripRecordCommentRepository.findByTripRecord(tripRecord, pageable);
-//        return TripRecordCommentListResponseDto.fromData(tripRecord.getCommentCount(), tripRecordComments, loginMember);
-//    }
 
     public void removeComment(PrincipalDetails principalDetails, Long placeReviewCommentId) {
 
