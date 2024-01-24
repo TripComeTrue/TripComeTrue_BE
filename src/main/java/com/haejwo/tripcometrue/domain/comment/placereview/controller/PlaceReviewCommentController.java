@@ -2,7 +2,6 @@ package com.haejwo.tripcometrue.domain.comment.placereview.controller;
 
 import com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.placereview.service.PlaceReviewCommentService;
-import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.TripRecordCommentRequestDto;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import jakarta.validation.Valid;
@@ -39,18 +38,6 @@ public class PlaceReviewCommentController {
         commentService.saveReplyComment(principalDetails, placeReviewCommentId, requestDto);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
-//
-//    @GetMapping("/{tripRecordId}/comments")
-//    public ResponseEntity<ResponseDTO<TripRecordCommentListResponseDto>> getCommentList(
-//            @AuthenticationPrincipal PrincipalDetails principalDetails,
-//            @PathVariable Long tripRecordId,
-//            @PageableDefault(sort = "createdAt", direction = Direction.DESC) Pageable pageable
-//    ) {
-//
-//        TripRecordCommentListResponseDto responseDto =
-//                commentService.getCommentList(principalDetails, tripRecordId, pageable);
-//        return ResponseEntity.ok(ResponseDTO.okWithData(responseDto));
-//    }
 
     @DeleteMapping("/comments/{placeReviewCommentId}")
     public ResponseEntity<ResponseDTO<Void>> deleteComment(

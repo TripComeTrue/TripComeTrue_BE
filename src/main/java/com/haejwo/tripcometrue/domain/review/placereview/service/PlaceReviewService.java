@@ -1,5 +1,7 @@
 package com.haejwo.tripcometrue.domain.review.placereview.service;
 
+import com.haejwo.tripcometrue.domain.comment.placereview.entity.PlaceReviewComment;
+import com.haejwo.tripcometrue.domain.comment.placereview.repository.PlaceReviewCommentRepository;
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
@@ -22,15 +24,11 @@ import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewDe
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
-
-import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +45,7 @@ public class PlaceReviewService {
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceRepository placeRepository;
     private final MemberRepository memberRepository;
+    private final PlaceReviewCommentRepository placeReviewCommentRepository;
 
     @Transactional
     public RegisterPlaceReviewResponseDto savePlaceReview(
@@ -63,11 +62,13 @@ public class PlaceReviewService {
         PlaceReview placeReview = PlaceReviewRequestDto.toEntity(loginMember, place, requestDto);
         placeReview.save(requestDto, loginMember);
 
-        return RegisterPlaceReviewResponseDto
-                .fromEntity(placeReviewRepository.save(placeReview));
+        return RegisterPlaceReviewResponseDto.fromEntity(placeReviewRepository.save(placeReview));
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            return null;
+        }
         return memberRepository.findById(principalDetails.getMember().getId())
                 .orElseThrow(UserNotFoundException::new);
     }
@@ -92,7 +93,10 @@ public class PlaceReviewService {
             hasLiked = hasLikedPlaceReview(principalDetails, placeReview);
         }
 
-        return PlaceReviewResponseDto.fromEntity(placeReview, hasLiked);
+        Member loginMember = getMember(principalDetails);
+        Slice<PlaceReviewComment> comments = getPlaceReviewSlice(placeReview);
+
+        return PlaceReviewResponseDto.fromEntityWithComment(placeReview, hasLiked, comments, loginMember);
     }
 
     private PlaceReview getPlaceReviewById(Long placeReviewId) {
@@ -112,6 +116,10 @@ public class PlaceReviewService {
         return memberIds.contains(principalDetails.getMember().getId());
     }
 
+    private Slice<PlaceReviewComment> getPlaceReviewSlice(PlaceReview placeReview) {
+        return placeReviewCommentRepository.findByPlaceReviewOrderByCreatedAtDesc(placeReview, null);
+    }
+
     @Transactional
     public PlaceReviewResponseDto modifyPlaceReview(
             PrincipalDetails principalDetails,
@@ -124,9 +132,10 @@ public class PlaceReviewService {
 
         validateRightMemberAccess(loginMember, placeReview);
         placeReview.update(requestDto, loginMember);
+        Slice<PlaceReviewComment> comments = getPlaceReviewSlice(placeReview);
 
         return PlaceReviewResponseDto
-                .fromEntity(placeReview, hasLikedPlaceReview(principalDetails, placeReview));
+                .fromEntityWithComment(placeReview, hasLikedPlaceReview(principalDetails, placeReview), comments, loginMember);
     }
 
     private void validateRightMemberAccess(Member member, PlaceReview placeReview) {
@@ -177,9 +186,16 @@ public class PlaceReviewService {
 
         return PlaceReviewListResponseDto.fromResponseDtos(
                 reviews,
-                reviews.map(placeReview -> PlaceReviewResponseDto.fromEntity(
-                        placeReview,
-                        hasLikedPlaceReview(principalDetails, placeReview))
+                reviews.map(placeReview -> {
+                            boolean hasLiked = false;
+                            if (principalDetails != null) {
+                                hasLiked = hasLikedPlaceReview(principalDetails, placeReview);
+                            }
+                            return PlaceReviewResponseDto.fromEntity(
+                                    placeReview,
+                                    hasLiked
+                            );
+                        }
                 ).toList());
     }
 

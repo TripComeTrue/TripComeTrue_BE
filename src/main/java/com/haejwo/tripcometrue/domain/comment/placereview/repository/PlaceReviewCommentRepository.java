@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PlaceReviewCommentRepository extends JpaRepository<PlaceReviewComment, Long> {
 
-    Slice<PlaceReviewComment> findByPlaceReview(PlaceReview placeReview, Pageable pageable);
+    Slice<PlaceReviewComment> findByPlaceReviewOrderByCreatedAtDesc(PlaceReview placeReview, Pageable pageable);
 
     @Modifying
     @Query("delete from PlaceReviewComment prc where prc.parentComment.id = :placeReviewCommentId")
