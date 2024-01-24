@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/v1/members")
 @RestController
-public class MemberSearchController {
+public class MemberReadSearchController {
 
     private final MemberFacade memberFacade;
 
