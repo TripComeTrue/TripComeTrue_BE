@@ -2,28 +2,21 @@ package com.haejwo.tripcometrue.domain.comment.placereview.service;
 
 import com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.placereview.entity.PlaceReviewComment;
+import com.haejwo.tripcometrue.domain.comment.placereview.exception.PlaceReviewCommentNotFoundException;
 import com.haejwo.tripcometrue.domain.comment.placereview.repository.PlaceReviewCommentRepository;
-import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.TripRecordCommentRequestDto;
-import com.haejwo.tripcometrue.domain.comment.triprecord.dto.response.TripRecordCommentListResponseDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.entity.TripRecordComment;
 import com.haejwo.tripcometrue.domain.comment.triprecord.exception.TripRecordCommentNotFoundException;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
-import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
-import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -38,13 +31,13 @@ public class PlaceReviewCommentService {
     public void saveComment(
             PrincipalDetails principalDetails,
             Long placeReviewId,
-            PlaceReviewCommentRequestDto requestDto
+            com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto requestDto
     ) {
 
         Member loginMember = getMember(principalDetails);
         PlaceReview placeReview = getPlaceReviewById(placeReviewId);
 
-        PlaceReviewComment comment = PlaceReviewCommentRequestDto.toComment(loginMember, placeReview, requestDto);
+        PlaceReviewComment comment = com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto.toComment(loginMember, placeReview, requestDto);
         placeReviewCommentRepository.save(comment);
         placeReview.increaseCommentCount();
     }
@@ -59,25 +52,25 @@ public class PlaceReviewCommentService {
                 .orElseThrow(PlaceReviewNotFoundException::new);
     }
 
-//    public void saveReplyComment(
-//            PrincipalDetails principalDetails,
-//            Long tripRecordCommentId,
-//            TripRecordCommentRequestDto requestDto
-//    ) {
-//
-//        Member loginMember = getMember(principalDetails);
-//        TripRecordComment tripRecordComment = getTripRecordCommentById(tripRecordCommentId);
-//        TripRecord tripRecord = tripRecordComment.getTripRecord();
-//
-//        TripRecordComment comment = TripRecordCommentRequestDto.toReplyComment(loginMember, tripRecord, tripRecordComment, requestDto);
-//        tripRecordCommentRepository.save(comment);
-//        tripRecord.incrementCommentCount();
-//    }
-//
-//    private TripRecordComment getTripRecordCommentById(Long tripRecordCommentId) {
-//        return tripRecordCommentRepository.findById(tripRecordCommentId)
-//                .orElseThrow(TripRecordCommentNotFoundException::new);
-//    }
+    public void saveReplyComment(
+            PrincipalDetails principalDetails,
+            Long placeReviewCommentId,
+            PlaceReviewCommentRequestDto requestDto
+    ) {
+
+        Member loginMember = getMember(principalDetails);
+        PlaceReviewComment placeReviewComment = getPlaceReviewCommentById(placeReviewCommentId);
+        PlaceReview placeReview = placeReviewComment.getPlaceReview();
+
+        PlaceReviewComment comment = PlaceReviewCommentRequestDto.toReplyComment(loginMember, placeReview, placeReviewComment, requestDto);
+        placeReviewCommentRepository.save(comment);
+        placeReview.increaseCommentCount();
+    }
+
+    private PlaceReviewComment getPlaceReviewCommentById(Long tripRecordCommentId) {
+        return placeReviewCommentRepository.findById(tripRecordCommentId)
+                .orElseThrow(PlaceReviewCommentNotFoundException::new);
+    }
 //
 //    @Transactional(readOnly = true)
 //    public TripRecordCommentListResponseDto getCommentList(
