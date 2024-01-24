@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.comment.triprecord.controller;
 
-import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.CommentRequestDto;
+import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.TripRecordCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.dto.response.TripRecordCommentListResponseDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.service.TripRecordCommentService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
@@ -26,7 +26,7 @@ public class TripRecordCommentController {
     public ResponseEntity<ResponseDTO<Void>> registerComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordId,
-            @RequestBody @Valid CommentRequestDto requestDto
+            @RequestBody @Valid TripRecordCommentRequestDto requestDto
     ) {
 
         commentService.saveComment(principalDetails, tripRecordId, requestDto);
@@ -37,7 +37,7 @@ public class TripRecordCommentController {
     public ResponseEntity<ResponseDTO<Void>> registerReplyComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long tripRecordCommentId,
-            @RequestBody @Valid CommentRequestDto requestDto
+            @RequestBody @Valid TripRecordCommentRequestDto requestDto
     ) {
 
         commentService.saveReplyComment(principalDetails, tripRecordCommentId, requestDto);
