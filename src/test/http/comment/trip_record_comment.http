@@ -8,11 +8,11 @@ Content-Type: application/json
 
 
 ### 여행 후기 대댓글 달기
-POST localhost:8080/v1/trip-records/{tripRecordId}/comments/{tripRecordCommentId}
+POST localhost:8080/v1/trip-records/comments/1/reply-comments
 Content-Type: application/json
 
 {
-  "content": "첫 댓글입니다 ㅎㅎ"
+  "content": "대댓글 입니다! ㅎㅎ"
 }
 
 
