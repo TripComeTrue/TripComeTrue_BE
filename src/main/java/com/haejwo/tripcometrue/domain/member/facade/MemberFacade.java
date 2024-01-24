@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.member.facade;
 
 import com.haejwo.tripcometrue.domain.member.dto.response.*;
-import com.haejwo.tripcometrue.domain.member.service.MemberSearchService;
+import com.haejwo.tripcometrue.domain.member.service.MemberReadSearchService;
 import com.haejwo.tripcometrue.domain.member.service.MemberService;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 public class MemberFacade {
 
     private final MemberService memberService;
-    private final MemberSearchService memberSearchService;
+    private final MemberReadSearchService memberReadSearchService;
     private final TripRecordScheduleVideoService tripRecordScheduleVideoService;
     private final TripRecordService tripRecordService;
 
     public MemberSearchResultWithContentResponseDto searchByNicknameResultWithContent(String nickname) {
-        List<MemberSimpleResponseDto> members = memberSearchService.searchByNickname(nickname);
+        List<MemberSimpleResponseDto> members = memberReadSearchService.searchByNickname(nickname);
 
         List<Long> memberIds = members
             .stream()
@@ -48,7 +48,7 @@ public class MemberFacade {
 
     public SliceResponseDto<MemberDetailListItemResponseDto> searchByNicknamePagination(String query, Pageable pageable) {
 
-        SliceResponseDto<MemberSimpleResponseDto> sliceResult = memberSearchService.searchByNickname(query, pageable);
+        SliceResponseDto<MemberSimpleResponseDto> sliceResult = memberReadSearchService.searchByNickname(query, pageable);
 
         List<Long> memberIds = sliceResult.content()
             .stream()
