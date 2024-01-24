@@ -36,20 +36,6 @@ public class CityContentReadController {
             );
     }
 
-    // 도시 관련 여행 후기 조회
-    @GetMapping("/{cityId}/trip-records")
-    public ResponseEntity<ResponseDTO<?>> getTripRecordsByCityId(
-        @PathVariable("cityId") Long cityId,
-        @RequestParam("totalDays") String totalDays
-    ) {
-        // TODO: 도시 여행 후기 리스트 조회 서비스 로직 구현
-        return ResponseEntity
-            .ok()
-            .body(
-                ResponseDTO.okWithData(null)
-            );
-    }
-
     // 도시 갤러리 더보기 조회
     @GetMapping("/{cityId}/images")
     public ResponseEntity<ResponseDTO<SliceResponseDto<CityImageContentResponseDto>>> getImagesByCityIdPagination(
