@@ -1,4 +1,5 @@
 package com.haejwo.tripcometrue.domain.likes.service;
+
 import com.haejwo.tripcometrue.domain.likes.dto.response.PlaceReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.dto.response.TripRecordReviewLikesResponseDto;
 import com.haejwo.tripcometrue.domain.likes.entity.PlaceReviewLikes;
@@ -8,12 +9,12 @@ import com.haejwo.tripcometrue.domain.likes.repository.PlaceReviewLikesRepositor
 import com.haejwo.tripcometrue.domain.likes.repository.TripRecordReviewLikesRepository;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
-import com.haejwo.tripcometrue.domain.place.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
+import com.haejwo.tripcometrue.domain.review.placereview.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.TripRecordReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
-import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordReviewNotFoundException;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import jakarta.transaction.Transactional;
