@@ -5,6 +5,7 @@ import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceNearbyResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
@@ -63,6 +64,14 @@ public class PlaceService {
         List<PlaceMapInfoResponseDto> responseDtos = placeRepository.findPlaceMapInfoListByPlaceId(placeId);
 
         return responseDtos;
+    }
+
+    public List<PlaceNearbyResponseDto> findNearbyPlaceList(Long placeId) {
+
+        List<PlaceNearbyResponseDto> responseDtos = placeRepository.findNearbyPlaces(placeId);
+
+        return responseDtos;
+
     }
 
     @Transactional
