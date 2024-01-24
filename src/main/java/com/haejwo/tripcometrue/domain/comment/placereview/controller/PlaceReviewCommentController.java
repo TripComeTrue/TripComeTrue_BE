@@ -3,18 +3,13 @@ package com.haejwo.tripcometrue.domain.comment.placereview.controller;
 import com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.placereview.service.PlaceReviewCommentService;
 import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.TripRecordCommentRequestDto;
-import com.haejwo.tripcometrue.domain.comment.triprecord.dto.response.TripRecordCommentListResponseDto;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.data.domain.Sort.Direction;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,23 +22,23 @@ public class PlaceReviewCommentController {
     public ResponseEntity<ResponseDTO<Void>> registerComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long placeReviewId,
-            @RequestBody @Valid PlaceReviewCommentRequestDto requestDto
+            @RequestBody @Valid com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto requestDto
     ) {
 
         commentService.saveComment(principalDetails, placeReviewId, requestDto);
         return ResponseEntity.ok(ResponseDTO.ok());
     }
 
-//    @PostMapping("/comments/{tripRecordCommentId}/reply-comments")
-//    public ResponseEntity<ResponseDTO<Void>> registerReplyComment(
-//            @AuthenticationPrincipal PrincipalDetails principalDetails,
-//            @PathVariable Long tripRecordCommentId,
-//            @RequestBody @Valid TripRecordCommentRequestDto requestDto
-//    ) {
-//
-//        commentService.saveReplyComment(principalDetails, tripRecordCommentId, requestDto);
-//        return ResponseEntity.ok(ResponseDTO.ok());
-//    }
+    @PostMapping("/comments/{placeReviewCommentId}/reply-comments")
+    public ResponseEntity<ResponseDTO<Void>> registerReplyComment(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long placeReviewCommentId,
+            @RequestBody @Valid PlaceReviewCommentRequestDto requestDto
+    ) {
+
+        commentService.saveReplyComment(principalDetails, placeReviewCommentId, requestDto);
+        return ResponseEntity.ok(ResponseDTO.ok());
+    }
 //
 //    @GetMapping("/{tripRecordId}/comments")
 //    public ResponseEntity<ResponseDTO<TripRecordCommentListResponseDto>> getCommentList(
