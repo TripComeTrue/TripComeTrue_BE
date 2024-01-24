@@ -12,6 +12,7 @@ import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -173,7 +174,9 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
     }
 
     @Override
-    public Slice<TripRecord> findTripRecordsByHashTag(String hashTag, Pageable pageable) {
+    public Slice<TripRecord> findTripRecordsByHashtag(
+        String hashTag, Pageable pageable
+    ) {
 
         int pageSize = pageable.getPageSize();
         List<TripRecord> content = queryFactory
@@ -188,6 +191,30 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
                         )
                         .groupBy(tripRecord.id)
                 )
+            )
+            .orderBy(getSort(pageable))
+            .offset(pageable.getOffset())
+            .limit(pageSize + 1)
+            .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageSize) {
+            content.remove(pageSize);
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<TripRecord> findTripRecordsByExpenseRangeType(
+        ExpenseRangeType expenseRangeType, Pageable pageable
+    ) {
+        int pageSize = pageable.getPageSize();
+        List<TripRecord> content = queryFactory
+            .selectFrom(tripRecord)
+            .where(
+                eqExpenseRangeType(expenseRangeType)
             )
             .orderBy(getSort(pageable))
             .offset(pageable.getOffset())
@@ -327,6 +354,10 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
         }
 
         return tripRecord.totalDays.eq(Integer.parseInt(totalDays));
+    }
+
+    private BooleanExpression eqExpenseRangeType(ExpenseRangeType expenseRangeType) {
+        return Objects.nonNull(expenseRangeType) ? tripRecord.expenseRangeType.eq(expenseRangeType) : null;
     }
 
     private OrderSpecifier<?>[] getSort(Pageable pageable) {
