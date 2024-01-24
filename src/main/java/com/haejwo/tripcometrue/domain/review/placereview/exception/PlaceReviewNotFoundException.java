@@ -5,9 +5,9 @@ import com.haejwo.tripcometrue.global.exception.ErrorCode;
 
 public class PlaceReviewNotFoundException extends ApplicationException {
 
-    private static final ErrorCode ERROR_CODE = ErrorCode.PLACE_REVIEW_NOT_FOUND;
+  private static ErrorCode ERROR_CODE = ErrorCode.PLACE_REVIEW_NOT_FOUND;
 
-    public PlaceReviewNotFoundException() {
-        super(ERROR_CODE);
-    }
+  public PlaceReviewNotFoundException(){
+    super(ERROR_CODE);
+  }
 }
