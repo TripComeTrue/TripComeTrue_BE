@@ -26,6 +26,7 @@ public class Place extends BaseTimeEntity {
     @Column(nullable = false)
     private String address;
     private String description;
+    private String phoneNumber;
     private LocalTime weekdayOpenTime;
     private LocalTime weekdayCloseTime;
     private LocalTime weekendOpenTime;
@@ -49,15 +50,15 @@ public class Place extends BaseTimeEntity {
     }
 
     @Builder
-    public Place(Long id, String name, String address, String description,
-        LocalTime weekdayOpenTime,
-        LocalTime weekdayCloseTime, LocalTime weekendOpenTime, LocalTime weekendCloseTime,
-        Double latitude, Double longitude, Integer storedCount, Integer reviewCount,
-        Integer commentCount, City city) {
+    public Place(Long id, String name, String address, String description, String phoneNumber,
+        LocalTime weekdayOpenTime, LocalTime weekdayCloseTime, LocalTime weekendOpenTime,
+        LocalTime weekendCloseTime, Double latitude, Double longitude, Integer storedCount,
+        Integer reviewCount, Integer commentCount, City city) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
+        this.phoneNumber = phoneNumber;
         this.weekdayOpenTime = weekdayOpenTime;
         this.weekdayCloseTime = weekdayCloseTime;
         this.weekendOpenTime = weekendOpenTime;
