@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.haejwo.tripcometrue.domain.review.global.PointType.ONLY_ONE_POINT;
 import static com.haejwo.tripcometrue.domain.review.global.PointType.TWO_POINTS;
-import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.REMOVE;
 
 @Getter
 @Entity
