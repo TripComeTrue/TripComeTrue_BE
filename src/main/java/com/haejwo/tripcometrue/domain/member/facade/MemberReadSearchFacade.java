@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberFacade {
+public class MemberReadSearchFacade {
 
     private final MemberService memberService;
     private final MemberReadSearchService memberReadSearchService;

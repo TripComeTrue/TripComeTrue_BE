@@ -3,7 +3,7 @@ package com.haejwo.tripcometrue.domain.member.controller;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberCreatorInfoResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberDetailListItemResponseDto;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSearchResultWithContentResponseDto;
-import com.haejwo.tripcometrue.domain.member.facade.MemberFacade;
+import com.haejwo.tripcometrue.domain.member.facade.MemberReadSearchFacade;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MemberReadSearchController {
 
-    private final MemberFacade memberFacade;
+    private final MemberReadSearchFacade memberReadSearchFacade;
 
     @GetMapping("/{memberId}")
     public ResponseEntity<ResponseDTO<MemberCreatorInfoResponseDto>> memberCreatorInfo(
@@ -28,7 +28,7 @@ public class MemberReadSearchController {
             .ok()
             .body(
                 ResponseDTO.okWithData(
-                    memberFacade.getCreatorInfo(memberId)
+                    memberReadSearchFacade.getCreatorInfo(memberId)
                 )
             );
     }
@@ -41,7 +41,7 @@ public class MemberReadSearchController {
             .ok()
             .body(
                 ResponseDTO.okWithData(
-                    memberFacade.searchByNicknameResultWithContent(query)
+                    memberReadSearchFacade.searchByNicknameResultWithContent(query)
                 )
             );
     }
@@ -55,7 +55,7 @@ public class MemberReadSearchController {
             .ok()
             .body(
                 ResponseDTO.okWithData(
-                    memberFacade.searchByNicknamePagination(query, pageable)
+                    memberReadSearchFacade.searchByNicknamePagination(query, pageable)
                 )
             );
     }
