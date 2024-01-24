@@ -1,6 +1,6 @@
 package com.haejwo.tripcometrue.domain.comment.triprecord.service;
 
-import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.CommentRequestDto;
+import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.TripRecordCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.dto.response.TripRecordCommentListResponseDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.entity.TripRecordComment;
 import com.haejwo.tripcometrue.domain.comment.triprecord.exception.TripRecordCommentNotFoundException;
@@ -35,13 +35,13 @@ public class TripRecordCommentService {
     public void saveComment(
             PrincipalDetails principalDetails,
             Long tripRecordId,
-            CommentRequestDto requestDto
+            TripRecordCommentRequestDto requestDto
     ) {
 
         Member loginMember = getMember(principalDetails);
         TripRecord tripRecord = getTripRecordById(tripRecordId);
 
-        TripRecordComment comment = CommentRequestDto.toComment(loginMember, tripRecord, requestDto);
+        TripRecordComment comment = TripRecordCommentRequestDto.toComment(loginMember, tripRecord, requestDto);
         tripRecordCommentRepository.save(comment);
         tripRecord.incrementCommentCount();
     }
@@ -54,14 +54,14 @@ public class TripRecordCommentService {
     public void saveReplyComment(
             PrincipalDetails principalDetails,
             Long tripRecordCommentId,
-            CommentRequestDto requestDto
+            TripRecordCommentRequestDto requestDto
     ) {
 
         Member loginMember = getMember(principalDetails);
         TripRecordComment tripRecordComment = getTripRecordCommentById(tripRecordCommentId);
         TripRecord tripRecord = tripRecordComment.getTripRecord();
 
-        TripRecordComment comment = CommentRequestDto.toReplyComment(loginMember, tripRecord, tripRecordComment, requestDto);
+        TripRecordComment comment = TripRecordCommentRequestDto.toReplyComment(loginMember, tripRecord, tripRecordComment, requestDto);
         tripRecordCommentRepository.save(comment);
         tripRecord.incrementCommentCount();
     }
