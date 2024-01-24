@@ -16,6 +16,7 @@ public record PlaceReviewCommentResponseDto(
         String profileUrl,
         String nickname,
         boolean isWriter,
+        String content,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH-mm-ss")
         LocalDateTime createdAt,
@@ -31,6 +32,7 @@ public record PlaceReviewCommentResponseDto(
                 placeReviewComment.getMember().getProfileImage(),
                 placeReviewComment.getMember().getMemberBase().getNickname(),
                 isWriter(placeReviewComment, loginMember),
+                placeReviewComment.getContent(),
                 placeReviewComment.getCreatedAt(),
                 getReplyComments(placeReviewComment, loginMember) //자식 댓글 리스트에 담기
         );
