@@ -36,8 +36,9 @@ public record PlaceListItemResponseDto(
             .weekdayCloseTime(entity.getWeekdayCloseTime())
             .weekendOpenTime(entity.getWeekendOpenTime())
             .weekendCloseTime(entity.getWeekendCloseTime())
+            .telNumber(entity.getPhoneNumber())
             .cityName(entity.getCity().getName())
             .imageUrl(imageUrl)
-            .build(); // TODO: telNumber mapping
+            .build();
     }
 }
