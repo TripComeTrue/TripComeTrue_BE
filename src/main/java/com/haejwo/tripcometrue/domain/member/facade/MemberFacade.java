@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.member.facade;
 
 import com.haejwo.tripcometrue.domain.member.dto.response.*;
 import com.haejwo.tripcometrue.domain.member.service.MemberSearchService;
+import com.haejwo.tripcometrue.domain.member.service.MemberService;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordScheduleVideoService;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class MemberFacade {
 
+    private final MemberService memberService;
     private final MemberSearchService memberSearchService;
     private final TripRecordScheduleVideoService tripRecordScheduleVideoService;
     private final TripRecordService tripRecordService;
@@ -77,6 +79,23 @@ public class MemberFacade {
             .sort(sliceResult.sort())
             .first(sliceResult.first())
             .last(sliceResult.last())
+            .build();
+    }
+
+    public MemberCreatorInfoResponseDto getCreatorInfo(Long memberId) {
+        MemberSimpleResponseDto memberInfo = memberService.getMemberSimpleInfo(memberId);
+
+        List<TripRecordScheduleVideoListItemResponseDto> videos = tripRecordScheduleVideoService.getVideosInMemberIds(List.of(memberId));
+        List<TripRecordListItemResponseDto> tripRecords = tripRecordService.findTripRecordsWihMemberInMemberIds(List.of(memberId));
+
+        return MemberCreatorInfoResponseDto.builder()
+            .memberDetailInfo(
+                MemberDetailListItemResponseDto.of(
+                    memberInfo, tripRecords.size(), videos.size()
+                )
+            )
+            .videos(videos)
+            .tripRecords(tripRecords)
             .build();
     }
 
