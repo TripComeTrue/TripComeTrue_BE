@@ -22,7 +22,7 @@ public class TripRecordComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "trip_record_comment_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
