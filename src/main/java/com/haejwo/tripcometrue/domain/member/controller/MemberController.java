@@ -150,7 +150,8 @@ public class MemberController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<ResponseDTO<MemberDetailResponseDto>> getMemberDetails(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<ResponseDTO<MemberDetailResponseDto>> getMemberDetails(
+        @AuthenticationPrincipal PrincipalDetails principalDetails) {
         MemberDetailResponseDto responseDto = memberService.getMemberDetails(principalDetails);
         ResponseDTO<MemberDetailResponseDto> response = ResponseDTO.okWithData(responseDto);
         return ResponseEntity

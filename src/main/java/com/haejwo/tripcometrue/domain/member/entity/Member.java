@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +47,8 @@ public class Member extends BaseTimeEntity {
 
     private Double memberRating;
 
+    private LocalDateTime nickNameChangeTime;
+
     @Builder
     public Member(String email, String nickname, String password, String authority,
         String provider, Double memberRating) {
@@ -64,6 +67,10 @@ public class Member extends BaseTimeEntity {
 
     public void updateNickNameChangeCount(){
         this.nickNameChangeCount = (this.nickNameChangeCount == null) ? 1 : this.nickNameChangeCount + 1;
+    }
+
+    public void updateNickNameChangeTime(LocalDateTime nicknameChangeTime){
+        this.nickNameChangeTime = nicknameChangeTime;
     }
 
     public void updateTripLevel(){
