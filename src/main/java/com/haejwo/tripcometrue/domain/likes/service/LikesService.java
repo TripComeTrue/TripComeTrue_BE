@@ -8,15 +8,14 @@ import com.haejwo.tripcometrue.domain.likes.repository.PlaceReviewLikesRepositor
 import com.haejwo.tripcometrue.domain.likes.repository.TripRecordReviewLikesRepository;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
-import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
+import com.haejwo.tripcometrue.domain.place.exception.PlaceReviewNotFoundException;
 import com.haejwo.tripcometrue.domain.review.placereview.entity.PlaceReview;
 import com.haejwo.tripcometrue.domain.review.placereview.repository.PlaceReviewRepository;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
-import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
+import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordReviewNotFoundException;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,7 @@ import org.springframework.stereotype.Service;
       Member member = memberRepository.findById(memberId)
           .orElseThrow(() -> new InvalidLikesException(ErrorCode.USER_NOT_FOUND));
       PlaceReview placeReview = placeReviewRepository.findById(placeReviewId)
-          .orElseThrow(() -> new EntityNotFoundException());
+          .orElseThrow(() -> new InvalidLikesException(ErrorCode.PLACE_REVIEW_NOT_FOUND));
 
       PlaceReviewLikes like = PlaceReviewLikes.builder()
           .member(member)
@@ -66,9 +65,9 @@ import org.springframework.stereotype.Service;
       }
 
       Member member = memberRepository.findById(memberId)
-          .orElseThrow(() -> new EntityNotFoundException());
+          .orElseThrow(() -> new InvalidLikesException(ErrorCode.USER_NOT_FOUND));
       TripRecordReview tripRecordReview = tripRecordReviewRepository.findById(tripRecordReviewId)
-          .orElseThrow(() -> new EntityNotFoundException());
+          .orElseThrow(() -> new InvalidLikesException(ErrorCode.TRIP_RECORD_REVIEW_NOT_FOUND));
 
       TripRecordReviewLikes like = TripRecordReviewLikes.builder()
           .member(member)
@@ -94,7 +93,7 @@ import org.springframework.stereotype.Service;
 
     private PlaceReview findByPlaceReviewId(Long placeReviewId) {
       return placeReviewRepository.findById(placeReviewId)
-          .orElseThrow(PlaceNotFoundException::new);
+          .orElseThrow(PlaceReviewNotFoundException::new);
     }
 
     @Transactional
@@ -111,7 +110,7 @@ import org.springframework.stereotype.Service;
 
     private TripRecordReview findByTripRecordReviewId(Long tripRecordReviewId) {
       return tripRecordReviewRepository.findById(tripRecordReviewId)
-          .orElseThrow(TripRecordNotFoundException::new);
+          .orElseThrow(TripRecordReviewNotFoundException::new);
     }
   }
 
