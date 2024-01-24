@@ -4,6 +4,7 @@ import com.haejwo.tripcometrue.domain.city.entity.City;
 import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.place.dto.request.PlaceRequestDto;
+import com.haejwo.tripcometrue.domain.place.dto.response.PlaceListItemResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceNearbyResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
@@ -11,10 +12,16 @@ import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import java.util.List;
+import java.util.Objects;
+
+import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleImageWithPlaceIdQueryDto;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
+import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +32,7 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final CityRepository cityRepository;
+    private final TripRecordScheduleImageRepository tripRecordScheduleImageRepository;
 
     @Transactional
     public PlaceResponseDto addPlace(PlaceRequestDto requestDto) {
@@ -57,6 +65,36 @@ public class PlaceService {
 
         return result;
 
+    }
+
+    @Transactional(readOnly = true)
+    public SliceResponseDto<PlaceListItemResponseDto> listPlacesByName(
+        String placeName, Pageable pageable
+    ) {
+        Slice<Place> places = placeRepository.findPlacesWithCityByName(placeName, pageable);
+
+        return SliceResponseDto.of(
+            places.map(
+                place ->
+                    PlaceListItemResponseDto
+                        .fromEntity(
+                            place,
+                            // 여행지 대표이미지 추출
+                            tripRecordScheduleImageRepository
+                                .findInPlaceIdsOrderByCreatedAtDesc(
+                                    places.getContent()
+                                        .stream()
+                                        .map(Place::getId)
+                                        .toList()
+                                )
+                                .stream()
+                                .filter(Objects::nonNull)
+                                .findFirst()
+                                .map(TripRecordScheduleImageWithPlaceIdQueryDto::imageUrl)
+                                .orElse(null)
+                        )
+            )
+        );
     }
 
     public List<PlaceMapInfoResponseDto> findPlaceMapInfoList(Long placeId) {
