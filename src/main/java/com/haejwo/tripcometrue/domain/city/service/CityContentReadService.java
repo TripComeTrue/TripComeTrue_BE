@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -63,7 +64,14 @@ public class CityContentReadService {
         return places
             .stream()
             .map(place -> {
-                String imageUrl = imageMap.get(place.getId()).get(0).imageUrl();
+                String imageUrl = Objects.isNull(imageMap.get(place.getId())) ? null :
+                    imageMap.get(place.getId())
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .map(TripRecordScheduleImageWithPlaceIdQueryDto::imageUrl)
+                        .orElse(null);
+
                 return CityPlaceResponseDto.fromEntity(place, imageUrl);
             })
             .toList();
