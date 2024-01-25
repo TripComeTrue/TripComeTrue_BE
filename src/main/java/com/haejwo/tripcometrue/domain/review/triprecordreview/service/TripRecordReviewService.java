@@ -182,16 +182,19 @@ public class TripRecordReviewService {
         Member loginMember = getMember(principalDetails);
 
         Long totalCount = tripRecordReviewRepository.countByTripRecordId(tripRecordId);
-        Float myScore = tripRecordReviewRepository
-                .findMyScoreByMemberAndTripRecordId(loginMember, tripRecordId).orElse(0f);
+        Optional<TripRecordReview> myReview = tripRecordReviewRepository
+                .findByMemberAndTripRecordId(loginMember, tripRecordId);
+
+        Long myReviewId = myReview.map(TripRecordReview::getId).orElse(null);
+        Float myRatingScore = myReview.map(TripRecordReview::getRatingScore).orElse(0f);
 
         Optional<TripRecordReview> latestReview = tripRecordReviewRepository
                 .findTopByTripRecordIdOrderByCreatedAtDesc(tripRecordId);
 
         if (latestReview.isEmpty()) {
-            return EmptyTripRecordReviewResponseDto.fromData(totalCount, myScore);
+            return EmptyTripRecordReviewResponseDto.fromData(totalCount, myReviewId, myRatingScore);
         }
-        return LatestTripRecordReviewResponseDto.fromEntity(totalCount, latestReview.get(), myScore);
+        return LatestTripRecordReviewResponseDto.fromEntity(totalCount, latestReview.get(), myReviewId, myRatingScore);
     }
 
     public SimpleTripRecordResponseDto getTripRecordReview(PrincipalDetails principalDetails, Long tripRecordReviewId) {
