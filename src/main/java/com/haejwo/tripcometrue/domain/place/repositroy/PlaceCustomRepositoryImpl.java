@@ -10,8 +10,10 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.OrderSpecifier.NullHandling;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -268,6 +270,10 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
             }
         }
 
-        return orderSpecifiers.isEmpty() ? null : orderSpecifiers.toArray(OrderSpecifier[]::new);
+        if(orderSpecifiers.isEmpty()) {
+            orderSpecifiers.add(new OrderSpecifier(Order.ASC, NullExpression.DEFAULT, NullHandling.Default));
+        }
+
+        return orderSpecifiers.toArray(OrderSpecifier[]::new);
     }
 }

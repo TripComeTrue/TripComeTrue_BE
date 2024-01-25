@@ -10,8 +10,10 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.*;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.OrderSpecifier.NullHandling;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -387,6 +389,10 @@ public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport im
             }
         }
 
-        return orderSpecifiers.isEmpty() ? null : orderSpecifiers.toArray(OrderSpecifier[]::new); // 최신순
+        if(orderSpecifiers.isEmpty()) {
+            orderSpecifiers.add(new OrderSpecifier(Order.ASC, NullExpression.DEFAULT, NullHandling.Default));
+        }
+
+        return orderSpecifiers.toArray(OrderSpecifier[]::new);
     }
 }
