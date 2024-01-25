@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,9 +38,12 @@ public class CityInfoReadService {
     }
 
     @Transactional(readOnly = true)
-    public ExchangeRateResponseDto getExchangeRate(String curUnit) {
-        CurrencyUnit currencyUnit = validateAndConvertToCurrencyUnit(curUnit);
+    public ExchangeRateResponseDto getExchangeRateByCityId(Long cityId) {
 
+        City city = cityRepository.findById(cityId)
+            .orElseThrow(CityNotFoundException::new);
+
+        CurrencyUnit currencyUnit = city.getCurrency();
         String exchangeRate = (String) redisTemplate.opsForValue()
             .get("exchange-rate:" + currencyUnit);
 
@@ -104,12 +106,5 @@ public class CityInfoReadService {
             .add(new BigDecimal("32"))
             .setScale(2, RoundingMode.HALF_UP)
             .toString();
-    }
-
-    private CurrencyUnit validateAndConvertToCurrencyUnit(String curUnit) {
-        return Arrays.stream(CurrencyUnit.values())
-            .filter(currencyUnit -> currencyUnit.name().equals(curUnit.toUpperCase()))
-            .findFirst()
-            .orElseThrow();
     }
 }
