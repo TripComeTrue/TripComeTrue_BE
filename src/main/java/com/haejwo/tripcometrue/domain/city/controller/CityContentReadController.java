@@ -107,16 +107,17 @@ public class CityContentReadController {
             );
     }
 
-    // 도시 여행지 더보기 조회
+    // 도시 여행지 더보기 조회 및 도시 여행지 검색 조회 (페이징)
     @GetMapping("/{cityId}/places")
     public ResponseEntity<ResponseDTO<SliceResponseDto<CityPlaceResponseDto>>> getPlacesByCityIdPagination(
         @PathVariable("cityId") Long cityId,
+        @RequestParam(required = false, name = "placeName") String placeName,
         @PageableDefault(sort = "storedCount", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(
-                ResponseDTO.okWithData(cityContentReadService.getPlaces(cityId, pageable))
+                ResponseDTO.okWithData(cityContentReadService.getPlaces(cityId, placeName, pageable))
             );
     }
 
