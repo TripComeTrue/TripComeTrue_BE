@@ -23,7 +23,7 @@ public class TripRecordViewHistory extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "trip_record_view_history")
+  @Column(name = "trip_record_view_history_id")
   private Long id;
 
 
