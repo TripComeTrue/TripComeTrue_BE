@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.city.controller;
 
 import com.haejwo.tripcometrue.domain.city.dto.response.*;
 import com.haejwo.tripcometrue.domain.city.service.CityContentReadService;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import com.haejwo.tripcometrue.global.validator.annotation.HomeTopListQueryType;
@@ -67,7 +68,7 @@ public class CityContentReadController {
 
     // 도시 쇼츠 더보기 조회
     @GetMapping("/{cityId}/videos")
-    public ResponseEntity<ResponseDTO<SliceResponseDto<CityVideoContentResponseDto>>> getVideosByCityIdPagination(
+    public ResponseEntity<ResponseDTO<SliceResponseDto<TripRecordScheduleVideoListItemResponseDto>>> getVideosByCityIdPagination(
         @PathVariable("cityId") Long cityId,
         @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -82,7 +83,7 @@ public class CityContentReadController {
 
     // 도시 쇼츠 리스트 조회
     @GetMapping("/{cityId}/videos/list")
-    public ResponseEntity<ResponseDTO<List<CityVideoContentResponseDto>>> getVideosByCityId(
+    public ResponseEntity<ResponseDTO<List<TripRecordScheduleVideoListItemResponseDto>>> getVideosByCityId(
         @PathVariable("cityId") Long cityId
     ) {
         return ResponseEntity

@@ -1,7 +1,6 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleVideoQueryDto;
-import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordScheduleVideo;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -28,12 +27,29 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TripRecordScheduleVideo> findByCityId(Long cityId, Pageable pageable) {
+    public Slice<TripRecordScheduleVideoQueryDto> findByCityId(Long cityId, Pageable pageable) {
+
         int pageSize = pageable.getPageSize();
-        List<TripRecordScheduleVideo> content = queryFactory
-            .selectFrom(tripRecordScheduleVideo)
-            .leftJoin(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule).fetchJoin()
-            .leftJoin(tripRecordSchedule.place, place)
+        List<TripRecordScheduleVideoQueryDto> content = queryFactory
+            .select(
+                Projections.constructor(
+                    TripRecordScheduleVideoQueryDto.class,
+                    tripRecordScheduleVideo.id,
+                    tripRecord.id,
+                    tripRecord.title,
+                    tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecordScheduleVideo.videoUrl,
+                    tripRecord.storeCount,
+                    member.id,
+                    member.memberBase.nickname,
+                    member.profileImage
+                )
+            )
+            .from(tripRecordScheduleVideo)
+            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
+            .join(tripRecordSchedule.place, place)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecord.member, member)
             .where(
                 place.city.id.eq(cityId)
             )
@@ -52,15 +68,30 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<TripRecordScheduleVideo> findByCityIdOrderByCreatedAtDescLimitSize(Long cityId, Integer size) {
+    public List<TripRecordScheduleVideoQueryDto> findByCityIdOrderByCreatedAtDescLimitSize(Long cityId, Integer size) {
         return queryFactory
-            .selectFrom(tripRecordScheduleVideo)
-            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule).fetchJoin()
+            .select(
+                Projections.constructor(
+                    TripRecordScheduleVideoQueryDto.class,
+                    tripRecordScheduleVideo.id,
+                    tripRecord.id,
+                    tripRecord.title,
+                    tripRecordScheduleVideo.thumbnailUrl,
+                    tripRecordScheduleVideo.videoUrl,
+                    tripRecord.storeCount,
+                    member.id,
+                    member.memberBase.nickname,
+                    member.profileImage
+                )
+            )
+            .from(tripRecordScheduleVideo)
+            .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
             .join(tripRecordSchedule.place, place)
+            .join(tripRecordSchedule.tripRecord, tripRecord)
+            .join(tripRecord.member, member)
             .where(
                 place.city.id.eq(cityId)
             )
-            .orderBy(tripRecordScheduleVideo.createdAt.desc())
             .limit(size)
             .fetch();
     }

@@ -7,6 +7,7 @@ import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordScheduleImageWithPlaceIdQueryDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordScheduleVideoListItemResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
@@ -129,21 +130,21 @@ public class CityContentReadService {
 
     // 도시 쇼츠 리스트 조회
     @Transactional(readOnly = true)
-    public List<CityVideoContentResponseDto> getVideos(Long cityId) {
+    public List<TripRecordScheduleVideoListItemResponseDto> getVideos(Long cityId) {
         return tripRecordScheduleVideoRepository
             .findByCityIdOrderByCreatedAtDescLimitSize(cityId, CITY_MEDIA_CONTENT_SIZE)
             .stream()
-            .map(CityVideoContentResponseDto::fromEntity)
+            .map(TripRecordScheduleVideoListItemResponseDto::fromQueryDto)
             .toList();
     }
 
     // 도시 쇼츠 리스트 조회 (페이징, 정렬)
     @Transactional(readOnly = true)
-    public SliceResponseDto<CityVideoContentResponseDto> getVideos(Long cityId, Pageable pageable) {
+    public SliceResponseDto<TripRecordScheduleVideoListItemResponseDto> getVideos(Long cityId, Pageable pageable) {
         return SliceResponseDto.of(
             tripRecordScheduleVideoRepository
                 .findByCityId(cityId, pageable)
-                .map(CityVideoContentResponseDto::fromEntity)
+                .map(TripRecordScheduleVideoListItemResponseDto::fromQueryDto)
         );
     }
 
