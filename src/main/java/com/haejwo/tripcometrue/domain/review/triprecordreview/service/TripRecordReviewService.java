@@ -22,6 +22,8 @@ import com.haejwo.tripcometrue.domain.review.triprecordreview.dto.response.lates
 import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.exception.*;
 import com.haejwo.tripcometrue.domain.review.triprecordreview.repository.TripRecordReviewRepository;
+import com.haejwo.tripcometrue.domain.tripplan.entity.TripPlan;
+import com.haejwo.tripcometrue.domain.tripplan.repository.TripPlanRepository;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordNotFoundException;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
@@ -32,6 +34,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +48,7 @@ public class TripRecordReviewService {
     private final TripRecordReviewRepository tripRecordReviewRepository;
     private final TripRecordRepository tripRecordRepository;
     private final MemberRepository memberRepository;
+    private final TripPlanRepository tripPlanRepository;
 
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
     @Transactional
@@ -181,20 +185,36 @@ public class TripRecordReviewService {
         getTripRecordById(tripRecordId);
         Member loginMember = getMember(principalDetails);
 
+        Optional<TripRecordReview> latestReview = tripRecordReviewRepository
+                .findTopByTripRecordIdOrderByCreatedAtDesc(tripRecordId);
+
         Long totalCount = tripRecordReviewRepository.countByTripRecordId(tripRecordId);
         Optional<TripRecordReview> myReview = tripRecordReviewRepository
                 .findByMemberAndTripRecordId(loginMember, tripRecordId);
 
+        String content = myReview.map(TripRecordReview::getContent).orElse(null);
         Long myReviewId = myReview.map(TripRecordReview::getId).orElse(null);
         Float myRatingScore = myReview.map(TripRecordReview::getRatingScore).orElse(0f);
 
-        Optional<TripRecordReview> latestReview = tripRecordReviewRepository
-                .findTopByTripRecordIdOrderByCreatedAtDesc(tripRecordId);
+        boolean isReviewable = canWriteReview(loginMember, tripRecordId, content, myRatingScore);
 
         if (latestReview.isEmpty()) {
-            return EmptyTripRecordReviewResponseDto.fromData(totalCount, myReviewId, myRatingScore);
+            return EmptyTripRecordReviewResponseDto.fromData(totalCount, myReviewId, myRatingScore, isReviewable);
         }
-        return LatestTripRecordReviewResponseDto.fromEntity(totalCount, latestReview.get(), myReviewId, myRatingScore);
+        return LatestTripRecordReviewResponseDto.fromEntity(totalCount, latestReview.get(), myReviewId, myRatingScore, isReviewable);
+    }
+
+    private boolean canWriteReview(Member loginMember, Long tripRecordId, String content, float score) {
+
+        if (content != null || score == 0f) {
+            return false;
+        }
+
+        Optional<TripPlan> latestTripPlan = tripPlanRepository.findByMemberIdAndTripRecordId(loginMember, tripRecordId);
+        return latestTripPlan.map(tripPlan ->
+                        tripPlan.getTripEndDay().isBefore(LocalDate.now())
+                )
+                .orElse(false);
     }
 
     public SimpleTripRecordResponseDto getTripRecordReview(PrincipalDetails principalDetails, Long tripRecordReviewId) {
@@ -229,7 +249,6 @@ public class TripRecordReviewService {
                             return TripRecordReviewResponseDto.fromEntity(
                                     tripRecordReview,
                                     hasLiked
-
                             );
                         }
                 ).toList());

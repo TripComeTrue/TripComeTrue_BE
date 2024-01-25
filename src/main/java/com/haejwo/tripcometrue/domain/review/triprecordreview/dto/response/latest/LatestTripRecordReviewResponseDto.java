@@ -8,18 +8,21 @@ public record LatestTripRecordReviewResponseDto(
         Long totalCount,
         TripRecordReviewResponseDto latestTripRecordReview,
         Long myTripRecordReviewId,
-        Float myRatingScore
+        Float myRatingScore,
+        boolean canRegisterContent
 
 ) implements LatestReviewResponseDto {
     public static LatestTripRecordReviewResponseDto fromEntity(
             Long totalCount,
             TripRecordReview tripRecordReview,
             Long myTripRecordReviewId,
-            Float myRatingScore) {
+            Float myRatingScore,
+            boolean canRegisterContent) {
         return new LatestTripRecordReviewResponseDto(
                 totalCount,
                 TripRecordReviewResponseDto.fromEntity(tripRecordReview, false),
                 myTripRecordReviewId,
-                myRatingScore);
+                myRatingScore,
+                canRegisterContent);
     }
 }

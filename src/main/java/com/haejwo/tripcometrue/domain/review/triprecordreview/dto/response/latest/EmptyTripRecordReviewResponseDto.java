@@ -4,10 +4,11 @@ public record EmptyTripRecordReviewResponseDto(
 
         Long totalCount,
         Long myTripRecordReviewId,
-        Float myRatingScore
+        Float myRatingScore,
+        boolean canRegisterContent
 
 ) implements LatestReviewResponseDto {
-    public static EmptyTripRecordReviewResponseDto fromData(Long totalCount, Long myTripRecordReviewId, Float myRatingScore) {
-        return new EmptyTripRecordReviewResponseDto(totalCount, myTripRecordReviewId, myRatingScore);
+    public static EmptyTripRecordReviewResponseDto fromData(Long totalCount, Long myTripRecordReviewId, Float myRatingScore, boolean canRegisterContent) {
+        return new EmptyTripRecordReviewResponseDto(totalCount, myTripRecordReviewId, myRatingScore, canRegisterContent);
     }
 }
