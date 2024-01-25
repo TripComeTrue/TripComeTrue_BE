@@ -18,4 +18,6 @@ public interface TripRecordStoreRepository extends JpaRepository <TripRecordStor
 
   Long countByTripRecord(TripRecord tripRecord);
 
+  Boolean existsByMemberAndTripRecord(Member member, TripRecord tripRecord);
+
 }
