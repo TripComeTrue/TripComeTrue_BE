@@ -1,5 +1,7 @@
 package com.haejwo.tripcometrue.domain.comment.triprecord.service;
 
+import com.haejwo.tripcometrue.domain.alarm.entity.AlarmType;
+import com.haejwo.tripcometrue.domain.alarm.service.AlarmService;
 import com.haejwo.tripcometrue.domain.comment.triprecord.dto.request.TripRecordCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.dto.response.TripRecordCommentListResponseDto;
 import com.haejwo.tripcometrue.domain.comment.triprecord.entity.TripRecordComment;
@@ -31,6 +33,7 @@ public class TripRecordCommentService {
     private final MemberRepository memberRepository;
     private final TripRecordRepository tripRecordRepository;
     private final TripRecordCommentRepository tripRecordCommentRepository;
+    private final AlarmService alarmService;
 
     public void saveComment(
             PrincipalDetails principalDetails,
@@ -44,6 +47,13 @@ public class TripRecordCommentService {
         TripRecordComment comment = TripRecordCommentRequestDto.toComment(loginMember, tripRecord, requestDto);
         tripRecordCommentRepository.save(comment);
         tripRecord.incrementCommentCount();
+
+        alarmService.addAlarm(
+            loginMember,
+            tripRecord.getMember(),
+            AlarmType.NEW_TRIP_RECORD_COMMENT,
+            tripRecordId,
+            comment.getId());
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
