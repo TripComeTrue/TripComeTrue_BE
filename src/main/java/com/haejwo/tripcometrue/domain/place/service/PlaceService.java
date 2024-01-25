@@ -79,7 +79,7 @@ public class PlaceService {
     public SliceResponseDto<PlaceListItemResponseDto> listPlacesByName(
         String placeName, Pageable pageable
     ) {
-        Slice<Place> places = placeRepository.findPlacesWithCityByName(placeName, pageable);
+        Slice<Place> places = placeRepository.findPlacesWithCityByPlaceName(placeName, pageable);
 
         return SliceResponseDto.of(
             places.map(

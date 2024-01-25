@@ -92,7 +92,7 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Slice<Place> findPlacesWithCityByName(String placeName, Pageable pageable) {
+    public Slice<Place> findPlacesWithCityByPlaceName(String placeName, Pageable pageable) {
 
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
