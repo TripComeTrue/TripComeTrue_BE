@@ -1,5 +1,7 @@
 package com.haejwo.tripcometrue.domain.comment.placereview.service;
 
+import com.haejwo.tripcometrue.domain.alarm.entity.AlarmType;
+import com.haejwo.tripcometrue.domain.alarm.service.AlarmService;
 import com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto;
 import com.haejwo.tripcometrue.domain.comment.placereview.entity.PlaceReviewComment;
 import com.haejwo.tripcometrue.domain.comment.placereview.exception.PlaceReviewCommentNotFoundException;
@@ -28,6 +30,7 @@ public class PlaceReviewCommentService {
     private final MemberRepository memberRepository;
     private final PlaceReviewRepository placeReviewRepository;
     private final PlaceReviewCommentRepository placeReviewCommentRepository;
+    private final AlarmService alarmService;
 
     public void saveComment(
             PrincipalDetails principalDetails,
@@ -41,6 +44,13 @@ public class PlaceReviewCommentService {
         PlaceReviewComment comment = com.haejwo.tripcometrue.domain.comment.placereview.dto.request.PlaceReviewCommentRequestDto.toComment(loginMember, placeReview, requestDto);
         placeReviewCommentRepository.save(comment);
         placeReview.increaseCommentCount();
+
+        alarmService.addAlarm(
+            loginMember,
+            placeReview.getMember(),
+            AlarmType.NEW_PLACE_REVIEW_COMMENT,
+            placeReviewId,
+            comment.getId());
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
