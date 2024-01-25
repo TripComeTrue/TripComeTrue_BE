@@ -6,6 +6,7 @@ import com.haejwo.tripcometrue.domain.place.dto.response.PlaceMapInfoResponseDto
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceNearbyResponseDto;
 import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.service.PlaceService;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,10 +51,11 @@ public class PlaceController {
 
     @GetMapping("/{placeId}")
     public ResponseEntity<ResponseDTO<PlaceResponseDto>> placeDetails(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
         @PathVariable Long placeId
     ) {
 
-        PlaceResponseDto responseDto = placeService.findPlace(placeId);
+        PlaceResponseDto responseDto = placeService.findPlace(principalDetails, placeId);
         ResponseDTO<PlaceResponseDto> responseBody = ResponseDTO.okWithData(responseDto);
 
         return ResponseEntity

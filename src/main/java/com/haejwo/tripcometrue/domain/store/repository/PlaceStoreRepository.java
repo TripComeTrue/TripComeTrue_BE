@@ -19,4 +19,6 @@ public interface PlaceStoreRepository extends JpaRepository<PlaceStore, Long> {
 
   Long countByPlace(Place place);
 
+  Boolean existsByMemberAndPlace(Member member, Place place);
+
 }
