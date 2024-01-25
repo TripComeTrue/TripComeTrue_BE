@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TripRecordViewHistoryRepository extends JpaRepository<TripRecordViewHistory, Long> {
+public interface TripRecordViewHistoryRepository
+    extends JpaRepository<TripRecordViewHistory, Long>, TripRecordViewHistoryRepositoryCustom {
 
   Page<TripRecordViewHistory> findByMember(Member member, Pageable pageable);
 
