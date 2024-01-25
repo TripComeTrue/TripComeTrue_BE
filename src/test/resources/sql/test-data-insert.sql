@@ -133,3 +133,16 @@ values (12, now(), now(), '자유여행', 4);
 
 insert into trip_record_tag (trip_record_tag_id, created_at, updated_at, hash_tag_type, trip_record_id)
 values (13, now(), now(), '맛집', 4);
+
+/* trip_record_view_history */
+insert into trip_record_view_history (created_at, updated_at, member_id, trip_record_id)
+values ('2024-01-21T10:00:00', '2024-01-21T10:00:00', 2, 1);
+
+insert into trip_record_view_history (created_at, updated_at, member_id, trip_record_id)
+values ('2024-01-21T22:00:00', '2024-01-22T22:00:00', 3, 1);
+
+insert into trip_record_view_history (created_at, updated_at, member_id, trip_record_id)
+values ('2024-01-21T23:59:00', '2024-01-21T23:59:00', 2, 2);
+
+insert into trip_record_view_history (created_at, updated_at, member_id, trip_record_id)
+values ('2024-01-21T15:00:00', '2024-01-23T23:59:59', 2, 3);
