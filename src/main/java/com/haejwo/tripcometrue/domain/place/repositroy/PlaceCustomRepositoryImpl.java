@@ -67,13 +67,16 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Slice<Place> findPlacesByCityId(Long cityId, Pageable pageable) {
+    public Slice<Place> findPlacesByCityIdAndPlaceName(Long cityId, String placeName, Pageable pageable) {
 
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
             .selectFrom(place)
             .join(place.city, city)
-            .where(city.id.eq(cityId))
+            .where(
+                city.id.eq(cityId),
+                containsIgnoreCasePlaceName(placeName)
+            )
             .offset(pageable.getOffset())
             .limit(pageSize + 1)
             .orderBy(getSort(pageable))
@@ -110,18 +113,6 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
         }
 
         return new SliceImpl<>(content, pageable, hasNext);
-    }
-
-    private BooleanExpression containsIgnoreCasePlaceName(String placeName) {
-        if (!StringUtils.hasText(placeName)) {
-            return null;
-        }
-
-        String replacedWhitespace = placeName.replaceAll(" ", "");
-
-        return Expressions.stringTemplate(
-            "function('replace',{0},{1},{2})", place.name, " ", ""
-        ).containsIgnoreCase(replacedWhitespace);
     }
 
     @Override
@@ -241,6 +232,18 @@ public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport impleme
                     .collect(Collectors.toList());
 
         return result;
+    }
+
+    private BooleanExpression containsIgnoreCasePlaceName(String placeName) {
+        if (!StringUtils.hasText(placeName)) {
+            return null;
+        }
+
+        String replacedWhitespace = placeName.replaceAll(" ", "");
+
+        return Expressions.stringTemplate(
+            "function('replace',{0},{1},{2})", place.name, " ", ""
+        ).containsIgnoreCase(replacedWhitespace);
     }
 
     private OrderSpecifier<?>[] getSort(Pageable pageable) {
