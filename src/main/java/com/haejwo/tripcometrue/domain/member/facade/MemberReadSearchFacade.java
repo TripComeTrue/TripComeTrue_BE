@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,9 +54,13 @@ public class MemberReadSearchFacade {
             .map(MemberSimpleResponseDto::memberId)
             .toList();
 
-        Map<Long, List<TripRecordListItemResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(memberIds);
+        Map<Long, List<TripRecordListItemResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(
+            tripRecordService.findTripRecordsWihMemberInMemberIds(memberIds)
+        );
 
-        Map<Long, List<TripRecordScheduleVideoListItemResponseDto>> videoMap = getGroupByMemberIdVideoMap(memberIds);
+        Map<Long, List<TripRecordScheduleVideoListItemResponseDto>> videoMap = getGroupByMemberIdVideoMap(
+            tripRecordScheduleVideoService.getVideosInMemberIds(memberIds)
+        );
 
 
         return SliceResponseDto.<MemberDetailListItemResponseDto>builder()
@@ -97,14 +102,44 @@ public class MemberReadSearchFacade {
             .build();
     }
 
-    private Map<Long, List<TripRecordScheduleVideoListItemResponseDto>> getGroupByMemberIdVideoMap(List<Long> memberIds) {
-        return tripRecordScheduleVideoService.getVideosInMemberIds(memberIds)
+    public List<MemberInfoWithTripRecordsResponseDto> listTopMemberCreators() {
+        List<MemberSimpleResponseDto> memberSimpleInfos = memberReadSearchService.listTopMemberSimpleInfos();
+        log.info("memberSimpleInfo");
+
+
+        Map<Long, List<TripRecordListItemResponseDto>> tripRecordMap = getGroupByMemberIdTripRecordMap(
+            tripRecordService.findTripRecordsWihMemberInMemberIds(
+                memberSimpleInfos
+                    .stream()
+                    .map(MemberSimpleResponseDto::memberId)
+                    .toList()
+            )
+        );
+
+        return memberSimpleInfos.stream()
+            .map(memberInfo -> MemberInfoWithTripRecordsResponseDto.builder()
+                .memberInfo(memberInfo)
+                .tripRecords(
+                    Objects.nonNull(tripRecordMap.get(memberInfo.memberId())) ?
+                        tripRecordMap.get(memberInfo.memberId()) : new ArrayList<>()
+                )
+                .build()
+            )
+            .toList();
+    }
+
+    private Map<Long, List<TripRecordScheduleVideoListItemResponseDto>> getGroupByMemberIdVideoMap(
+        List<TripRecordScheduleVideoListItemResponseDto> tripRecordScheduleVideos
+    ) {
+        return tripRecordScheduleVideos
             .stream()
             .collect(Collectors.groupingBy(TripRecordScheduleVideoListItemResponseDto::memberId));
     }
 
-    private Map<Long, List<TripRecordListItemResponseDto>> getGroupByMemberIdTripRecordMap(List<Long> memberIds) {
-        return tripRecordService.findTripRecordsWihMemberInMemberIds(memberIds)
+    private Map<Long, List<TripRecordListItemResponseDto>> getGroupByMemberIdTripRecordMap(
+        List<TripRecordListItemResponseDto> tripRecords
+    ) {
+        return tripRecords
             .stream()
             .collect(Collectors.groupingBy(TripRecordListItemResponseDto::memberId));
     }
