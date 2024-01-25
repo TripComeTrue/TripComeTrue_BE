@@ -82,7 +82,6 @@ class MemberReadSearchFacadeTest extends AbstractContainersSupport {
         MemberCreatorInfoResponseDto result = memberReadSearchFacade.getCreatorInfo(memberId);
 
         // then
-        log.info("{}", result);
         assertThat(result.memberDetailInfo().memberId()).isEqualTo(memberId);
         assertThat(result.tripRecords().size()).isEqualTo(result.memberDetailInfo().tripRecordTotal());
         assertThat(result.videos().size()).isEqualTo(result.memberDetailInfo().videoTotal());
