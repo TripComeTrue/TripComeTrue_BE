@@ -5,14 +5,14 @@ import lombok.Builder;
 public record TripRecordScheduleImageListResponseDto(
     Long tripRecordId,
     String imageUrl,
-    Integer TripRecordStoreNum
+    Integer tripRecordStoreCount
 ) {
 
     @Builder
     public TripRecordScheduleImageListResponseDto(Long tripRecordId, String imageUrl,
-        Integer TripRecordStoreNum) {
+        Integer tripRecordStoreCount) {
         this.tripRecordId = tripRecordId;
         this.imageUrl = imageUrl;
-        this.TripRecordStoreNum = TripRecordStoreNum;
+        this.tripRecordStoreCount = tripRecordStoreCount;
     }
 }
