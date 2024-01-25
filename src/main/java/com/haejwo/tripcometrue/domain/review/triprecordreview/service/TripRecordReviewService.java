@@ -1,5 +1,7 @@
 package com.haejwo.tripcometrue.domain.review.triprecordreview.service;
 
+import com.haejwo.tripcometrue.domain.alarm.entity.AlarmType;
+import com.haejwo.tripcometrue.domain.alarm.service.AlarmService;
 import com.haejwo.tripcometrue.domain.likes.entity.TripRecordReviewLikes;
 import com.haejwo.tripcometrue.domain.member.entity.Member;
 import com.haejwo.tripcometrue.domain.member.exception.UserInvalidAccessException;
@@ -49,6 +51,7 @@ public class TripRecordReviewService {
     private final TripRecordRepository tripRecordRepository;
     private final MemberRepository memberRepository;
     private final TripPlanRepository tripPlanRepository;
+    private final AlarmService alarmService;
 
     // FIXME: 1/18/24 ratingScore @NotNull과 상충되는 부분 수정하기
     @Transactional
@@ -142,6 +145,13 @@ public class TripRecordReviewService {
         isReviewAlreadyRegister(tripRecordReview);
 
         tripRecordReview.registerContent(requestDto, loginMember);
+
+        alarmService.addAlarm(
+            loginMember,
+            tripRecordReview.getTripRecord().getMember(),
+            AlarmType.NEW_TRIP_RECORD_REVIEW,
+            tripRecordReview.getTripRecord().getId(),
+            tripRecordReviewId);
     }
 
     private void isReviewAlreadyRegister(TripRecordReview tripRecordReview) {
@@ -269,4 +279,6 @@ public class TripRecordReviewService {
                         hasLikedTripRecordReview(principalDetails, tripRecordReview))
                 ).toList());
     }
+
+
 }
