@@ -94,17 +94,24 @@ public class CityContentReadService {
             .toList();
     }
 
-    // 도시 여행지 전체 조회 (스크롤 페이징)
+    // 도시 여행지 전체 조회 및 검색 (스크롤 페이징)
     @Transactional(readOnly = true)
-    public SliceResponseDto<CityPlaceResponseDto> getPlaces(Long cityId, Pageable pageable) {
-        Slice<Place> places = placeRepository.findPlacesByCityId(cityId, pageable);
+    public SliceResponseDto<CityPlaceResponseDto> getPlaces(Long cityId, String placeName, Pageable pageable) {
+        Slice<Place> places = placeRepository.findPlacesByCityIdAndPlaceName(cityId, placeName, pageable);
 
         Map<Long, List<TripRecordScheduleImageWithPlaceIdQueryDto>> imageMap = getImageMapFromPlaceIds(places.getContent());
 
         return SliceResponseDto.of(
             places
                 .map(place -> {
-                    String imageUrl = imageMap.get(place.getId()).get(0).imageUrl();
+                    String imageUrl = Objects.isNull(imageMap.get(place.getId())) ? null :
+                        imageMap.get(place.getId())
+                            .stream()
+                            .filter(Objects::nonNull)
+                            .findFirst()
+                            .map(TripRecordScheduleImageWithPlaceIdQueryDto::imageUrl)
+                            .orElse(null);
+
                     return CityPlaceResponseDto.fromEntity(place, imageUrl);
                 })
         );
