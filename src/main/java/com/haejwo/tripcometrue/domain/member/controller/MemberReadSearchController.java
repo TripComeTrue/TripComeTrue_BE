@@ -59,4 +59,16 @@ public class MemberReadSearchController {
                 )
             );
     }
+
+    // 홈 피드 HOT 인기 크리에이터 리스트 조회
+    @GetMapping("/top-list")
+    public ResponseEntity<ResponseDTO<?>> listTopCreators() {
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    memberReadSearchFacade.listTopMemberCreators()
+                )
+            );
+    }
 }
