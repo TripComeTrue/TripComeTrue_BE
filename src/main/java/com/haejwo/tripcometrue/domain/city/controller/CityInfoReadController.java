@@ -31,15 +31,15 @@ public class CityInfoReadController {
             );
     }
 
-    @GetMapping("/exchange-rates")
+    @GetMapping("/{cityId}/exchange-rates")
     public ResponseEntity<ResponseDTO<ExchangeRateResponseDto>> getExchangeRate(
-        @RequestParam(name = "curUnit") String curUnit
+        @PathVariable("cityId") Long cityId
     ) {
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(
-                ResponseDTO.okWithData(cityInfoReadService.getExchangeRate(curUnit))
+                ResponseDTO.okWithData(cityInfoReadService.getExchangeRateByCityId(cityId))
             );
     }
 
