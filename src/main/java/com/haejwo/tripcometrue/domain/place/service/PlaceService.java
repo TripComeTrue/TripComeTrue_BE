@@ -11,6 +11,8 @@ import com.haejwo.tripcometrue.domain.place.dto.response.PlaceResponseDto;
 import com.haejwo.tripcometrue.domain.place.entity.Place;
 import com.haejwo.tripcometrue.domain.place.exception.PlaceNotFoundException;
 import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
+import com.haejwo.tripcometrue.domain.store.repository.PlaceStoreRepository;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +35,7 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final CityRepository cityRepository;
     private final TripRecordScheduleImageRepository tripRecordScheduleImageRepository;
+    private final PlaceStoreRepository placeStoreRepository;
 
     @Transactional
     public PlaceResponseDto addPlace(PlaceRequestDto requestDto) {
@@ -47,11 +50,16 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public PlaceResponseDto findPlace(Long placeId) {
+    public PlaceResponseDto findPlace(PrincipalDetails principalDetails, Long placeId) {
 
         Place findPlace = findPlaceById(placeId);
+        
+        Boolean isStored = false;
+        if(principalDetails != null) {
+            isStored = placeStoreRepository.existsByMemberAndPlace(principalDetails.getMember(), findPlace);
+        }
 
-        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(findPlace);
+        PlaceResponseDto responseDto = PlaceResponseDto.fromEntity(findPlace, isStored);
 
         return responseDto;
     }
