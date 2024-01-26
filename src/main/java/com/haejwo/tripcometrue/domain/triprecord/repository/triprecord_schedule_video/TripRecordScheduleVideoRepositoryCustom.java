@@ -12,11 +12,11 @@ public interface TripRecordScheduleVideoRepositoryCustom {
 
     List<TripRecordScheduleVideoQueryDto> findByCityIdOrderByCreatedAtDescLimitSize(Long cityId, Integer size);
 
-    List<TripRecordScheduleVideoQueryDto> findNewestVideoList(int size);
+    List<TripRecordScheduleVideoQueryDto> findNewestVideos(int size);
 
-    List<TripRecordScheduleVideoQueryDto> findNewestVideoListDomestic(int size);
+    List<TripRecordScheduleVideoQueryDto> findNewestVideosDomestic(int size);
 
-    List<TripRecordScheduleVideoQueryDto> findNewestVideoListOverseas(int size);
+    List<TripRecordScheduleVideoQueryDto> findNewestVideosOverseas(int size);
 
-    List<TripRecordScheduleVideoQueryDto> findVideoListInMemberIds(List<Long> memberIds);
+    List<TripRecordScheduleVideoQueryDto> findInMemberIds(List<Long> memberIds);
 }

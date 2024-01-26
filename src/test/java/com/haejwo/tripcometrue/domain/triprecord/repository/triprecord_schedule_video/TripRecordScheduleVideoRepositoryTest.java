@@ -296,7 +296,7 @@ class TripRecordScheduleVideoRepositoryTest {
         int size = 5;
 
         //when
-        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoList(size);
+        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideos(size);
 
         //then
         assertThat(result).hasSize(size);
@@ -310,7 +310,7 @@ class TripRecordScheduleVideoRepositoryTest {
         int size = 5;
 
         //when
-        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoListDomestic(size);
+        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideosDomestic(size);
 
         //then
         assertThat(result).hasSize(2);
@@ -322,7 +322,7 @@ class TripRecordScheduleVideoRepositoryTest {
         int size = 5;
 
         //when
-        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideoListOverseas(size);
+        List<TripRecordScheduleVideoQueryDto> result = tripRecordScheduleVideoRepository.findNewestVideosOverseas(size);
 
         //then
         assertThat(result).hasSize(4);
