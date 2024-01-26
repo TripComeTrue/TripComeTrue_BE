@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
 import static com.haejwo.tripcometrue.domain.member.entity.QMember.member;
 import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripRecord;
@@ -48,10 +49,11 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
             .from(tripRecordScheduleVideo)
             .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
             .join(tripRecordSchedule.place, place)
+            .join(place.city, city)
             .join(tripRecordSchedule.tripRecord, tripRecord)
             .join(tripRecord.member, member)
             .where(
-                place.city.id.eq(cityId)
+                city.id.eq(cityId)
             )
             .orderBy(getSort(pageable))
             .offset(pageable.getOffset())
@@ -87,10 +89,11 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
             .from(tripRecordScheduleVideo)
             .join(tripRecordScheduleVideo.tripRecordSchedule, tripRecordSchedule)
             .join(tripRecordSchedule.place, place)
+            .join(place.city, city)
             .join(tripRecordSchedule.tripRecord, tripRecord)
             .join(tripRecord.member, member)
             .where(
-                place.city.id.eq(cityId)
+                city.id.eq(cityId)
             )
             .limit(size)
             .fetch();
@@ -218,7 +221,7 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
                     case "createdAt":
                         return new OrderSpecifier[] {new OrderSpecifier<>(direction, tripRecordScheduleVideo.createdAt)};
                     case "storedCount":
-                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, tripRecordSchedule.tripRecord.storeCount), newest};
+                        return new OrderSpecifier[] {new OrderSpecifier<>(direction, tripRecord.storeCount), newest};
                 }
             }
         }
