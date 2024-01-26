@@ -8,6 +8,7 @@ import java.util.Objects;
 public record CityResponseDto(
     Long cityId,
     String name,
+    String englishName,
     String language,
     String timeDifference,
     String voltage,
@@ -28,6 +29,7 @@ public record CityResponseDto(
         return CityResponseDto.builder()
             .cityId(entity.getId())
             .name(entity.getName())
+            .englishName(entity.getEnglishName())
             .language(entity.getLanguage())
             .timeDifference(entity.getTimeDifference())
             .voltage(entity.getVoltage())
@@ -47,6 +49,7 @@ public record CityResponseDto(
         return CityResponseDto.builder()
             .cityId(entity.getId())
             .name(entity.getName())
+            .englishName(entity.getEnglishName())
             .language(entity.getLanguage())
             .timeDifference(entity.getTimeDifference())
             .voltage(entity.getVoltage())

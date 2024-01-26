@@ -6,6 +6,7 @@ import com.haejwo.tripcometrue.global.enums.Country;
 
 public record AddCityRequestDto(
     String name,
+    String englishName,
     String language,
     String timeDifference,
     String voltage,
@@ -18,6 +19,7 @@ public record AddCityRequestDto(
     public City toEntity() {
         return City.builder()
             .name(this.name)
+            .englishName(this.englishName)
             .language(this.language)
             .timeDifference(this.timeDifference)
             .voltage(this.voltage)
