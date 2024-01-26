@@ -14,5 +14,6 @@ public interface TripRecordRepository extends
 {
 
   Page<TripRecord> findByMemberId(Long memberId, Pageable pageable);
-  Optional<TripRecord> findById (Member member);
+
+  Optional<TripRecord> findByMember(Member member);
 }
