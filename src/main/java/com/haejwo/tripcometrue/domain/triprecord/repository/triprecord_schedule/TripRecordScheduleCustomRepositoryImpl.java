@@ -6,13 +6,15 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +29,7 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
     }
 
     @Override
-    public List<TripRecordScheduleImageListResponseDto> findScheduleImagesWithFilter(
+    public Page<TripRecordScheduleImageListResponseDto> findScheduleImagesWithFilter(
         Pageable pageable,
         TripRecordScheduleImageListRequestAttribute request
     ) {
@@ -55,7 +57,7 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
             }
         }
 
-        List<TripRecordScheduleImageListResponseDto> result = jpaQueryFactory
+        QueryResults<TripRecordScheduleImageListResponseDto> queryResults  = jpaQueryFactory
             .select(Projections.constructor(TripRecordScheduleImageListResponseDto.class,
                 qTripRecord.id,
                 qTripRecordScheduleImage.imageUrl.min(),
@@ -68,7 +70,9 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
             .orderBy(orderSpecifier)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .fetchResults();
+
+        Page<TripRecordScheduleImageListResponseDto> result = new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
 
         return result;
     }
