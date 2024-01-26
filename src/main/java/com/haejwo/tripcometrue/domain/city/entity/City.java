@@ -19,6 +19,7 @@ public class City extends BaseTimeEntity {
     @Column(name = "city_id")
     private Long id;
     private String name;
+    private String englishName;
     private String language;
     private String timeDifference;
     private String voltage;
@@ -38,12 +39,13 @@ public class City extends BaseTimeEntity {
 
     @Builder
     private City(
-        Long id, String name, String language, String timeDifference,
+        Long id, String name, String englishName, String language, String timeDifference,
         String voltage, String visa, CurrencyUnit currency, String weatherRecommendation,
         String weatherDescription, Integer storeCount, Country country, String imageUrl
     ) {
         this.id = id;
         this.name = name;
+        this.englishName = englishName;
         this.language = language;
         this.timeDifference = timeDifference;
         this.voltage = voltage;
