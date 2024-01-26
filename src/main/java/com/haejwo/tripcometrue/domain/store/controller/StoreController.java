@@ -3,6 +3,7 @@ package com.haejwo.tripcometrue.domain.store.controller;
 import com.haejwo.tripcometrue.domain.store.dto.request.CityStoreRequestDto;
 import com.haejwo.tripcometrue.domain.store.dto.request.PlaceStoreRequestDto;
 import com.haejwo.tripcometrue.domain.store.dto.request.TripRecordStoreRequestDto;
+import com.haejwo.tripcometrue.domain.store.dto.response.CheckCityStoredResponseDto;
 import com.haejwo.tripcometrue.domain.store.dto.response.CityStoreResponseDto;
 import com.haejwo.tripcometrue.domain.store.dto.response.PlaceStoreResponseDto;
 import com.haejwo.tripcometrue.domain.store.dto.response.TripRecordStoreResponseDto;
@@ -115,5 +116,20 @@ public class StoreController {
     public ResponseEntity<ResponseDTO<Long>> getStoredCountForTripRecord(@PathVariable Long tripRecordId) {
         Long count = storeService.getStoredCountForTripRecord(tripRecordId);
         return ResponseEntity.ok(ResponseDTO.okWithData(count));
+    }
+
+    @GetMapping("/v1/cities/{cityId}/stores")
+    public ResponseEntity<ResponseDTO<CheckCityStoredResponseDto>> checkCityStoredByLoginMember(
+        @PathVariable("cityId") Long cityId,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+
+        return ResponseEntity
+            .ok()
+            .body(
+                ResponseDTO.okWithData(
+                    storeService.checkCityStoredByLoginMember(principalDetails, cityId)
+                )
+            );
     }
 }
