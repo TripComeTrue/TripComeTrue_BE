@@ -29,7 +29,6 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecor
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_image.TripRecordScheduleImageRepository;
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -146,6 +146,7 @@ public class StoreService{
         tripRecordStoreRepository.delete(tripRecordStore);
     }
 
+    @Transactional(readOnly = true)
     public CheckCityStoredResponseDto checkCityStoredByLoginMember(PrincipalDetails principalDetails, Long cityId) {
 
         if (Objects.isNull(principalDetails.getMember())) {
