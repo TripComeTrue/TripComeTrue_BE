@@ -1,7 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute;
 
 public record TripRecordScheduleImageListRequestAttribute(
-    Long placeId
+    Long placeId,
+    String orderBy
 ) {
 
 }

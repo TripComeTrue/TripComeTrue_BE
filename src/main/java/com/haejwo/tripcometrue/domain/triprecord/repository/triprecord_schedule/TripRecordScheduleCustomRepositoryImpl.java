@@ -6,6 +6,8 @@ import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
 import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -40,6 +42,19 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
             booleanBuilder.and(qTripRecordSchedule.place.id.eq(request.placeId()));
         }
 
+        OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(Order.DESC, qTripRecord.storeCount);
+
+        if (request.orderBy() != null) {
+            switch (request.orderBy()) {
+                case "storeCount":
+                    orderSpecifier = new OrderSpecifier<>(Order.DESC, qTripRecord.storeCount);
+                    break;
+                case "createdAt":
+                    orderSpecifier = new OrderSpecifier<>(Order.DESC, qTripRecord.createdAt);
+                    break;
+            }
+        }
+
         List<TripRecordScheduleImageListResponseDto> result = jpaQueryFactory
             .select(Projections.constructor(TripRecordScheduleImageListResponseDto.class,
                 qTripRecord.id,
@@ -50,7 +65,7 @@ public class TripRecordScheduleCustomRepositoryImpl implements TripRecordSchedul
             .leftJoin(qTripRecordSchedule.tripRecordScheduleImages, qTripRecordScheduleImage)
             .where(booleanBuilder)
             .groupBy(qTripRecordSchedule.tripRecord.id)
-            .orderBy(qTripRecord.storeCount.desc())
+            .orderBy(orderSpecifier)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
