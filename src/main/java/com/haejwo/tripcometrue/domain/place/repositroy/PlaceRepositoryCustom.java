@@ -10,7 +10,7 @@ import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
-public interface PlaceCustomRepository {
+public interface PlaceRepositoryCustom {
 
     Page<Place> findPlaceWithFilter(Pageable pageable,
                                     Integer storedCount);

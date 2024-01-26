@@ -34,11 +34,11 @@ import org.springframework.util.StringUtils;
 import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
 import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
 
-public class PlaceCustomRepositoryImpl extends QuerydslRepositorySupport implements PlaceCustomRepository {
+public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements PlaceRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public PlaceCustomRepositoryImpl(JPAQueryFactory queryFactory) {
+    public PlaceRepositoryImpl(JPAQueryFactory queryFactory) {
         super(Place.class);
         this.queryFactory = queryFactory;
     }
