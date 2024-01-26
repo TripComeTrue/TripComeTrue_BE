@@ -72,7 +72,7 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
             .selectFrom(place)
-            .join(place.city, city)
+            .innerJoin(place.city, city)
             .where(
                 city.id.eq(cityId),
                 containsIgnoreCasePlaceName(placeName)
@@ -97,7 +97,7 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
             .selectFrom(place)
-            .join(place.city, city).fetchJoin()
+            .innerJoin(place.city, city).fetchJoin()
             .where(
                 containsIgnoreCasePlaceName(placeName)
             )
@@ -120,7 +120,7 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
 
         return queryFactory
             .selectFrom(place)
-            .join(place.city)
+            .innerJoin(place.city)
             .where(place.city.eq(city))
             .orderBy(place.storedCount.desc(), place.createdAt.desc())
             .limit(size)
@@ -267,12 +267,11 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
                     case "commentCount":
                         orderSpecifiers.add(new OrderSpecifier<>(direction, place.commentCount));
                         break;
-
-                    // TODO: 정렬 기준 예외 처리
                 }
             }
         }
 
+        // 아무 조건 존재하지 않는 경우, order by null
         if(orderSpecifiers.isEmpty()) {
             orderSpecifiers.add(new OrderSpecifier(Order.ASC, NullExpression.DEFAULT, NullHandling.Default));
         }
