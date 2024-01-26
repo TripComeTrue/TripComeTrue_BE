@@ -114,6 +114,12 @@ public class TripRecord extends BaseTimeEntity {
         }
     }
 
+    public void decrementStoreCount() {
+        if(this.storeCount > 0) {
+            this.storeCount--;
+        }
+    }
+
     public void incrementReviewCount() {
         if(this.reviewCount == null) {
             this.reviewCount = 1;

@@ -109,6 +109,11 @@ public class StoreService{
         Long memberId = principalDetails.getMember().getId();
         CityStore cityStore = cityStoreRepository.findByMemberIdAndCityId(memberId, cityId)
                 .orElseThrow(() -> new StoreNotFoundException(ErrorCode.STORE_NOT_FOUND));
+
+        City city = cityRepository.findById(cityId)
+            .orElseThrow();
+        city.decrementStoreCount();
+
         cityStoreRepository.delete(cityStore);
     }
 
@@ -117,6 +122,11 @@ public class StoreService{
         Long memberId = principalDetails.getMember().getId();
         PlaceStore placeStore = placeStoreRepository.findByMemberIdAndPlaceId(memberId, placeId)
                 .orElseThrow(() -> new StoreNotFoundException(ErrorCode.STORE_NOT_FOUND));
+
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(()-> new PlaceNotFoundException());
+        place.decrementStoreCount();
+
         placeStoreRepository.delete(placeStore);
     }
 
@@ -125,6 +135,11 @@ public class StoreService{
         Long memberId = principalDetails.getMember().getId();
         TripRecordStore tripRecordStore = tripRecordStoreRepository.findByMemberIdAndTripRecordId(memberId, tripRecordId)
                 .orElseThrow(() -> new StoreNotFoundException(ErrorCode.STORE_NOT_FOUND));
+
+        TripRecord tripRecord = tripRecordRepository.findById(tripRecordId)
+                .orElseThrow(()-> new TripRecordNotFoundException());
+        tripRecord.decrementStoreCount();
+
         tripRecordStoreRepository.delete(tripRecordStore);
     }
 
