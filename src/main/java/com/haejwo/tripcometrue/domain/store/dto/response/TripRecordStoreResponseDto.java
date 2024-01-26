@@ -7,38 +7,14 @@ import java.time.LocalDate;
 
 public record TripRecordStoreResponseDto(
     Long id,
-    String title,
-    String content,
-    String expenseRangeType,
-    String countries,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    LocalDate tripStartDay,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    LocalDate tripEndDay,
-    Integer totalDays,
-    Double averageRating,
-    Integer viewCount,
-    Integer storeCount,
-    Integer commentCount,
-    String imageUrl
+    Integer storeCount
 ) {
 
   public static TripRecordStoreResponseDto fromEntity(TripRecordStore tripRecordStore, String imageUrl) {
     TripRecord tripRecord = tripRecordStore.getTripRecord();
     return new TripRecordStoreResponseDto(
         tripRecord.getId(),
-        tripRecord.getTitle(),
-        tripRecord.getContent(),
-        tripRecord.getExpenseRangeType().name(), //todo
-        tripRecord.getCountries(),
-        tripRecord.getTripStartDay(),
-        tripRecord.getTripEndDay(),
-        tripRecord.getTotalDays(),
-        tripRecord.getAverageRating(),
-        tripRecord.getViewCount(),
-        tripRecord.getStoreCount(),
-        tripRecord.getCommentCount(),
-        imageUrl
+        tripRecord.getStoreCount()
     );
   }
 }
