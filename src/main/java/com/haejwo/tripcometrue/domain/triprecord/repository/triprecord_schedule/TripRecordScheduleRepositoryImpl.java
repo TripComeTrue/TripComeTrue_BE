@@ -19,12 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TripRecordScheduleCustomRepositoryImpl implements TripRecordScheduleCustomRepository {
+public class TripRecordScheduleRepositoryImpl implements TripRecordScheduleRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Autowired
-    public TripRecordScheduleCustomRepositoryImpl(EntityManager entityManager) {
+    public TripRecordScheduleRepositoryImpl(EntityManager entityManager) {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
 
