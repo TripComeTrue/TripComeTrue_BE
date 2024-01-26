@@ -38,6 +38,7 @@ public class SpringSecurityConfig {
                 configuration.applyPermitDefaultValues();
                 configuration.addAllowedOriginPattern("");
                 configuration.addAllowedOriginPattern("http://localhost:5173");
+                configuration.addAllowedOriginPattern("https://tripcometrue.vercel.app");
                 configuration.setAllowedMethods(
                     Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"));
 
