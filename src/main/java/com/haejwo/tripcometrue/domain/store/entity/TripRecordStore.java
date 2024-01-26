@@ -11,13 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class TripRecordStore extends BaseTimeEntity {
 
     @Id
@@ -25,16 +26,16 @@ public class TripRecordStore extends BaseTimeEntity {
     @Column(name = "trip_record_store_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_Id")
     Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "trip_record_id")
     TripRecord tripRecord;
 
     @Builder
-    public TripRecordStore(Member member, TripRecord tripRecord){
+    private TripRecordStore(Member member, TripRecord tripRecord){
         this.member = member;
         this.tripRecord = tripRecord;
     }
