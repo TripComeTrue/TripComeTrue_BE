@@ -383,12 +383,11 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
                     case "averageRating":
                         orderSpecifiers.add(new OrderSpecifier<>(direction, tripRecord.averageRating));
                         break;
-
-                    // TODO: 정렬 기준 예외 처리
                 }
             }
         }
 
+        // 정렬 기준 없는 경우 order by null
         if(orderSpecifiers.isEmpty()) {
             orderSpecifiers.add(new OrderSpecifier(Order.ASC, NullExpression.DEFAULT, NullHandling.Default));
         }
