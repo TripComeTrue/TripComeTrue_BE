@@ -86,7 +86,7 @@ public class TripRecordService {
         Pageable pageable
     ) {
         return SliceResponseDto.of(
-            tripRecordRepository.findTripRecordListByFilter(searchParamAttribute, pageable)
+            tripRecordRepository.findTripRecordsByFilter(searchParamAttribute, pageable)
                 .map(tripRecord -> TripRecordListItemResponseDto.fromEntity(tripRecord, null, tripRecord.getMember()))
         );
     }
@@ -116,9 +116,9 @@ public class TripRecordService {
 
         List<TripRecord> tripRecords;
         if (type.equalsIgnoreCase("domestic")) {
-            tripRecords = tripRecordRepository.findTopTripRecordListDomestic(HOME_CONTENT_SIZE);
+            tripRecords = tripRecordRepository.findTopTripRecordsDomestic(HOME_CONTENT_SIZE);
         } else {
-            tripRecords = tripRecordRepository.findTopTripRecordListOverseas(HOME_CONTENT_SIZE);
+            tripRecords = tripRecordRepository.findTopTripRecordsOverseas(HOME_CONTENT_SIZE);
         }
 
         return tripRecords
@@ -141,7 +141,7 @@ public class TripRecordService {
     public List<TripRecordListItemResponseDto> findTripRecordsWihMemberInMemberIds(List<Long> memberIds) {
 
         return tripRecordRepository
-            .findTripRecordListWithMemberInMemberIds(memberIds)
+            .findTripRecordsWithMemberInMemberIds(memberIds)
             .stream()
             .map(tripRecord -> TripRecordListItemResponseDto.fromEntity(tripRecord, null, tripRecord.getMember()))
             .toList();

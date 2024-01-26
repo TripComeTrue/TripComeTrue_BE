@@ -15,17 +15,17 @@ public interface TripRecordRepositoryCustom {
 
     List<TripRecordListResponseDto> finTripRecordWithFilter(Pageable pageable, TripRecordListRequestAttribute request);
 
-    Slice<TripRecord> findTripRecordListByFilter(TripRecordSearchParamAttribute requestParamAttribute, Pageable pageable);
+    Slice<TripRecord> findTripRecordsByFilter(TripRecordSearchParamAttribute requestParamAttribute, Pageable pageable);
 
     Slice<TripRecord> findTripRecordsByHashtag(String hashTag, Pageable pageable);
 
     Slice<TripRecord> findTripRecordsByExpenseRangeType(ExpenseRangeType expenseRangeType, Pageable pageable);
 
-    List<TripRecord> findTopTripRecordListDomestic(int size);
+    List<TripRecord> findTopTripRecordsDomestic(int size);
 
-    List<TripRecord> findTopTripRecordListOverseas(int size);
+    List<TripRecord> findTopTripRecordsOverseas(int size);
 
     List<TripRecordHotShortsListResponseDto> findTripRecordHotShortsList(Pageable pageable);
 
-    List<TripRecord> findTripRecordListWithMemberInMemberIds(List<Long> memberIds);
+    List<TripRecord> findTripRecordsWithMemberInMemberIds(List<Long> memberIds);
 }

@@ -134,7 +134,7 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public Slice<TripRecord> findTripRecordListByFilter(
+    public Slice<TripRecord> findTripRecordsByFilter(
         TripRecordSearchParamAttribute requestParamAttribute,
         Pageable pageable
     ) {
@@ -233,7 +233,7 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public List<TripRecord> findTopTripRecordListDomestic(int size) {
+    public List<TripRecord> findTopTripRecordsDomestic(int size) {
 
         return queryFactory
             .selectFrom(tripRecord)
@@ -244,7 +244,7 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public List<TripRecord> findTopTripRecordListOverseas(int size) {
+    public List<TripRecord> findTopTripRecordsOverseas(int size) {
 
         return queryFactory
             .selectFrom(tripRecord)
@@ -297,7 +297,7 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public List<TripRecord> findTripRecordListWithMemberInMemberIds(List<Long> memberIds) {
+    public List<TripRecord> findTripRecordsWithMemberInMemberIds(List<Long> memberIds) {
 
         return queryFactory.selectFrom(tripRecord)
             .join(tripRecord.member, member).fetchJoin()
