@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.city.service;
 
 import com.haejwo.tripcometrue.domain.city.dto.api.ExchangeRateApiDto;
-import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
+import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;

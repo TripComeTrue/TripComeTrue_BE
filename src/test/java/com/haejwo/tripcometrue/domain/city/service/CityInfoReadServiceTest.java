@@ -5,7 +5,7 @@ import com.haejwo.tripcometrue.config.DatabaseCleanUpAfterEach;
 import com.haejwo.tripcometrue.domain.city.dto.response.CityInfoResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.WeatherResponseDto;
 import com.haejwo.tripcometrue.domain.city.entity.City;
-import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
+import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import com.haejwo.tripcometrue.domain.city.entity.Weather;
 import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;

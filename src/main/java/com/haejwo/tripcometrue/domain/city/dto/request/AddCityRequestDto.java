@@ -1,7 +1,7 @@
 package com.haejwo.tripcometrue.domain.city.dto.request;
 
 import com.haejwo.tripcometrue.domain.city.entity.City;
-import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
+import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import com.haejwo.tripcometrue.global.enums.Country;
 
 public record AddCityRequestDto(

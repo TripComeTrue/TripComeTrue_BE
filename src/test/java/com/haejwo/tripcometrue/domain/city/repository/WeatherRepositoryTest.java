@@ -2,7 +2,7 @@ package com.haejwo.tripcometrue.domain.city.repository;
 
 import com.haejwo.tripcometrue.config.TestQuerydslConfig;
 import com.haejwo.tripcometrue.domain.city.entity.City;
-import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
+import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import com.haejwo.tripcometrue.domain.city.entity.Weather;
 import com.haejwo.tripcometrue.global.enums.Country;
 import org.junit.jupiter.api.AfterEach;

@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.city.entity;
+package com.haejwo.tripcometrue.global.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
