@@ -37,11 +37,11 @@ import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripR
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag.tripRecordTag;
 
-public class TripRecordCustomRepositoryImpl extends QuerydslRepositorySupport implements TripRecordCustomRepository {
+public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implements TripRecordRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public TripRecordCustomRepositoryImpl(JPAQueryFactory queryFactory) {
+    public TripRecordRepositoryImpl(JPAQueryFactory queryFactory) {
         super(TripRecord.class);
         this.queryFactory = queryFactory;
     }

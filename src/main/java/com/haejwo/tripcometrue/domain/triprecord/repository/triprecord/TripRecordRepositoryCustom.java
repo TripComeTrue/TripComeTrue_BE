@@ -11,7 +11,7 @@ import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
-public interface TripRecordCustomRepository {
+public interface TripRecordRepositoryCustom {
 
     List<TripRecordListResponseDto> finTripRecordWithFilter(Pageable pageable, TripRecordListRequestAttribute request);
 
