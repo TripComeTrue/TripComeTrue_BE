@@ -57,8 +57,11 @@ public class TripRecordCommentService {
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
-        return memberRepository.findById(principalDetails.getMember().getId())
-                .orElseThrow(UserNotFoundException::new);
+        if (principalDetails != null) {
+            return memberRepository.findById(principalDetails.getMember().getId())
+                    .orElseThrow(UserNotFoundException::new);
+        }
+        return null;
     }
 
     public void saveReplyComment(
