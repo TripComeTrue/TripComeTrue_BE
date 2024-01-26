@@ -2,7 +2,7 @@ package com.haejwo.tripcometrue.domain.city.service;
 
 import com.haejwo.tripcometrue.domain.city.dto.response.CityResponseDto;
 import com.haejwo.tripcometrue.domain.city.entity.City;
-import com.haejwo.tripcometrue.domain.city.entity.CurrencyUnit;
+import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

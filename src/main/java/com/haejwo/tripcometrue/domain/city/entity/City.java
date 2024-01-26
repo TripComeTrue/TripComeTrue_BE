@@ -2,6 +2,7 @@ package com.haejwo.tripcometrue.domain.city.entity;
 
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
 import com.haejwo.tripcometrue.global.enums.Country;
+import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
