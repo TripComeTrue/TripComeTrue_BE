@@ -67,5 +67,11 @@ public class City extends BaseTimeEntity {
             this.storeCount++;
         }
     }
+
+    public void decrementStoreCount() {
+        if(this.storeCount > 0) {
+            this.storeCount--;
+        }
+    }
 }
 

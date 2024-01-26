@@ -90,6 +90,12 @@ public class Place extends BaseTimeEntity {
         }
     }
 
+    public void decrementStoreCount() {
+        if(this.storedCount > 0) {
+            this.storedCount--;
+        }
+    }
+
     public void incrementReviewCount() {
         if(this.reviewCount == null) {
             this.reviewCount = 1;
