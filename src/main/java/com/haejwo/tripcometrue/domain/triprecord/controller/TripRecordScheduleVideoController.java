@@ -21,7 +21,7 @@ public class TripRecordScheduleVideoController {
     private final TripRecordScheduleVideoService tripRecordScheduleVideoService;
 
     @GetMapping("/list")
-    public ResponseEntity<ResponseDTO<List<TripRecordScheduleVideoListItemResponseDto>>> getVideosByType(
+    public ResponseEntity<ResponseDTO<List<TripRecordScheduleVideoListItemResponseDto>>> listVideosByRequestType(
         @RequestParam("type") @HomeVideoListQueryType String type
     ) {
         return ResponseEntity
