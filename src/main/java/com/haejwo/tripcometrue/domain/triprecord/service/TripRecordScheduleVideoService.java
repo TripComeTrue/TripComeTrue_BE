@@ -23,11 +23,11 @@ public class TripRecordScheduleVideoService {
         List<TripRecordScheduleVideoQueryDto> queryResults;
 
         if (type.equalsIgnoreCase("all")) {
-            queryResults = tripRecordScheduleVideoRepository.findNewestVideoList(HOME_CONTENT_SIZE);
+            queryResults = tripRecordScheduleVideoRepository.findNewestVideos(HOME_CONTENT_SIZE);
         } else if (type.equalsIgnoreCase("domestic")) {
-            queryResults = tripRecordScheduleVideoRepository.findNewestVideoListDomestic(HOME_CONTENT_SIZE);
+            queryResults = tripRecordScheduleVideoRepository.findNewestVideosDomestic(HOME_CONTENT_SIZE);
         } else {
-            queryResults = tripRecordScheduleVideoRepository.findNewestVideoListOverseas(HOME_CONTENT_SIZE);
+            queryResults = tripRecordScheduleVideoRepository.findNewestVideosOverseas(HOME_CONTENT_SIZE);
         }
 
         return queryResults.stream()
@@ -39,7 +39,7 @@ public class TripRecordScheduleVideoService {
     public List<TripRecordScheduleVideoListItemResponseDto> getVideosInMemberIds(List<Long> memberIds) {
 
         return tripRecordScheduleVideoRepository
-            .findVideoListInMemberIds(memberIds)
+            .findInMemberIds(memberIds)
             .stream()
             .map(TripRecordScheduleVideoListItemResponseDto::fromQueryDto)
             .toList();

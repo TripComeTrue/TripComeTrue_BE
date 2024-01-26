@@ -97,7 +97,7 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<TripRecordScheduleVideoQueryDto> findNewestVideoList(int size) {
+    public List<TripRecordScheduleVideoQueryDto> findNewestVideos(int size) {
         return queryFactory
             .select(
                 Projections.constructor(
@@ -123,7 +123,7 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<TripRecordScheduleVideoQueryDto> findNewestVideoListDomestic(int size) {
+    public List<TripRecordScheduleVideoQueryDto> findNewestVideosDomestic(int size) {
         return queryFactory
             .select(
                 Projections.constructor(
@@ -150,7 +150,7 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<TripRecordScheduleVideoQueryDto> findNewestVideoListOverseas(int size) {
+    public List<TripRecordScheduleVideoQueryDto> findNewestVideosOverseas(int size) {
         return queryFactory
             .select(
                 Projections.constructor(
@@ -177,7 +177,7 @@ public class TripRecordScheduleVideoRepositoryImpl implements TripRecordSchedule
     }
 
     @Override
-    public List<TripRecordScheduleVideoQueryDto> findVideoListInMemberIds(List<Long> memberIds) {
+    public List<TripRecordScheduleVideoQueryDto> findInMemberIds(List<Long> memberIds) {
         return queryFactory
             .select(
                 Projections.constructor(
