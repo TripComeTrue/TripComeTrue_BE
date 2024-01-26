@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TripRecordScheduleRepository extends
     JpaRepository<TripRecordSchedule, Long>,
-    TripRecordScheduleCustomRepository {
+    TripRecordScheduleRepositoryCustom {
 
 
     List<TripRecordSchedule> findAllByTripRecordId(Long recordId);

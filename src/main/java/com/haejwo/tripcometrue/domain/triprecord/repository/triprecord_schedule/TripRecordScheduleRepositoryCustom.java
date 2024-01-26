@@ -5,7 +5,7 @@ import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedul
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface TripRecordScheduleCustomRepository {
+public interface TripRecordScheduleRepositoryCustom {
 
     Page<TripRecordScheduleImageListResponseDto> findScheduleImagesWithFilter(Pageable pageable, TripRecordScheduleImageListRequestAttribute request);
 
