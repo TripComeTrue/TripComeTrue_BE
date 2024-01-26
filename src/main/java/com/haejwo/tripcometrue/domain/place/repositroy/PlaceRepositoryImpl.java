@@ -72,7 +72,7 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
             .selectFrom(place)
-            .innerJoin(place.city, city)
+            .join(place.city, city)
             .where(
                 city.id.eq(cityId),
                 containsIgnoreCasePlaceName(placeName)
@@ -97,7 +97,7 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
         int pageSize = pageable.getPageSize();
         List<Place> content = queryFactory
             .selectFrom(place)
-            .innerJoin(place.city, city).fetchJoin()
+            .join(place.city, city).fetchJoin()
             .where(
                 containsIgnoreCasePlaceName(placeName)
             )
@@ -120,7 +120,7 @@ public class PlaceRepositoryImpl extends QuerydslRepositorySupport implements Pl
 
         return queryFactory
             .selectFrom(place)
-            .innerJoin(place.city)
+            .join(place.city)
             .where(place.city.eq(city))
             .orderBy(place.storedCount.desc(), place.createdAt.desc())
             .limit(size)
