@@ -136,8 +136,6 @@ public class PlaceService {
         placeRepository.delete(findPlace);
     }
 
-
-
     private Place findPlaceById(Long placeId) {
 
         Place findPlace = placeRepository.findById(placeId)
@@ -145,7 +143,5 @@ public class PlaceService {
 
         return findPlace;
     }
-
-
 
 }
