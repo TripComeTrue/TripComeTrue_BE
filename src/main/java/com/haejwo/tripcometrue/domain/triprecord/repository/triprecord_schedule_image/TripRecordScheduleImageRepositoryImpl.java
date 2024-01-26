@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
 import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
 import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleImage.tripRecordScheduleImage;
@@ -30,10 +31,11 @@ public class TripRecordScheduleImageRepositoryImpl implements TripRecordSchedule
         int pageSize = pageable.getPageSize();
         List<TripRecordScheduleImage> content = queryFactory
             .selectFrom(tripRecordScheduleImage)
-            .leftJoin(tripRecordScheduleImage.tripRecordSchedule, tripRecordSchedule).fetchJoin()
-            .leftJoin(tripRecordSchedule.place, place)
+            .join(tripRecordScheduleImage.tripRecordSchedule, tripRecordSchedule).fetchJoin()
+            .join(tripRecordSchedule.place, place)
+            .join(place.city, city)
             .where(
-                place.city.id.eq(cityId)
+                city.id.eq(cityId)
             )
             .orderBy(getSort(pageable))
             .offset(pageable.getOffset())
@@ -53,10 +55,11 @@ public class TripRecordScheduleImageRepositoryImpl implements TripRecordSchedule
     public List<TripRecordScheduleImage> findByCityIdOrderByCreatedAtDescLimitSize(Long cityId, Integer size) {
         return queryFactory
             .selectFrom(tripRecordScheduleImage)
-            .leftJoin(tripRecordScheduleImage.tripRecordSchedule, tripRecordSchedule).fetchJoin()
-            .leftJoin(tripRecordSchedule.place, place)
+            .join(tripRecordScheduleImage.tripRecordSchedule, tripRecordSchedule).fetchJoin()
+            .join(tripRecordSchedule.place, place)
+            .join(place.city, city)
             .where(
-                place.city.id.eq(cityId)
+                city.id.eq(cityId)
             )
             .orderBy(tripRecordScheduleImage.createdAt.desc())
             .limit(size)
@@ -76,7 +79,8 @@ public class TripRecordScheduleImageRepositoryImpl implements TripRecordSchedule
             )
             .from(tripRecordScheduleImage)
             .join(tripRecordScheduleImage.tripRecordSchedule, tripRecordSchedule)
-            .where(tripRecordSchedule.place.id.in(placeIds))
+            .join(tripRecordSchedule.place, place)
+            .where(place.id.in(placeIds))
             .orderBy(tripRecordScheduleImage.createdAt.desc())
             .fetch();
     }
