@@ -7,14 +7,18 @@ import java.time.LocalDate;
 
 public record TripRecordStoreResponseDto(
     Long id,
-    Integer storeCount
+    String title,
+    Integer storeCount,
+    String imageUrl
 ) {
 
   public static TripRecordStoreResponseDto fromEntity(TripRecordStore tripRecordStore, String imageUrl) {
     TripRecord tripRecord = tripRecordStore.getTripRecord();
     return new TripRecordStoreResponseDto(
         tripRecord.getId(),
-        tripRecord.getStoreCount()
+        tripRecord.getTitle(),
+        tripRecord.getStoreCount(),
+        imageUrl
     );
   }
 }
