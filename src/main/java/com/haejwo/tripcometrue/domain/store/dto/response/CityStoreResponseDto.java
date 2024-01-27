@@ -6,14 +6,18 @@ import com.haejwo.tripcometrue.global.enums.Country;
 
 public record CityStoreResponseDto(
     Long id,
-    Integer storeCount
+    String name,
+    Integer storeCount,
+    String imageUrl
 ) {
 
   public static CityStoreResponseDto fromEntity(CityStore cityStore) {
     City city = cityStore.getCity();
     return new CityStoreResponseDto(
         city.getId(),
-        city.getStoreCount()
+        city.getName(),
+        city.getStoreCount(),
+        city.getImageUrl()
     );
   }
 }
