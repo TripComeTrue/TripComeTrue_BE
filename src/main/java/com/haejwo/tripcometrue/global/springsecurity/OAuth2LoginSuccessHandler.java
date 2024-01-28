@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  * @implNote 해당 클래스는 SimpleUrlAuthenticationSuccessHandler를 상속받은 OAuth 로그인 성공 후 로직을 처리 하는 클래스
  * 로그인 성공 후 리디렉트 하게 설정 했습니다.
  * 프론트 배포사이트 -> http://localhost:5173/auth/social
+ * https://tripcometrue.vercel.app
  * 스프링 코드 내로 리디렉트 설정 하고 싶은 경우
  * String redirectUrl = "/user/oauth-success?token="+token;
  */
@@ -38,7 +39,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         //한국어 인코딩 설정
         String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
 
-        String redirectUrl = "http://localhost:5173/auth/social?token=" + token
+        String redirectUrl = "https://tripcometrue.vercel.app/auth/social?token=" + token
             + "&email=" + email + "&name=" + encodedName;
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
