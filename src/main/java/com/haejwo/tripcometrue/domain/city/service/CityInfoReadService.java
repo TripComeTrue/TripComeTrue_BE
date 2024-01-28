@@ -51,6 +51,7 @@ public class CityInfoReadService {
             .curUnit(currencyUnit.name())
             .curName(currencyUnit.getCurrencyName())
             .exchangeRate(exchangeRate)
+            .country(city.getCountry().getDescription())
             .build();
     }
 
