@@ -1,12 +1,25 @@
 package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord;
 
+import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
+import static com.haejwo.tripcometrue.domain.member.entity.QMember.member;
+import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripRecord;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
+import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag.tripRecordTag;
+
 import com.haejwo.tripcometrue.domain.member.entity.QMember;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordListRequestAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.ModelAttribute.TripRecordSearchParamAttribute;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordMemberResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.member.TripRecordVideoMemberResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord.TripRecordListResponseDto;
 import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_schedule_media.TripRecordHotShortsListResponseDto;
-import com.haejwo.tripcometrue.domain.triprecord.entity.*;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordImage;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordScheduleVideo;
+import com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag;
+import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecord;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
 import com.haejwo.tripcometrue.global.enums.Country;
 import com.querydsl.core.BooleanBuilder;
@@ -19,23 +32,15 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.StringUtils;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
-import static com.haejwo.tripcometrue.domain.city.entity.QCity.city;
-import static com.haejwo.tripcometrue.domain.member.entity.QMember.member;
-import static com.haejwo.tripcometrue.domain.place.entity.QPlace.place;
-import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecord.tripRecord;
-import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordSchedule.tripRecordSchedule;
-import static com.haejwo.tripcometrue.domain.triprecord.entity.QTripRecordTag.tripRecordTag;
 
 public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implements TripRecordRepositoryCustom {
 
@@ -267,27 +272,23 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
                 qTripRecord.id,
                 qTripRecord.title,
                 qTripRecord.storeCount,
-                JPAExpressions
-                    .select(qTripRecordScheduleVideo.id.min())
-                    .from(qTripRecordScheduleVideo)
-                    .where(qTripRecordScheduleVideo.tripRecordSchedule.id.eq(
-                        JPAExpressions
-                            .select(qTripRecordSchedule.id.min())
-                            .from(qTripRecordSchedule)
-                            .where(qTripRecordSchedule.tripRecord.id.eq(qTripRecord.id)))),
-                JPAExpressions
-                    .select(qTripRecordScheduleVideo.thumbnailUrl.min())
-                    .from(qTripRecordScheduleVideo)
-                    .where(qTripRecordScheduleVideo.tripRecordSchedule.tripRecord.id.eq(qTripRecord.id)),
-                Projections.constructor(TripRecordMemberResponseDto.class,
+                qTripRecordScheduleVideo.id,
+                qTripRecordScheduleVideo.thumbnailUrl,
+                qTripRecordScheduleVideo.videoUrl,
+                Projections.constructor(TripRecordVideoMemberResponseDto.class,
+                    qMember.id,
                     qMember.memberBase.nickname,
                     qMember.profileImage)))
             .from(qTripRecord)
             .leftJoin(qTripRecord.tripRecordSchedules, qTripRecordSchedule)
             .leftJoin(qTripRecordSchedule.tripRecordScheduleVideos, qTripRecordScheduleVideo)
             .leftJoin(qTripRecord.member, qMember)
-            .where(qTripRecordScheduleVideo.thumbnailUrl.isNotNull())
-            .groupBy(qTripRecord.id)
+            .where(qTripRecordScheduleVideo.thumbnailUrl.isNotNull(),
+                qTripRecordScheduleVideo.id.eq(
+                    JPAExpressions
+                        .select(qTripRecordScheduleVideo.id.min())
+                        .from(qTripRecordScheduleVideo)
+                        .where(qTripRecordScheduleVideo.tripRecordSchedule.tripRecord.id.eq(qTripRecord.id))))
             .orderBy(qTripRecord.storeCount.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
