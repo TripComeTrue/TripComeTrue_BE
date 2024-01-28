@@ -88,7 +88,14 @@ public class CityContentReadService {
         return places
             .stream()
             .map(place -> {
-                String imageUrl = imageMap.get(place.getId()).get(0).imageUrl();
+                String imageUrl = Objects.isNull(imageMap.get(place.getId())) ? null :
+                    imageMap.get(place.getId())
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .map(TripRecordScheduleImageWithPlaceIdQueryDto::imageUrl)
+                        .orElse(null);
+
                 return CityPlaceWithLatLongResponseDto.fromEntity(place, imageUrl);
             })
             .toList();
