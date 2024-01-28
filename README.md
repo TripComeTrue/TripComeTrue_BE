@@ -23,7 +23,8 @@
 - API 명세서:
     - [Postman 1](https://documenter.getpostman.com/view/14269013/2s9YsJCYY9#47909ddc-026a-4731-b0ca-5088b8e8574f)
     - [Postman 2](https://documenter.getpostman.com/view/24478928/2s9YsRaUDD)
-    - [Notion](https://arrow-halibut-e8d.notion.site/API-9d3aa3736a764af6a513efda552211b5?pvs=4)
+    - [Notion 1](https://arrow-halibut-e8d.notion.site/API-9d3aa3736a764af6a513efda552211b5?pvs=4)
+    - [Notion 2](https://immense-soarer-ecc.notion.site/TripComeTrue-API-4f9c4ca0580e47e49adfe3b62ec39957?pvs=4)
 
     
 ### 📌패키지 구조
