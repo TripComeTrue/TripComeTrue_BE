@@ -26,6 +26,6 @@ public interface TripRecordReviewRepository extends JpaRepository<TripRecordRevi
 
     boolean existsByMemberAndTripRecord(Member member, TripRecord tripRecord);
 
-    @Query("select count(trr) from TripRecordReview trr where trr.content is not null")
-    Long countByTripRecordId(Long tripRecordId);
+    @Query("select count(trr) from TripRecordReview trr where trr.content is not null and trr.tripRecord.id = :tripRecordId")
+    Long countByTripRecordId(@Param("tripRecordId") Long tripRecordId);
 }
