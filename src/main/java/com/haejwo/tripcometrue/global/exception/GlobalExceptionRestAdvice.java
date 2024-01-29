@@ -1,18 +1,24 @@
 package com.haejwo.tripcometrue.global.exception;
 
+import com.haejwo.tripcometrue.global.s3.exception.FileMaxSizeExceededException;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
-import java.util.Map;
+
+import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author liyusang1
@@ -66,14 +72,24 @@ public class GlobalExceptionRestAdvice {
 
         BindingResult bindingResult = e.getBindingResult();
 
-        Map<String, String> fieldErrors = bindingResult.getFieldErrors()
+        List<String> fieldErrors = bindingResult.getFieldErrors()
             .stream()
-            .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+            .collect(Collectors.toList());
 
         log.error(e.getMessage(), e);
+        String errorMessage = String.join(", ", fieldErrors);
+
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ResponseDTO.errorWithMessage(HttpStatus.BAD_REQUEST,
-                fieldErrors.values().toString().substring(1,fieldErrors.values().toString().length()-1)));
+            .body(ResponseDTO.errorWithMessage(HttpStatus.BAD_REQUEST, errorMessage));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ResponseDTO<Void>> maxUploadSizeExceededExceptionHandler() {
+        HttpStatus status = HttpStatus.PAYLOAD_TOO_LARGE;
+        return ResponseEntity
+                .status(status)
+                .body(ResponseDTO.error(new FileMaxSizeExceededException().getErrorCode()));
     }
 }

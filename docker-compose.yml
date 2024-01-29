@@ -1,12 +1,23 @@
 version: '3'
+
+networks:
+  network:
+
 services:
-  travel-db:
+  tripcometrue-db:
     container_name: tripcometrue-db
-    build:
-      context: ./database
-      dockerfile: Dockerfile
+    image: jo0oy/tripcometrue-mysql
     ports:
       - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=tripcometrue
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=Asia/Seoul
+    volumes:
+      - ./database/data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     restart: always
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
@@ -15,5 +26,20 @@ services:
     networks:
       - network
 
-networks:
-  network:
+  tripcometrue-redis:
+    container_name: tripcometrue-redis
+    image: redis:6
+    hostname: redis
+    command: redis-server --port 6379
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+    environment:
+      - TZ=Asia/Seoul
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    restart: always
+    networks:
+      - network

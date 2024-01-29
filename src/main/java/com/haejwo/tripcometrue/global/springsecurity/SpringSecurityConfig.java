@@ -1,16 +1,19 @@
 package com.haejwo.tripcometrue.global.springsecurity;
 
+import com.haejwo.tripcometrue.global.jwt.JwtAuthenticationFilter;
+import com.haejwo.tripcometrue.global.jwt.JwtAuthorizationFilter;
 import com.haejwo.tripcometrue.global.util.CustomResponseUtil;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
@@ -18,6 +21,11 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @Configuration
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final PrincipalOauth2UserService principalOauth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -30,6 +38,7 @@ public class SpringSecurityConfig {
                 configuration.applyPermitDefaultValues();
                 configuration.addAllowedOriginPattern("");
                 configuration.addAllowedOriginPattern("http://localhost:5173");
+                configuration.addAllowedOriginPattern("https://tripcometrue.vercel.app");
                 configuration.setAllowedMethods(
                     Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"));
 
@@ -48,15 +57,57 @@ public class SpringSecurityConfig {
         http.sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // jwt filter
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthorizationFilter, BasicAuthenticationFilter.class);
+
         http.authorizeHttpRequests(authz -> authz
             /*
             .requestMatchers(new AntPathRequestMatcher("ant matcher")).authenticated()
             .requestMatchers(new AntPathRequestMatcher("role sample")).hasRole("ADMIN")
-            .requestMatchers(new AntPathRequestMatcher("role sample", HttpMethod.POST.name())).hasRole("ADMIN")
-            .requestMatchers(HttpMethod.OPTIONS, "/basket/**").permitAll() // OPTIONS 메서드에 대한 권한 허용 */
+            .requestMatchers(HttpMethod.OPTIONS, "/basket/**").permitAll() // OPTIONS 메서드에 대한 권한 허용
+            .requestMatchers(new AntPathRequestMatcher("role sample", HttpMethod.POST.name())).hasRole("ADMIN") */
             .requestMatchers(new AntPathRequestMatcher("/login/**")).permitAll()
-            .requestMatchers(new AntPathRequestMatcher("/v1/member/signup/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/signup")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/test/jwt")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/check-duplicated-email")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/oauth2/info/**")).permitAll()
+
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/check-password")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/change-password")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/profile-image")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/introduction")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/nickname")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/member/details")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/members/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/view-history")).permitAll()
+
+            .requestMatchers(new AntPathRequestMatcher("/v1/cities/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/places/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/images/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/videos/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/trip-places/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/trip-records/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/trip-records-schedules/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/search-schedule-places/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/schedule-place/**")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/trip-plan/{planId}")).permitAll()
+            .requestMatchers(new AntPathRequestMatcher("/v1/country-city")).permitAll()
+
             .anyRequest().authenticated());
+
+        /**
+         * @author liyusang1
+         * @implNote 사용자 프로필 정보를 가져오고 그 정보를 토대로 회원가입을 자동으로 진행
+         * 정보가 추가 적으로 필요하면 추가적으로 요구 받아야함
+         * OAuth 완료가 되면 엑세스토큰 + 사용자 프로필 정보를 한번에 받음 로그인 성공시 principalOauth2UserService에서 처리 후
+         * oAuth2LoginSuccessHandler에서 리디렉트 처리
+         */
+        http.oauth2Login(oauth2 -> oauth2
+            .userInfoEndpoint(
+                userInfoEndpoint -> userInfoEndpoint.userService(principalOauth2UserService))
+            .successHandler(oAuth2LoginSuccessHandler)
+        );
 
         http.exceptionHandling(exceptionHandling -> {
             exceptionHandling.authenticationEntryPoint(

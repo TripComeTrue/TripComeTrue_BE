@@ -11,8 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public class MemberBase {
-    private String email;
-    private String nickname;
-    private String password;
-    private String authority;
+
+  private String email;
+  private String nickname;
+  private String password;
+  private String authority;
+
+  public void changePassword(String encodedNewPassword) {
+    this.password = encodedNewPassword;
+  }
+
+  public void changeNickname(String nickname){this.nickname = nickname;}
 }
