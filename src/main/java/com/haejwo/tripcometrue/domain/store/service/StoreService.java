@@ -149,7 +149,7 @@ public class StoreService{
     @Transactional(readOnly = true)
     public CheckCityStoredResponseDto checkCityStoredByLoginMember(PrincipalDetails principalDetails, Long cityId) {
 
-        if (Objects.isNull(principalDetails.getMember())) {
+        if (Objects.isNull(principalDetails)) {
             return CheckCityStoredResponseDto.builder()
                 .isStored(false)
                 .build();
