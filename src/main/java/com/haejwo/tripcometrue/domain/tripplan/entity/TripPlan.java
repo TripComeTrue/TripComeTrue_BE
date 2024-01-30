@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -54,7 +55,7 @@ public class TripPlan extends BaseTimeEntity {
         this.countries = countries;
         this.tripStartDay = tripStartDay;
         this.tripEndDay = tripEndDay;
-        this.totalDays = totalDays;
+        this.totalDays = (int)ChronoUnit.DAYS.between(tripStartDay, tripEndDay)+1;
         this.averageRating = averageRating;
         this.viewCount = 0;
         this.tripPlanSchedules = tripRecordSchedules;
@@ -66,5 +67,6 @@ public class TripPlan extends BaseTimeEntity {
         this.countries = requestDto.countries();
         this.tripStartDay = requestDto.tripStartDay();
         this.tripEndDay = requestDto.tripEndDay();
+        this.totalDays = (int)ChronoUnit.DAYS.between(tripStartDay, tripEndDay)+1;
     }
 }

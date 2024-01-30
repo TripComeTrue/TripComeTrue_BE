@@ -95,6 +95,7 @@ public class TripRecord extends BaseTimeEntity {
         this.expenseRangeType = requestDto.expenseRangeType();
         this.tripStartDay = requestDto.tripStartDay();
         this.tripEndDay = requestDto.tripEndDay();
+        this.totalDays = (int)ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay)+1;
         this.countries = requestDto.countries();
     }
 
@@ -158,6 +159,6 @@ public class TripRecord extends BaseTimeEntity {
         if (this.tripStartDay == null || this.tripEndDay == null) {
             return 0;
         }
-        return (int) ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay);
+        return (int) ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay)+1;
     }
 }
