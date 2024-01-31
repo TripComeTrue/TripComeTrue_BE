@@ -31,9 +31,10 @@ public class CityInfoReadService {
     private static final int WEATHER_MONTH_GAP = 3;
 
     @Transactional(readOnly = true)
-    public CityInfoResponseDto getCityInfo(Long id) {
+    public CityInfoResponseDto getCityInfo(Long cityId) {
         return CityInfoResponseDto.fromEntity(
-            getCityEntity(id)
+            cityRepository.findById(cityId)
+                .orElseThrow(CityNotFoundException::new)
         );
     }
 
@@ -56,8 +57,9 @@ public class CityInfoReadService {
     }
 
     @Transactional(readOnly = true)
-    public List<WeatherResponseDto> getWeatherInfo(Long id) {
-        City city = getCityEntity(id);
+    public List<WeatherResponseDto> getWeatherInfo(Long cityId) {
+        City city = cityRepository.findById(cityId)
+            .orElseThrow(CityNotFoundException::new);
 
         // 현재 달 포함 향후 3개월
         int curMonth = LocalDate.now().getMonthValue();
@@ -73,11 +75,6 @@ public class CityInfoReadService {
             .map(
                 w -> WeatherResponseDto.fromEntity(w, convertToTempF(w.getMaxAvgTemp()), convertToTempF(w.getMinAvgTemp()))
             ).toList();
-    }
-
-    private City getCityEntity(Long id) {
-        return cityRepository.findById(id)
-            .orElseThrow(CityNotFoundException::new);
     }
 
     private List<Weather> sortWeatherInfos(List<Weather> weathers) {
