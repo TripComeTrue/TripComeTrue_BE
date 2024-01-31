@@ -14,7 +14,10 @@ public record AddCityRequestDto(
     String currency,
     String weatherRecommendation,
     String weatherDescription,
-    Country country
+    Country country,
+    String imageUrl,
+    Double latitude,
+    Double longitude
 ) {
     public City toEntity() {
         return City.builder()
@@ -28,6 +31,9 @@ public record AddCityRequestDto(
             .weatherRecommendation(this.weatherRecommendation)
             .weatherDescription(this.weatherDescription)
             .country(this.country)
+            .imageUrl(this.imageUrl)
+            .latitude(this.latitude)
+            .longitude(this.longitude)
             .build();
     }
 }
