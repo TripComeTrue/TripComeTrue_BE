@@ -23,8 +23,10 @@ public class Place extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String address;
+
     private String description;
     private String phoneNumber;
     private LocalTime weekdayOpenTime;

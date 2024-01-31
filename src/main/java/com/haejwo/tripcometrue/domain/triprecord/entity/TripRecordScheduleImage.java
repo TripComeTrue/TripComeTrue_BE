@@ -1,13 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,12 +19,12 @@ public class TripRecordScheduleImage extends BaseTimeEntity {
 
     private String imageUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "trip_schedule_id")
     private TripRecordSchedule tripRecordSchedule;
 
     @Builder
-    public TripRecordScheduleImage(String imageUrl,
+    private TripRecordScheduleImage(String imageUrl,
         TripRecordSchedule tripRecordSchedule) {
         this.imageUrl = imageUrl;
         this.tripRecordSchedule = tripRecordSchedule;

@@ -50,7 +50,7 @@ public class Member extends BaseTimeEntity {
     private LocalDateTime nickNameChangeTime;
 
     @Builder
-    public Member(String email, String nickname, String password, String authority,
+    private Member(String email, String nickname, String password, String authority,
         String provider, Double memberRating) {
         this.memberBase = new MemberBase(email, nickname, password, authority);
         this.provider = provider;

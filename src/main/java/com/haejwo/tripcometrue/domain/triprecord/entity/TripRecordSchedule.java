@@ -40,27 +40,28 @@ public class TripRecordSchedule extends BaseTimeEntity {
 
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private ExternalLinkTagType tagType;
+
+    private String tagUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "trip_record_id")
+    private TripRecord tripRecord;
+
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleImage> tripRecordScheduleImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "tripRecordSchedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordScheduleVideo> tripRecordScheduleVideos = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "place_id")
-    private Place place;
-
-    @ManyToOne
-    @JoinColumn(name = "trip_record_id")
-    private TripRecord tripRecord;
-
-    @Enumerated(EnumType.STRING)
-    private ExternalLinkTagType tagType;
-
-    private String tagUrl;
 
     @Builder
-    public TripRecordSchedule(Integer dayNumber, Integer ordering, String content,
+    private TripRecordSchedule(Integer dayNumber, Integer ordering, String content,
         Place place, TripRecord tripRecord, ExternalLinkTagType tagType, String tagUrl) {
         this.dayNumber = dayNumber;
         this.ordering = ordering;

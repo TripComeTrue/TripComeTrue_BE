@@ -21,11 +21,11 @@ public class PlaceStore extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
-    Member member;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "place_id")
-    Place place;
+    private Place place;
 
     @Builder
     private PlaceStore(Member member, Place place){

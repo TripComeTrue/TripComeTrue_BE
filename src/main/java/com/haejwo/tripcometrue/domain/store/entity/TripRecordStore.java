@@ -28,11 +28,11 @@ public class TripRecordStore extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_Id")
-    Member member;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "trip_record_id")
-    TripRecord tripRecord;
+    private TripRecord tripRecord;
 
     @Builder
     private TripRecordStore(Member member, TripRecord tripRecord){

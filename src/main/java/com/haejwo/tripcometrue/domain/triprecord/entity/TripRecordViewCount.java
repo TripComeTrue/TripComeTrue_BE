@@ -1,13 +1,8 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,12 +22,12 @@ public class TripRecordViewCount extends BaseTimeEntity {
 
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
     @Builder
-    public TripRecordViewCount(Long id, Integer viewCount, LocalDate date, TripRecord tripRecord) {
+    private TripRecordViewCount(Long id, Integer viewCount, LocalDate date, TripRecord tripRecord) {
         this.id = id;
         this.viewCount = viewCount;
         this.date = date;

@@ -3,15 +3,7 @@ package com.haejwo.tripcometrue.domain.triprecord.entity;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExternalLinkTagType;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.TripRecordImageType;
 import com.haejwo.tripcometrue.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,12 +24,12 @@ public class TripRecordImage extends BaseTimeEntity {
     private ExternalLinkTagType tagType;
     private String tagUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "trip_record_id")
     private TripRecord tripRecord;
 
     @Builder
-    public TripRecordImage(TripRecordImageType imageType, String imageUrl,
+    private TripRecordImage(TripRecordImageType imageType, String imageUrl,
         ExternalLinkTagType tagType, String tagUrl, TripRecord tripRecord) {
         this.imageUrl = imageUrl;
         this.tagType = tagType;
