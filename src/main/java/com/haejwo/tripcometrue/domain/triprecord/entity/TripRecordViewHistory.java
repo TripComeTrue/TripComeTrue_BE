@@ -27,11 +27,11 @@ public class TripRecordViewHistory extends BaseTimeEntity {
   private Long id;
 
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "member_id")
   private Member member;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "trip_record_id")
   private TripRecord tripRecord;
 
@@ -41,7 +41,7 @@ public class TripRecordViewHistory extends BaseTimeEntity {
   }
 
   @Builder
-  public TripRecordViewHistory(Member member, TripRecord tripRecord) {
+  private TripRecordViewHistory(Member member, TripRecord tripRecord) {
     this.member = member;
     this.tripRecord = tripRecord;
   }

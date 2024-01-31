@@ -26,21 +26,21 @@ public class PlaceReviewLikes  {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "place_review_likes_id")
-  private Long Id;
+  private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "place_review_id")
   private PlaceReview placeReview;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "member_id")
   private Member member;
 
 
   @Builder
-  public PlaceReviewLikes(Member member, PlaceReview placeReview) {
+  private PlaceReviewLikes(Member member, PlaceReview placeReview) {
     this.member = member;
     this.placeReview = placeReview;
   }

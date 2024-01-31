@@ -25,25 +25,22 @@ public class TripRecordReviewLikes {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "trip_record_review_likes_id")
-  private Long Id;
+  private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "trip_record_review_id")
   private TripRecordReview tripRecordReview;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "member_id")
   private Member member;
 
 
   @Builder
-  public TripRecordReviewLikes(Member member, TripRecordReview tripRecordReview) {
+  private TripRecordReviewLikes(Member member, TripRecordReview tripRecordReview) {
     this.member = member;
     this.tripRecordReview = tripRecordReview;
   }
-
-
-
 }

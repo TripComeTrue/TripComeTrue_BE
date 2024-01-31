@@ -37,14 +37,17 @@ public class TripRecord extends BaseTimeEntity {
 
     private LocalDate tripStartDay;
     private LocalDate tripEndDay;
-
     private Integer totalDays;
+
     private Double averageRating;
     private Integer viewCount;
     private Integer storeCount;
     private Integer reviewCount;
     private Integer commentCount;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordSchedule> tripRecordSchedules = new ArrayList<>();
@@ -58,12 +61,9 @@ public class TripRecord extends BaseTimeEntity {
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordStore> tripRecordStores = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @Builder
-    public TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
+    private TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
         String countries, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
         Double averageRating, Integer viewCount, Integer storeCount, Integer reviewCount,
         Integer commentCount, List<TripRecordSchedule> tripRecordSchedules,

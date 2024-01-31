@@ -21,11 +21,11 @@ public class CityStore extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
-    Member member;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "city_id")
-    City city;
+    private City city;
 
     @Builder
     private CityStore(Member member, City city){

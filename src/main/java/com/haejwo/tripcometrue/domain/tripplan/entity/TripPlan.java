@@ -38,18 +38,17 @@ public class TripPlan extends BaseTimeEntity {
     private Integer totalDays;
     private Integer averageRating;
     private Integer viewCount;
+    private Long referencedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "tripPlan", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripPlanSchedule> tripPlanSchedules = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    private Long referencedBy;
-
     @Builder
-    public TripPlan(String countries, LocalDate tripStartDay, LocalDate tripEndDay,
+    private TripPlan(String countries, LocalDate tripStartDay, LocalDate tripEndDay,
         Integer totalDays, Integer averageRating, Integer viewCount,
         List<TripPlanSchedule> tripRecordSchedules, Member member, Long referencedBy) {
         this.countries = countries;
