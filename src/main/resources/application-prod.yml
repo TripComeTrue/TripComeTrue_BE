@@ -33,6 +33,7 @@ spring:
             scope:
               - email
               - profile
+            redirect-uri: https://tripcometrue.site/login/oauth2/code/google
 
           naver:
             client-id: ${NAVER_ID}
