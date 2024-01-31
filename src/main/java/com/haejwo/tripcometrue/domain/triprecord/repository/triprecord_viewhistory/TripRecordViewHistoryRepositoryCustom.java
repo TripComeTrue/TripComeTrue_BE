@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecordViewHistory.repository;
+package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewhistory;
 
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordViewHistoryGroupByQueryDto;
 

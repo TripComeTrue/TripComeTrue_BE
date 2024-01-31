@@ -1,4 +1,4 @@
-package com.haejwo.tripcometrue.domain.triprecordViewHistory.dto.response;
+package com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_viewhistory;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.haejwo.tripcometrue.domain.triprecord.entity.TripRecordViewHistory;
 import java.time.LocalDateTime;

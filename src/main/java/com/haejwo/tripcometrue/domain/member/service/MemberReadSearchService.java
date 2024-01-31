@@ -3,7 +3,7 @@ package com.haejwo.tripcometrue.domain.member.service;
 import com.haejwo.tripcometrue.domain.member.dto.response.MemberSimpleResponseDto;
 import com.haejwo.tripcometrue.domain.member.exception.UserNotFoundException;
 import com.haejwo.tripcometrue.domain.member.repository.MemberRepository;
-import com.haejwo.tripcometrue.domain.triprecordViewHistory.repository.TripRecordViewHistoryRepository;
+import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewhistory.TripRecordViewHistoryRepository;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

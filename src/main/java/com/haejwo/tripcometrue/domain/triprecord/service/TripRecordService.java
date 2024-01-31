@@ -18,7 +18,6 @@ import com.haejwo.tripcometrue.domain.triprecord.exception.TripRecordScheduleVid
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord.TripRecordRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_video.TripRecordScheduleVideoRepository;
 import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewcount.TripRecordViewCountRepository;
-import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordViewHistoryService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.SliceResponseDto;
 import java.time.LocalDate;
