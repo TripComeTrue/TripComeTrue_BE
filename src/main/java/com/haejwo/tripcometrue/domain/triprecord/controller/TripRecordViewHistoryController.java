@@ -1,6 +1,6 @@
-package com.haejwo.tripcometrue.domain.triprecordViewHistory.controller;
-import com.haejwo.tripcometrue.domain.triprecordViewHistory.dto.response.TripRecordViewHistoryResponseDto;
-import com.haejwo.tripcometrue.domain.triprecordViewHistory.service.TripRecordViewHistoryService;
+package com.haejwo.tripcometrue.domain.triprecord.controller;
+import com.haejwo.tripcometrue.domain.triprecord.dto.response.triprecord_viewhistory.TripRecordViewHistoryResponseDto;
+import com.haejwo.tripcometrue.domain.triprecord.service.TripRecordViewHistoryService;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,6 @@ package com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_viewhist
 
 import com.haejwo.tripcometrue.config.TestQuerydslConfig;
 import com.haejwo.tripcometrue.domain.triprecord.dto.query.TripRecordViewHistoryGroupByQueryDto;
-import com.haejwo.tripcometrue.domain.triprecordViewHistory.repository.TripRecordViewHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
