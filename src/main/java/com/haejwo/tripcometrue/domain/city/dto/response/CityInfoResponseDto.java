@@ -13,7 +13,9 @@ public record CityInfoResponseDto(
     String voltage,
     String visa,
     String curUnit,
-    String curName
+    String curName,
+    Double latitude,
+    Double longitude
 ) {
 
     @Builder
@@ -34,6 +36,8 @@ public record CityInfoResponseDto(
             .curName(
                 Objects.nonNull(entity.getCurrency()) ? entity.getCurrency().getCurrencyName() : null
             )
+            .latitude(entity.getLatitude())
+            .longitude(entity.getLongitude())
             .build();
     }
 }
