@@ -1,6 +1,7 @@
 package com.haejwo.tripcometrue.domain.triprecord.entity;
 
 import com.haejwo.tripcometrue.domain.member.entity.Member;
+import com.haejwo.tripcometrue.domain.review.triprecordreview.entity.TripRecordReview;
 import com.haejwo.tripcometrue.domain.store.entity.TripRecordStore;
 import com.haejwo.tripcometrue.domain.triprecord.dto.request.TripRecordRequestDto;
 import com.haejwo.tripcometrue.domain.triprecord.entity.type.ExpenseRangeType;
@@ -61,6 +62,8 @@ public class TripRecord extends BaseTimeEntity {
     @OneToMany(mappedBy = "tripRecord", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TripRecordStore> tripRecordStores = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tripRecordReview", cascade = CascadeType.REMOVE)
+    private List<TripRecordReview> tripRecordReviews = new ArrayList<>();
 
     @Builder
     private TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
@@ -134,6 +137,16 @@ public class TripRecord extends BaseTimeEntity {
             this.commentCount = 1;
         } else {
             this.commentCount++;
+        }
+    }
+
+    public void calculateAverageRating(double ratingScore) {
+        if (tripRecordReviews.isEmpty()) {
+            averageRating = ratingScore;
+        } else {
+            double totalRating = averageRating * tripRecordReviews.size();
+            totalRating += ratingScore;
+            averageRating = totalRating / (tripRecordReviews.size() + 1);
         }
     }
 
