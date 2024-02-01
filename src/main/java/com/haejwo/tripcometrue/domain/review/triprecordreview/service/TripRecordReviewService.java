@@ -66,8 +66,11 @@ public class TripRecordReviewService {
 
         isAlreadyTripRecordReviewExists(loginMember, tripRecord);
 
+        TripRecordReview tripRecordReview = requestDto.toEntity(loginMember, tripRecord);
+        tripRecord.calculateAverageRating(tripRecordReview.getRatingScore());
+
         return EvaluateTripRecordReviewResponseDto
-                .fromEntity(tripRecordReviewRepository.save(requestDto.toEntity(loginMember, tripRecord)));
+                .fromEntity(tripRecordReviewRepository.save(tripRecordReview));
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
