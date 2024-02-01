@@ -66,11 +66,9 @@ public class TripRecordReviewService {
 
         isAlreadyTripRecordReviewExists(loginMember, tripRecord);
 
-        TripRecordReview tripRecordReview = requestDto.toEntity(loginMember, tripRecord);
-        tripRecord.calculateAverageRating(tripRecordReview.getRatingScore());
-
+        tripRecord.calculateAverageRating(requestDto.ratingScore());
         return EvaluateTripRecordReviewResponseDto
-                .fromEntity(tripRecordReviewRepository.save(tripRecordReview));
+                .fromEntity(tripRecordReviewRepository.save(requestDto.toEntity(loginMember, tripRecord)));
     }
 
     private Member getMember(PrincipalDetails principalDetails) {
@@ -105,6 +103,9 @@ public class TripRecordReviewService {
 
         validateRightMemberAccess(loginMember, tripRecordReview);
         isContentAlreadyRegistered(tripRecordReview);
+
+        TripRecord tripRecord = getTripRecordById(tripRecordReview.getTripRecord().getId());
+        tripRecord.calculateAverageRating(requestDto.ratingScore());
 
         tripRecordReview.update(requestDto, loginMember);
     }
