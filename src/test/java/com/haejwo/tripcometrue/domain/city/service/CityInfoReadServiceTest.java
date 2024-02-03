@@ -89,7 +89,7 @@ class CityInfoReadServiceTest extends AbstractContainersSupport {
         long cityId = city.getId();
 
         // when
-        CityInfoResponseDto cityInfo = cityInfoReadService.getCityInfo(cityId);
+        CityInfoResponseDto cityInfo = cityInfoReadService.getCityInfo(cityId, null);
 
         // then
         assertThat(cityInfo.name()).isEqualTo("방콕");
@@ -115,7 +115,7 @@ class CityInfoReadServiceTest extends AbstractContainersSupport {
         long cityId = 10000;
 
         // when & then
-        assertThatThrownBy(() -> cityInfoReadService.getCityInfo(cityId))
+        assertThatThrownBy(() -> cityInfoReadService.getCityInfo(cityId, null))
             .isInstanceOf(CityNotFoundException.class);
     }
 
