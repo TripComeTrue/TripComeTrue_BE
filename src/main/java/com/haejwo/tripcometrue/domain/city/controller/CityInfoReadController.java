@@ -4,10 +4,12 @@ import com.haejwo.tripcometrue.domain.city.dto.response.CityInfoResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.ExchangeRateResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.WeatherResponseDto;
 import com.haejwo.tripcometrue.domain.city.service.CityInfoReadService;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import com.haejwo.tripcometrue.global.util.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +23,14 @@ public class CityInfoReadController {
 
     @GetMapping("/{cityId}")
     public ResponseEntity<ResponseDTO<CityInfoResponseDto>> getCityInfo(
-        @PathVariable("cityId") Long cityId
-    ) {
+        @PathVariable("cityId") Long cityId,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+        ) {
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(
-                ResponseDTO.okWithData(cityInfoReadService.getCityInfo(cityId))
+                ResponseDTO.okWithData(cityInfoReadService.getCityInfo(cityId, principalDetails))
             );
     }
 

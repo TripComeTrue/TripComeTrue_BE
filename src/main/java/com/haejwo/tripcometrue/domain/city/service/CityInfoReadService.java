@@ -4,11 +4,13 @@ import com.haejwo.tripcometrue.domain.city.dto.response.CityInfoResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.ExchangeRateResponseDto;
 import com.haejwo.tripcometrue.domain.city.dto.response.WeatherResponseDto;
 import com.haejwo.tripcometrue.domain.city.entity.City;
+import com.haejwo.tripcometrue.domain.store.repository.CityStoreRepository;
 import com.haejwo.tripcometrue.global.enums.CurrencyUnit;
 import com.haejwo.tripcometrue.domain.city.entity.Weather;
 import com.haejwo.tripcometrue.domain.city.exception.CityNotFoundException;
 import com.haejwo.tripcometrue.domain.city.repository.CityRepository;
 import com.haejwo.tripcometrue.domain.city.repository.WeatherRepository;
+import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -26,15 +29,22 @@ public class CityInfoReadService {
 
     private final CityRepository cityRepository;
     private final WeatherRepository weatherRepository;
+    private final CityStoreRepository cityStoreRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final int WEATHER_MONTH_GAP = 3;
 
     @Transactional(readOnly = true)
-    public CityInfoResponseDto getCityInfo(Long cityId) {
+    public CityInfoResponseDto getCityInfo(Long cityId, PrincipalDetails principalDetails) {
+
         return CityInfoResponseDto.fromEntity(
             cityRepository.findById(cityId)
-                .orElseThrow(CityNotFoundException::new)
+                .orElseThrow(CityNotFoundException::new),
+            Objects.nonNull(principalDetails)
+                && Objects.nonNull(principalDetails.getMember())
+                && cityStoreRepository
+                .findByMemberIdAndCityId(principalDetails.getMember().getId(), cityId)
+                .isPresent()
         );
     }
 
@@ -80,7 +90,7 @@ public class CityInfoReadService {
     private List<Weather> sortWeatherInfos(List<Weather> weathers) {
         int lastIdx = weathers.size() - 1;
 
-        if(weathers.get(lastIdx).getMonth() - weathers.get(0).getMonth() > WEATHER_MONTH_GAP) {
+        if (weathers.get(lastIdx).getMonth() - weathers.get(0).getMonth() > WEATHER_MONTH_GAP) {
             weathers.add(0, weathers.remove(lastIdx));
 
             for (int i = lastIdx; i >= 0; i--) {
