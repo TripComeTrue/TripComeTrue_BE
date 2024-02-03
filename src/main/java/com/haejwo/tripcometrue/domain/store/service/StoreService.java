@@ -9,7 +9,6 @@ import com.haejwo.tripcometrue.domain.place.repositroy.PlaceRepository;
 import com.haejwo.tripcometrue.domain.store.dto.request.CityStoreRequestDto;
 import com.haejwo.tripcometrue.domain.store.dto.request.PlaceStoreRequestDto;
 import com.haejwo.tripcometrue.domain.store.dto.request.TripRecordStoreRequestDto;
-import com.haejwo.tripcometrue.domain.store.dto.response.CheckCityStoredResponseDto;
 import com.haejwo.tripcometrue.domain.store.dto.response.CityStoreResponseDto;
 import com.haejwo.tripcometrue.domain.store.dto.response.PlaceStoreResponseDto;
 import com.haejwo.tripcometrue.domain.store.dto.response.TripRecordStoreResponseDto;
@@ -30,7 +29,6 @@ import com.haejwo.tripcometrue.domain.triprecord.repository.triprecord_schedule_
 import com.haejwo.tripcometrue.global.exception.ErrorCode;
 import com.haejwo.tripcometrue.global.springsecurity.PrincipalDetails;
 import java.util.List;
-import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -144,26 +142,6 @@ public class StoreService{
         tripRecord.decrementStoreCount();
 
         tripRecordStoreRepository.delete(tripRecordStore);
-    }
-
-    @Transactional(readOnly = true)
-    public CheckCityStoredResponseDto checkCityStoredByLoginMember(PrincipalDetails principalDetails, Long cityId) {
-
-        if (Objects.isNull(principalDetails)) {
-            return CheckCityStoredResponseDto.builder()
-                .isStored(false)
-                .build();
-        }
-
-        Long memberId = principalDetails.getMember().getId();
-
-        return CheckCityStoredResponseDto.builder()
-            .isStored(
-                cityStoreRepository
-                    .findByMemberIdAndCityId(memberId, cityId)
-                    .isPresent()
-            )
-            .build();
     }
 
     public Page<CityStoreResponseDto> getStoredCities(PrincipalDetails principalDetails, Pageable pageable) {
