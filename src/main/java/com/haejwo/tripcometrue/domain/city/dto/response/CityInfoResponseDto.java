@@ -15,7 +15,8 @@ public record CityInfoResponseDto(
     String curUnit,
     String curName,
     Double latitude,
-    Double longitude
+    Double longitude,
+    Boolean isStored
 ) {
 
     @Builder
@@ -38,6 +39,26 @@ public record CityInfoResponseDto(
             )
             .latitude(entity.getLatitude())
             .longitude(entity.getLongitude())
+            .build();
+    }
+
+    public static CityInfoResponseDto fromEntity(City entity, boolean isStored) {
+        return CityInfoResponseDto.builder()
+            .id(entity.getId())
+            .name(entity.getName())
+            .language(entity.getLanguage())
+            .timeDifference(entity.getTimeDifference())
+            .voltage(entity.getVoltage())
+            .visa(entity.getVisa())
+            .curUnit(
+                Objects.nonNull(entity.getCurrency()) ? entity.getCurrency().name() : null
+            )
+            .curName(
+                Objects.nonNull(entity.getCurrency()) ? entity.getCurrency().getCurrencyName() : null
+            )
+            .latitude(entity.getLatitude())
+            .longitude(entity.getLongitude())
+            .isStored(isStored)
             .build();
     }
 }
