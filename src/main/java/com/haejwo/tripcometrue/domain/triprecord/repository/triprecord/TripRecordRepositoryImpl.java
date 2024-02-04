@@ -242,7 +242,7 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
 
         return queryFactory
             .selectFrom(tripRecord)
-            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()))
+            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.getDescription()))
             .orderBy(tripRecord.averageRating.desc(), tripRecord.storeCount.desc())
             .limit(size)
             .fetch();
@@ -253,7 +253,7 @@ public class TripRecordRepositoryImpl extends QuerydslRepositorySupport implemen
 
         return queryFactory
             .selectFrom(tripRecord)
-            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.name()).not())
+            .where(tripRecord.countries.containsIgnoreCase(Country.KOREA.getDescription()).not())
             .orderBy(tripRecord.averageRating.desc(), tripRecord.storeCount.desc())
             .limit(size)
             .fetch();
