@@ -67,11 +67,11 @@ public class TripRecord extends BaseTimeEntity {
 
     @Builder
     private TripRecord(Long id, String title, String content, ExpenseRangeType expenseRangeType,
-        String countries, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
-        Double averageRating, Integer viewCount, Integer storeCount, Integer reviewCount,
-        Integer commentCount, List<TripRecordSchedule> tripRecordSchedules,
-        List<TripRecordTag> tripRecordTags, List<TripRecordImage> tripRecordImages,
-        List<TripRecordStore> tripRecordStores, Member member) {
+                       String countries, LocalDate tripStartDay, LocalDate tripEndDay, Integer totalDays,
+                       Double averageRating, Integer viewCount, Integer storeCount, Integer reviewCount,
+                       Integer commentCount, List<TripRecordSchedule> tripRecordSchedules,
+                       List<TripRecordTag> tripRecordTags, List<TripRecordImage> tripRecordImages,
+                       List<TripRecordStore> tripRecordStores, Member member) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -98,12 +98,12 @@ public class TripRecord extends BaseTimeEntity {
         this.expenseRangeType = requestDto.expenseRangeType();
         this.tripStartDay = requestDto.tripStartDay();
         this.tripEndDay = requestDto.tripEndDay();
-        this.totalDays = (int)ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay)+1;
+        this.totalDays = (int) ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay) + 1;
         this.countries = requestDto.countries();
     }
 
     public void incrementViewCount() {
-        if(this.viewCount == null) {
+        if (this.viewCount == null) {
             this.viewCount = 1;
         } else {
             this.viewCount++;
@@ -111,7 +111,7 @@ public class TripRecord extends BaseTimeEntity {
     }
 
     public void incrementStoreCount() {
-        if(this.storeCount == null) {
+        if (this.storeCount == null) {
             this.storeCount = 1;
         } else {
             this.storeCount++;
@@ -119,13 +119,13 @@ public class TripRecord extends BaseTimeEntity {
     }
 
     public void decrementStoreCount() {
-        if(this.storeCount > 0) {
+        if (this.storeCount > 0) {
             this.storeCount--;
         }
     }
 
     public void incrementReviewCount() {
-        if(this.reviewCount == null) {
+        if (this.reviewCount == null) {
             this.reviewCount = 1;
         } else {
             this.reviewCount++;
@@ -133,7 +133,7 @@ public class TripRecord extends BaseTimeEntity {
     }
 
     public void incrementCommentCount() {
-        if(this.commentCount == null) {
+        if (this.commentCount == null) {
             this.commentCount = 1;
         } else {
             this.commentCount++;
@@ -148,6 +148,16 @@ public class TripRecord extends BaseTimeEntity {
             totalRating += ratingScore;
             averageRating = totalRating / (tripRecordReviews.size() + 1);
         }
+    }
+
+    public void updateAverageRating(double newRatingScore, TripRecordReview tripRecordReview) {
+        double totalRating = averageRating * tripRecordReviews.size();
+        double previousRatingScore = tripRecordReview.getRatingScore();
+
+        totalRating -= previousRatingScore;
+        totalRating += newRatingScore;
+
+        averageRating = totalRating / tripRecordReviews.size();
     }
 
     public void decreaseCommentCount(int count) {
@@ -172,6 +182,6 @@ public class TripRecord extends BaseTimeEntity {
         if (this.tripStartDay == null || this.tripEndDay == null) {
             return 0;
         }
-        return (int) ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay)+1;
+        return (int) ChronoUnit.DAYS.between(this.tripStartDay, this.tripEndDay) + 1;
     }
 }

@@ -104,8 +104,8 @@ public class TripRecordReviewService {
         validateRightMemberAccess(loginMember, tripRecordReview);
         isContentAlreadyRegistered(tripRecordReview);
 
-        TripRecord tripRecord = getTripRecordById(tripRecordReview.getTripRecord().getId());
-        tripRecord.calculateAverageRating(requestDto.ratingScore());
+        TripRecord tripRecord = tripRecordReview.getTripRecord();
+        tripRecord.updateAverageRating(requestDto.ratingScore(), tripRecordReview);
 
         tripRecordReview.update(requestDto, loginMember);
     }
